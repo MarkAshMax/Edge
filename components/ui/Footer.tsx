@@ -72,7 +72,7 @@ export function Footer() {
           <div className="space-y-6 text-sm text-white/70">
             <div>
               <h3 className="text-sm font-semibold uppercase tracking-wide text-white/60">Need a hand?</h3>
-              <p className="mt-3">Live chat weekdays 9am–6pm BST</p>
+              <p className="mt-3">Live chat weekdays 9am-6pm BST</p>
               <p className="mt-1">Email support@mycustomcase.co.uk</p>
             </div>
             <div className="flex gap-3">

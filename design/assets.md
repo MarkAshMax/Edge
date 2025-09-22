@@ -27,6 +27,6 @@
 ## Additional Requirements
 - Provide colour lookup table for consistent grading between lifestyle and product shots.
 - Deliver RAW files to allow future retouch. Derived WebP assets should include @1x (720w), @2x (1440w), and @3x (2160w) variants.
-- Capture audio-free BTS clips (5–10s) during hero shoot for potential social content.
+- Capture audio-free BTS clips (5-10s) during hero shoot for potential social content.
 - Include model release forms for all identifiable subjects.
 - Ensure product renders use current case SKU dimensions; confirm with engineering for accuracy.

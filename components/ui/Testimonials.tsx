@@ -5,7 +5,7 @@ const testimonials = [
     name: "Amelia",
     city: "Manchester",
     model: "iPhone 15 Pro",
-    quote: "The design tool was so easy — I love my case!",
+    quote: "The design tool was so easy -- I love my case!",
     image: "/images/testimonials/amelia.jpg",
   },
   {
@@ -74,7 +74,7 @@ export function Testimonials() {
                   </p>
                 </div>
               </div>
-              <p className="mt-4 text-lg leading-relaxed text-white/90">“{item.quote}”</p>
+              <p className="mt-4 text-lg leading-relaxed text-white/90">"{item.quote}"</p>
             </article>
           ))}
         </div>

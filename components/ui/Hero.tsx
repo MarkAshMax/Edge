@@ -22,7 +22,7 @@ export function Hero() {
             Your Phone. Your Design. Your Style.
           </h1>
           <p className="mt-4 text-lg text-white/80">
-            Design a case that’s unmistakably you — photos, art, text & more.
+            Design a case that's unmistakably you -- photos, art, text & more.
           </p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
             <a href="#customiser" className={primaryButtonClasses}>
