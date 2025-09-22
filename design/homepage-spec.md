@@ -68,7 +68,7 @@ Mobile
 ```
 - **Copy:**
   - H1: Your Phone. Your Design. Your Style.
-  - Sub: Design a case that's unmistakably you -- photos, art, text & more.
+  - Sub: Design a case that’s unmistakably you — photos, art, text & more.
   - Microcopy: MagSafe-ready • Ships from the UK in 48 hours.
 - **Imagery:** Rooftop sunset with diverse friends laughing, showcasing vivid custom cases. Backup: blurred city night bokeh with floating case renders if photography unavailable.
 - **Components:** Soft glass panel (480px desktop, centred-left), radius 28px. Buttons 52px tall; 16px gap horizontal, stack with 12px gap on mobile.
