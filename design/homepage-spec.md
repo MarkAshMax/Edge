@@ -156,7 +156,7 @@ Mobile
 - **Heading:** Loved by creators across the UK.
 - **Card Content:**
   - Stars row: ★★★★★
-  - Quote example: "The design tool was so easy -- I love my case!"
+  - Quote example: “The design tool was so easy — I love my case!”
   - Meta: Amelia, Manchester · iPhone 15 Pro.
   - Portrait photo (circle) overlapping case close-up.
 - **Background:** Soft pastel wash blending muted accent gradient with 10% opacity abstract blobs.

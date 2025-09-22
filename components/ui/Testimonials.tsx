@@ -5,7 +5,7 @@ const testimonials = [
     name: "Amelia",
     city: "Manchester",
     model: "iPhone 15 Pro",
-    quote: "The design tool was so easy -- I love my case!",
+    quote: "The design tool was so easy — I love my case!",
     image: "/images/testimonials/amelia.jpg",
   },
   {
