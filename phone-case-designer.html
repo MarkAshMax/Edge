@@ -862,6 +862,13 @@
       display: grid;
       gap: 1.35rem;
     }
+    .final-card-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 1rem;
+    }
     .final-card h3 {
       margin: 0;
       font-size: 1.62rem;
@@ -870,16 +877,89 @@
       margin: 0;
       color: var(--text-tertiary);
     }
-    .final-card .actions .btn-ghost {
+    .final-card-badge {
+      padding: 0.5rem 1.1rem;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 118, 63, 0.45);
+      background: rgba(255, 77, 31, 0.16);
+      color: var(--accent-strong);
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .final-card-actions {
+      display: grid;
+      gap: 1.4rem;
+    }
+    .final-card-tools {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.9rem;
+    }
+    .btn-tool {
+      flex: 1 1 180px;
+      min-width: 160px;
+    }
+    .final-card-tools .btn-ghost {
       background: transparent;
-      border: 1px solid rgba(255, 255, 255, 0.38);
+      border: 1px solid rgba(255, 255, 255, 0.28);
       color: var(--text-primary);
     }
-    .final-card .actions .btn-ghost:hover,
-    .final-card .actions .btn-ghost:focus-visible {
+    .final-card-tools .btn-ghost:hover,
+    .final-card-tools .btn-ghost:focus-visible {
       color: var(--accent-strong);
       border-color: rgba(255, 118, 63, 0.6);
       background: rgba(255, 118, 63, 0.12);
+    }
+    .final-card-tools .btn-accent {
+      flex: 1 1 220px;
+      min-width: 200px;
+    }
+    .order-callout {
+      display: grid;
+      gap: 0.85rem;
+      text-align: center;
+      padding: clamp(1.4rem, 3vw, 1.9rem);
+      border-radius: var(--radius-md);
+      background: linear-gradient(155deg, rgba(255, 77, 31, 0.28), rgba(11, 13, 19, 0.88));
+      border: 1px solid rgba(255, 137, 82, 0.4);
+      box-shadow: 0 34px 70px rgba(255, 77, 31, 0.28);
+    }
+    .order-push {
+      margin: 0;
+      color: var(--text-primary);
+      font-size: 1.02rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+    .btn-order {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.05rem clamp(1.6rem, 4vw, 2.6rem);
+      border-radius: 999px;
+      background: linear-gradient(135deg, #ff6a24, #ff8a3a 55%, #ffb56f);
+      color: #07090f;
+      font-size: 1.02rem;
+      font-weight: 800;
+      text-decoration: none;
+      border: 1px solid rgba(255, 210, 181, 0.68);
+      box-shadow: 0 32px 70px rgba(255, 99, 46, 0.45);
+      transition: transform 180ms ease, box-shadow 180ms ease, filter 200ms ease;
+    }
+    .btn-order:hover,
+    .btn-order:focus-visible {
+      transform: translateY(-2px);
+      box-shadow: 0 40px 90px rgba(255, 118, 63, 0.55);
+      filter: brightness(1.06);
+    }
+    .order-note {
+      margin: 0;
+      color: rgba(244, 245, 255, 0.72);
+      font-size: 0.85rem;
+      letter-spacing: 0.02em;
     }
     .final-card .status {
       color: var(--text-secondary);
@@ -1055,6 +1135,18 @@
         flex: 1 1 auto;
         justify-content: center;
       }
+      .final-card-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.8rem;
+      }
+      .final-card-badge {
+        align-self: stretch;
+        text-align: center;
+      }
+      .order-callout {
+        padding: 1.2rem;
+      }
     }
   </style>
 </head>
@@ -1101,7 +1193,7 @@
           <p class="hero-eyebrow">Phone Case Studio</p>
           <h1 id="hero-title">Edge turns bold ideas into daily carry art.</h1>
           <p>Edge is the premium phone case studio built for sharp ideas, AI-powered generation, and meticulous, print-ready control.</p>
-          <p class="cta-push">Only a Few Designs Left—create yours for £19.99 with free case + delivery!</p>
+          <p class="cta-push">Design yours today for £19.99—free case and free delivery included!</p>
           <div class="hero-actions">
             <a class="primary-cta" href="#ai">Lock In My £19.99 Custom Case Now</a>
             <a class="secondary-link" href="#upload">Upload your design -></a>
@@ -1257,14 +1349,23 @@
           </section>
 
           <section class="final-card">
-            <div>
-              <h3>Ready when you are</h3>
-              <p>Preview the print mask, export a production-ready PNG, or jump straight to checkout.</p>
+            <div class="final-card-header">
+              <div>
+                <h3>Ready when you are</h3>
+                <p>Preview the print mask, export a production-ready PNG, or jump straight to checkout.</p>
+              </div>
+              <span class="final-card-badge">£19.99 · Free case + delivery</span>
             </div>
-            <div class="actions">
-              <button class="btn-ghost" id="previewBtn" type="button">Preview Mask</button>
-              <button class="btn-accent" id="downloadBtn" type="button">Download Design (PNG)</button>
-              <a id="orderBtn" class="btn-ghost" href="https://example.com/order" target="_blank" rel="noopener">Order Now</a>
+            <div class="final-card-actions">
+              <div class="final-card-tools">
+                <button class="btn-ghost btn-tool" id="previewBtn" type="button">Preview Mask</button>
+                <button class="btn-accent btn-tool" id="downloadBtn" type="button">Download Design (PNG)</button>
+              </div>
+              <div class="order-callout">
+                <p class="order-push">Your design slot is active—checkout now to print it today.</p>
+                <a id="orderBtn" class="btn-order" href="https://example.com/order" target="_blank" rel="noopener">Secure My £19.99 Case Now</a>
+                <p class="order-note">Instant checkout. Free case & tracked delivery included.</p>
+              </div>
             </div>
             <div id="exportStatus" class="status" role="status" aria-live="polite"></div>
           </section>
