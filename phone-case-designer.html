@@ -695,25 +695,18 @@
             <a class="secondary-link" href="#upload">Upload your design -></a>
           </div>
         </div>
-        <div class="hero-preview">
-          <div class="preview-card dark">
-            <div class="live-info">
-              <span id="transformInfo">Scale 100% · Rotation 0° · Opacity 100%</span>
-              <span>iPhone 15 Pro</span>
-            </div>
-            <div class="canvas-wrapper" id="canvasWrapper">
-              <canvas id="phoneCanvas" width="400" height="800" aria-label="Phone case preview"></canvas>
-              <div class="canvas-overlay"></div>
-            </div>
-          </div>
-          <div class="preview-card">
-            <h3>Orbit your concept in 3D</h3>
-            <p>Toggle the 3D view to inspect lighting, edges, and camera-ready angles before exporting the final artwork.</p>
-            <div id="preview3d">
-              <p id="preview3dPlaceholder">Enable 3D preview to orbit the device.</p>
+          <div class="hero-preview">
+            <div class="preview-card dark">
+              <div class="live-info">
+                <span id="transformInfo">Scale 100% · Rotation 0° · Opacity 100%</span>
+                <span>iPhone 15 Pro</span>
+              </div>
+              <div class="canvas-wrapper" id="canvasWrapper">
+                <canvas id="phoneCanvas" width="400" height="800" aria-label="Phone case preview"></canvas>
+                <div class="canvas-overlay"></div>
+              </div>
             </div>
           </div>
-        </div>
       </div>
     </section>
 
@@ -862,6 +855,8 @@
 
       const GEMINI_ENDPOINT = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image-preview:generateContent';
       const GEMINI_API_KEY = 'AIzaSyAOwDeATzaBPOJ8g1xm6n44iEbtFLOo1P8';
+      const RATE_LIMIT_FALLBACK_MS = 45_000;
+      let rateLimitUntil = 0;
 
       // Centralized UI and rendering state
       const state = {
@@ -1134,7 +1129,32 @@
           }),
         });
         if (!response.ok) {
-          throw new Error(`Gemini request failed (${response.status})`);
+          if (response.status === 429) {
+            const retryAfterHeader = response.headers.get('retry-after');
+            const retryAfterSeconds = retryAfterHeader ? Number(retryAfterHeader) : RATE_LIMIT_FALLBACK_MS / 1000;
+            const retryMs = Number.isFinite(retryAfterSeconds) && retryAfterSeconds > 0
+              ? retryAfterSeconds * 1000
+              : RATE_LIMIT_FALLBACK_MS;
+            rateLimitUntil = Date.now() + retryMs;
+            const seconds = Math.ceil(retryMs / 1000);
+            throw new Error(`Gemini is rate limiting right now. Please wait about ${seconds}s before trying again.`);
+          }
+
+          let detail = '';
+          try {
+            const errorPayload = await response.clone().json();
+            detail = errorPayload?.error?.message || errorPayload?.message || '';
+          } catch (jsonErr) {
+            try {
+              detail = await response.clone().text();
+            } catch (textErr) {
+              // ignored – fall back to generic message
+            }
+          }
+          const message = detail
+            ? `${detail} (Status ${response.status})`
+            : `Gemini request failed (${response.status}).`;
+          throw new Error(message);
         }
         return await response.json();
       };
@@ -1167,7 +1187,14 @@
           await applyImage(img);
           return;
         }
-        
+
+        const now = Date.now();
+        if (now < rateLimitUntil) {
+          const seconds = Math.ceil((rateLimitUntil - now) / 1000);
+          setStatus(aiStatus, `Gemini is cooling down. Try again in ${seconds}s.`, 'error');
+          return;
+        }
+
         try {
           setLoading(true);
           setStatus(aiStatus, 'Contacting Gemini…');
@@ -1175,6 +1202,7 @@
           const dataUrl = extractImageFromGemini(payload);
           const img = await loadImageFromSource(dataUrl, 'Gemini design');
           await applyImage(img);
+          rateLimitUntil = 0;
           cacheDesign(prompt, dataUrl);
           setStatus(aiStatus, 'Design ready! Drag to fine-tune.');
         } catch (err) {
