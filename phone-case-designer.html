@@ -350,7 +350,7 @@
       gap: clamp(1.6rem, 4vw, 2.4rem);
     }
     .card-grid.two {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-columns: minmax(0, 1fr);
     }
     .card-grid.three {
       grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -862,14 +862,6 @@
             </div>
           </section>
 
-          <section class="preview-card">
-            <h3 id="preview-title">Orbit your concept in 3D</h3>
-            <p>Toggle the 3D view to inspect lighting, edges, and camera-ready angles before exporting the final artwork.</p>
-            <div id="preview3d">
-              <p id="preview3dPlaceholder">Enable 3D preview to orbit the device.</p>
-            </div>
-          </section>
-
           <section class="final-card">
             <div>
               <h3>Ready when you are</h3>
@@ -915,6 +907,12 @@
       const toggle3d = document.getElementById('toggle3d');
       const templateButtons = document.querySelectorAll('[data-template]');
       const quickPromptButtons = document.querySelectorAll('[data-prompt]');
+
+      const has3DPreviewSection = Boolean(preview3dContainer && preview3dPlaceholder);
+      if (!has3DPreviewSection && toggle3d) {
+        toggle3d.checked = false;
+        toggle3d.disabled = true;
+      }
 
       const GEMINI_ENDPOINT = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image-preview:generateContent';
       const GEMINI_API_KEY = 'AIzaSyBsfKWcYbpEGd7tol6qOAyzc8WIrWPeZ4w';
@@ -1373,6 +1371,10 @@
 
       // Lazy-load Three.js only when the user opts into the 3D orbit preview
       const init3DPreview = async () => {
+        if (!has3DPreviewSection || !toggle3d) {
+          if (toggle3d) toggle3d.checked = false;
+          return;
+        }
         if (state.three.enabled) return;
         preview3dPlaceholder.textContent = 'Loading 3D preview…';
         try {
@@ -1475,8 +1477,10 @@
           texture: null,
           raf: 0,
         };
-        preview3dContainer.innerHTML = '';
-        preview3dContainer.appendChild(preview3dPlaceholder);
+        if (preview3dContainer && preview3dPlaceholder) {
+          preview3dContainer.innerHTML = '';
+          preview3dContainer.appendChild(preview3dPlaceholder);
+        }
       };
 
       const loadThreeCore = () => new Promise((resolve, reject) => {
@@ -1610,13 +1614,19 @@
 
       downloadBtn.addEventListener('click', performExport);
 
-      toggle3d.addEventListener('change', () => {
-        if (toggle3d.checked) {
-          init3DPreview();
-        } else {
-          destroy3DPreview();
-        }
-      });
+      if (toggle3d) {
+        toggle3d.addEventListener('change', () => {
+          if (!has3DPreviewSection) {
+            toggle3d.checked = false;
+            return;
+          }
+          if (toggle3d.checked) {
+            init3DPreview();
+          } else {
+            destroy3DPreview();
+          }
+        });
+      }
 
       templateButtons.forEach((button) => {
         button.addEventListener('click', () => {
