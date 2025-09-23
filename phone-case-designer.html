@@ -845,13 +845,75 @@
       text-transform: uppercase;
       color: var(--text-tertiary);
     }
-    .finish-column input,
-    .finish-column select {
+    .finish-column input {
       background: rgba(255, 255, 255, 0.03);
       color: var(--text-primary);
     }
-    .finish-column option {
-      color: #111827;
+    .overlay-upload {
+      display: grid;
+      gap: 0.45rem;
+    }
+    .overlay-file-input {
+      width: 100%;
+      padding: 0.7rem 0.85rem;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--stroke);
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--text-secondary);
+      cursor: pointer;
+    }
+    .overlay-file-input::file-selector-button {
+      margin-right: 0.9rem;
+      padding: 0.45rem 1rem;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--stroke);
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text-primary);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      cursor: pointer;
+    }
+    .overlay-file-input::file-selector-button:hover,
+    .overlay-file-input::file-selector-button:focus-visible {
+      background: rgba(255, 255, 255, 0.12);
+    }
+    .overlay-remove-btn {
+      justify-self: start;
+      padding: 0.32rem 0.95rem;
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      background: transparent;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: var(--text-tertiary);
+      cursor: pointer;
+      transition: border 180ms ease, color 180ms ease, background 180ms ease;
+    }
+    .overlay-remove-btn:hover,
+    .overlay-remove-btn:focus-visible {
+      color: var(--text-primary);
+      border-color: rgba(255, 255, 255, 0.28);
+      background: rgba(255, 255, 255, 0.05);
+    }
+    .overlay-preview {
+      border: 1px dashed rgba(255, 255, 255, 0.14);
+      border-radius: var(--radius-sm);
+      min-height: 132px;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      padding: 1rem;
+      background: rgba(255, 255, 255, 0.02);
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+    }
+    .overlay-preview img {
+      max-width: 100%;
+      max-height: 100%;
+      border-radius: calc(var(--radius-sm) - 4px);
+      display: block;
+      box-shadow: 0 10px 24px rgba(5, 7, 12, 0.35);
     }
     .ai-actions {
       display: flex;
@@ -1304,8 +1366,13 @@
                   <div class="finish-column">
                     <label for="overlayTextInput">Add text overlay</label>
                     <input id="overlayTextInput" type="text" placeholder="e.g., Luna, Stay Bold, or 1998" />
-                    <label for="overlayIconSelect">Upload logo/picture</label>
-                    <select id="overlayIconSelect"></select>
+                    <label for="overlayIconUpload">Upload logo/picture</label>
+                    <div class="overlay-upload">
+                      <input id="overlayIconUpload" class="overlay-file-input" type="file" accept="image/png,image/jpeg,image/webp,image/svg+xml" />
+                      <button id="overlayIconClear" class="overlay-remove-btn" type="button">Remove logo</button>
+                      <div id="overlayIconPreview" class="overlay-preview" aria-live="polite">No logo added yet.</div>
+                    </div>
+                    <p class="ai-helper">PNG, JPG, WebP, or SVG up to 3MB.</p>
                     <p class="ai-helper">We will blend these into the AI prompt for you.</p>
                   </div>
                 </div>
@@ -1396,7 +1463,7 @@
               </div>
               <div class="order-callout">
                 <p class="order-push">Your design slot is active—checkout now to print it today.</p>
-                <a id="orderBtn" class="btn-order" href="https://example.com/order" target="_blank" rel="noopener">Secure My £19.99 Case Now</a>
+                <a id="orderBtn" class="btn-order" href="checkout.html">Secure My £19.99 Case Now</a>
                 <p class="order-note">Instant checkout. Free case & tracked delivery included.</p>
               </div>
             </div>
@@ -1603,67 +1670,46 @@
         }
       ];
 
-      const ICON_OPTIONS = [
-        { id: '', label: 'No extra icon', prompt: '' },
-        { id: 'spark', label: '✨ Sparkles', prompt: 'a dusting of iridescent sparkle icons' },
-        { id: 'heart', label: '♥ Heart', prompt: 'a small glossy heart badge' },
-        { id: 'bolt', label: '⚡ Lightning', prompt: 'a sleek lightning bolt accent' },
-        { id: 'star', label: '⭐ Starburst', prompt: 'mini starburst stickers for extra energy' },
-        { id: 'orbit', label: '🪐 Orbit', prompt: 'a tiny orbit or planet charm' }
-      ];
-
-      const ICON_GLYPHS = {
-        spark: '✨',
-        heart: '♥',
-        bolt: '⚡',
-        star: '★',
-        orbit: '🪐',
-      };
-
       const SURPRISE_PRESETS = [
-        {
-          prompt: 'retro arcade skyline with neon scoreboards and glitch haze',
-          vibeId: 'pop-culture-icons',
-          layout: 'scatter',
-          overlayText: 'Level Up',
-          overlayIcon: 'bolt'
-        },
-        {
-          prompt: 'misty mountains at sunrise with koi fish clouds',
-          vibeId: 'nature-landscapes',
-          layout: 'border',
-          overlayText: 'Wander',
-          overlayIcon: 'spark'
-        },
-        {
-          prompt: 'cosmic dragon guarding a crystal tarot portal',
-          vibeId: 'fantasy-myth',
-          layout: 'center',
-          overlayText: 'Mythic',
-          overlayIcon: 'orbit'
-        },
-        {
-          prompt: 'collage of vintage magazines, doodle faces, and graffiti streaks',
-          vibeId: 'collage-chaos',
-          layout: 'scatter',
-          overlayText: 'Remix',
-          overlayIcon: 'star'
-        },
-        {
-          prompt: 'soft blush gradient with minimalist monogram and gold foil flecks',
-          vibeId: 'personal-identity',
-          layout: 'corner',
-          overlayText: 'AB',
-          overlayIcon: 'heart'
-        },
-        {
-          prompt: 'dreamy vaporwave sunset grid with chrome statues and palm trees',
-          vibeId: 'art-aesthetics',
-          layout: 'center',
-          overlayText: 'Paradise',
-          overlayIcon: 'spark'
-        }
+      {
+        prompt: 'retro arcade skyline with neon scoreboards and glitch haze',
+        vibeId: 'pop-culture-icons',
+        layout: 'scatter',
+        overlayText: 'Level Up'
+      },
+      {
+        prompt: 'misty mountains at sunrise with koi fish clouds',
+        vibeId: 'nature-landscapes',
+        layout: 'border',
+        overlayText: 'Wander'
+      },
+      {
+        prompt: 'cosmic dragon guarding a crystal tarot portal',
+        vibeId: 'fantasy-myth',
+        layout: 'center',
+        overlayText: 'Mythic'
+      },
+      {
+        prompt: 'collage of vintage magazines, doodle faces, and graffiti streaks',
+        vibeId: 'collage-chaos',
+        layout: 'scatter',
+        overlayText: 'Remix'
+      },
+      {
+        prompt: 'soft blush gradient with minimalist monogram and gold foil flecks',
+        vibeId: 'personal-identity',
+        layout: 'corner',
+        overlayText: 'AB'
+      },
+      {
+        prompt: 'dreamy vaporwave sunset grid with chrome statues and palm trees',
+        vibeId: 'art-aesthetics',
+        layout: 'center',
+        overlayText: 'Paradise'
+      }
       ];
+
+      const DEFAULT_OVERLAY_MESSAGE = 'No logo added yet.';
 
       const randomFrom = (arr) => arr[Math.floor(Math.random() * arr.length)];
 
@@ -1675,7 +1721,9 @@
       const vibeCase = document.getElementById('vibeCase');
       const vibeDots = document.getElementById('vibeDots');
       const overlayTextInput = document.getElementById('overlayTextInput');
-      const overlayIconSelect = document.getElementById('overlayIconSelect');
+      const overlayIconUpload = document.getElementById('overlayIconUpload');
+      const overlayIconClear = document.getElementById('overlayIconClear');
+      const overlayIconPreview = document.getElementById('overlayIconPreview');
       const layoutRadios = document.querySelectorAll('input[name="layoutOption"]');
       const surpriseBtn = document.getElementById('surpriseBtn');
       const GEMINI_ENDPOINT = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image-preview:generateContent';
@@ -1705,7 +1753,11 @@
           vibeIndex: 0,
           layout: 'center',
           overlayText: '',
-          overlayIcon: '',
+        },
+        customOverlay: {
+          bitmap: null,
+          objectUrl: '',
+          name: '',
         },
         three: {
           enabled: false,
@@ -1838,15 +1890,22 @@
       };
 
       const drawDesign = () => {
-        if (!state.imageBitmap) return;
+        if (!state.imageBitmap && !state.customOverlay?.bitmap) return;
         ctx.save();
         ctx.clip(phoneMaskPath);
-        ctx.translate(state.transform.x, state.transform.y);
-        ctx.rotate((state.transform.rotation * Math.PI) / 180);
-        const scale = state.baseScale * state.transform.scale;
-        ctx.scale(scale, scale);
-        ctx.globalAlpha = state.transform.opacity;
-        ctx.drawImage(state.imageBitmap, -state.imageBitmap.width / 2, -state.imageBitmap.height / 2);
+        if (state.imageBitmap) {
+          ctx.save();
+          ctx.translate(state.transform.x, state.transform.y);
+          ctx.rotate((state.transform.rotation * Math.PI) / 180);
+          const scale = state.baseScale * state.transform.scale;
+          ctx.scale(scale, scale);
+          ctx.globalAlpha = state.transform.opacity;
+          ctx.drawImage(state.imageBitmap, -state.imageBitmap.width / 2, -state.imageBitmap.height / 2);
+          ctx.restore();
+        }
+        if (state.customOverlay?.bitmap) {
+          drawCustomOverlay(ctx);
+        }
         ctx.restore();
       };
 
@@ -1858,7 +1917,24 @@
 
       const getSelectedLayout = () => LAYOUT_OPTIONS.find((layout) => layout.id === state.selections.layout) || LAYOUT_OPTIONS[0];
 
-      const getSelectedIcon = () => ICON_OPTIONS.find((icon) => icon.id === state.selections.overlayIcon) || ICON_OPTIONS[0];
+      const drawCustomOverlay = (ctx) => {
+        const overlay = state.customOverlay?.bitmap;
+        if (!overlay) return;
+        const layout = getSelectedLayout();
+        const maxWidth = caseWidth * 0.4;
+        const maxHeight = caseHeight * 0.4;
+        const scale = Math.min(maxWidth / overlay.width, maxHeight / overlay.height, 1);
+        const drawWidth = overlay.width * scale;
+        const drawHeight = overlay.height * scale;
+        const iconX = (layout?.preview?.iconX ?? 0.5) * caseWidth;
+        const iconY = (layout?.preview?.iconY ?? 0.3) * caseHeight;
+        ctx.save();
+        ctx.shadowColor = 'rgba(0, 0, 0, 0.32)';
+        ctx.shadowBlur = 18;
+        ctx.globalAlpha = 1;
+        ctx.drawImage(overlay, iconX - drawWidth / 2, iconY - drawHeight / 2, drawWidth, drawHeight);
+        ctx.restore();
+      };
 
       const updateVibeDisplay = () => {
         const vibe = getActiveVibe();
@@ -1995,22 +2071,7 @@
           ctx.restore();
         }
 
-        const iconOption = getSelectedIcon();
-        if (iconOption?.id && ICON_GLYPHS[iconOption.id]) {
-          ctx.save();
-          const glyph = ICON_GLYPHS[iconOption.id];
-          const iconSize = Math.max(30, minDim * 0.12);
-          ctx.font = `700 ${iconSize}px "Plus Jakarta Sans", "Inter", sans-serif`;
-          ctx.textBaseline = 'middle';
-          ctx.textAlign = 'center';
-          const iconX = (layout?.preview?.iconX ?? 0.5) * caseWidth;
-          const iconY = (layout?.preview?.iconY ?? 0.3) * caseHeight;
-          ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
-          ctx.shadowColor = 'rgba(0, 0, 0, 0.35)';
-          ctx.shadowBlur = 16;
-          ctx.fillText(glyph, iconX, iconY);
-          ctx.restore();
-        }
+        drawCustomOverlay(ctx);
 
         ctx.restore();
       };
@@ -2019,7 +2080,7 @@
         if (!state.needsRender) return;
         state.needsRender = false;
         clearCanvas();
-        if (state.imageBitmap) {
+        if (state.imageBitmap || state.customOverlay?.bitmap) {
           drawDesign();
         } else if (state.vibePreviewActive) {
           drawVibePreview();
@@ -2099,6 +2160,16 @@
         }
       };
 
+      const validateOverlayFile = (file) => {
+        const allowed = ['image/png', 'image/jpeg', 'image/webp', 'image/svg+xml'];
+        if (!allowed.includes(file.type)) {
+          throw new Error('Logo must be PNG, JPG, WebP, or SVG.');
+        }
+        if (file.size > 3 * 1024 * 1024) {
+          throw new Error('Logo too large. Keep it under 3MB.');
+        }
+      };
+
       const handleFile = async (file) => {
         try {
           validateFile(file);
@@ -2115,6 +2186,77 @@
         } catch (err) {
           console.error(err);
           setStatus(uploadStatus, err.message, 'error');
+        }
+      };
+
+      const setOverlayPreviewContent = (content) => {
+        if (!overlayIconPreview) return;
+        overlayIconPreview.innerHTML = '';
+        if (typeof content === 'string') {
+          overlayIconPreview.textContent = content;
+        } else if (content instanceof Node) {
+          overlayIconPreview.append(content);
+        }
+      };
+
+      const revokeOverlayObjectUrl = () => {
+        const { objectUrl } = state.customOverlay || {};
+        if (objectUrl) {
+          try {
+            URL.revokeObjectURL(objectUrl);
+          } catch (err) {
+            console.warn('Failed to revoke overlay object URL', err);
+          }
+        }
+      };
+
+      const clearCustomOverlay = (message = DEFAULT_OVERLAY_MESSAGE) => {
+        revokeOverlayObjectUrl();
+        state.customOverlay = { bitmap: null, objectUrl: '', name: '' };
+        setOverlayPreviewContent(message);
+        if (overlayIconUpload) {
+          overlayIconUpload.value = '';
+        }
+        state.vibePreviewActive = !state.imageBitmap;
+        state.needsRender = true;
+      };
+
+      const handleOverlayUpload = async (file) => {
+        if (!file) return;
+        let nextObjectUrl = '';
+        try {
+          validateOverlayFile(file);
+          setOverlayPreviewContent('Loading logo…');
+          nextObjectUrl = URL.createObjectURL(file);
+          const img = await loadImageFromSource(nextObjectUrl, file.name || 'logo');
+          const bitmap = await createImageBitmapSafe(img);
+          revokeOverlayObjectUrl();
+          state.customOverlay = {
+            bitmap,
+            objectUrl: nextObjectUrl,
+            name: file.name || 'Uploaded logo',
+          };
+          const previewImg = document.createElement('img');
+          previewImg.src = state.customOverlay.objectUrl;
+          previewImg.alt = file.name ? `${file.name} preview` : 'Uploaded logo preview';
+          setOverlayPreviewContent(previewImg);
+          if (overlayIconUpload) {
+            overlayIconUpload.value = '';
+          }
+          state.vibePreviewActive = !state.imageBitmap;
+          state.needsRender = true;
+          nextObjectUrl = '';
+        } catch (err) {
+          console.error(err);
+          if (nextObjectUrl) {
+            try {
+              URL.revokeObjectURL(nextObjectUrl);
+            } catch (revokeErr) {
+              console.warn('Failed to revoke new overlay URL', revokeErr);
+            }
+            nextObjectUrl = '';
+          }
+          clearCustomOverlay(err.message || DEFAULT_OVERLAY_MESSAGE);
         }
       };
 
@@ -2147,7 +2289,6 @@
         const basePrompt = sanitize(promptInput.value.trim());
         const vibe = getActiveVibe();
         const layout = getSelectedLayout();
-        const icon = getSelectedIcon();
         const overlayText = sanitize((state.selections.overlayText || '').trim());
 
         const safePrompt = basePrompt || 'abstract light trails with premium polish';
@@ -2168,8 +2309,9 @@
           parts.push(`Include the text "${overlayText}" as a polished overlay that remains legible on a phone case.`);
         }
 
-        if (icon?.prompt) {
-          parts.push(`Incorporate ${icon.prompt}.`);
+        if (state.customOverlay?.bitmap) {
+          const accentArea = layout?.label ? layout.label.toLowerCase() : 'accent area';
+          parts.push(`Leave clear space near the ${accentArea} so a custom uploaded logo overlay can be layered cleanly.`);
         }
 
         parts.push('Maintain balanced composition, crisp detail, and keep the artwork printable for a phone case.');
@@ -2466,7 +2608,7 @@
 
       // Upscale render (~300 DPI) and export the masked design as a PNG
       const performExport = async () => {
-        if (!state.imageBitmap) {
+        if (!state.imageBitmap && !state.customOverlay?.bitmap) {
           setStatus(exportStatus, 'Add or generate a design first.', 'error');
           return;
         }
@@ -2481,12 +2623,19 @@
           eCtx.clearRect(0, 0, caseWidth, caseHeight);
           eCtx.save();
           eCtx.clip(phoneMaskPath);
-          eCtx.translate(state.transform.x, state.transform.y);
-          eCtx.rotate((state.transform.rotation * Math.PI) / 180);
-          const scale = state.baseScale * state.transform.scale;
-          eCtx.scale(scale, scale);
-          eCtx.globalAlpha = state.transform.opacity;
-          eCtx.drawImage(state.imageBitmap, -state.imageBitmap.width / 2, -state.imageBitmap.height / 2);
+          if (state.imageBitmap) {
+            eCtx.save();
+            eCtx.translate(state.transform.x, state.transform.y);
+            eCtx.rotate((state.transform.rotation * Math.PI) / 180);
+            const scale = state.baseScale * state.transform.scale;
+            eCtx.scale(scale, scale);
+            eCtx.globalAlpha = state.transform.opacity;
+            eCtx.drawImage(state.imageBitmap, -state.imageBitmap.width / 2, -state.imageBitmap.height / 2);
+            eCtx.restore();
+          }
+          if (state.customOverlay?.bitmap) {
+            drawCustomOverlay(eCtx);
+          }
           eCtx.restore();
           eCtx.drawImage(caseLightingOverlay, 0, 0);
           const link = document.createElement('a');
@@ -2520,16 +2669,6 @@
         });
       });
 
-      if (overlayIconSelect && overlayIconSelect.options.length === 0) {
-        ICON_OPTIONS.forEach((option) => {
-          const optionEl = document.createElement('option');
-          optionEl.value = option.id;
-          optionEl.textContent = option.label;
-          overlayIconSelect.append(optionEl);
-        });
-        overlayIconSelect.value = state.selections.overlayIcon;
-      }
-
       const applyLayoutSelection = (layoutId) => {
         state.selections.layout = layoutId;
         layoutRadios.forEach((radio) => {
@@ -2561,14 +2700,21 @@
         });
       }
 
-      if (overlayIconSelect) {
-        overlayIconSelect.addEventListener('change', () => {
-          state.selections.overlayIcon = overlayIconSelect.value;
-          if (!state.imageBitmap) {
-            state.vibePreviewActive = true;
-            state.needsRender = true;
-          }
+      if (overlayIconUpload) {
+        overlayIconUpload.addEventListener('change', (event) => {
+          const file = event.target?.files?.[0];
+          handleOverlayUpload(file);
         });
+      }
+
+      if (overlayIconClear) {
+        overlayIconClear.addEventListener('click', () => {
+          clearCustomOverlay();
+        });
+      }
+
+      if (overlayIconPreview) {
+        setOverlayPreviewContent(DEFAULT_OVERLAY_MESSAGE);
       }
 
       if (vibeDots) {
@@ -2609,10 +2755,6 @@
           overlayTextInput.value = preset.overlayText || '';
         }
         state.selections.overlayText = preset.overlayText || '';
-        if (overlayIconSelect) {
-          overlayIconSelect.value = preset.overlayIcon || '';
-        }
-        state.selections.overlayIcon = preset.overlayIcon || '';
         state.vibePreviewActive = true;
         state.needsRender = true;
         handleGeminiGeneration();
