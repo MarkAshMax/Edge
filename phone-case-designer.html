@@ -577,6 +577,251 @@
     .template-card button {
       margin-left: auto;
     }
+    .ai-card-header {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+    .ai-card-lede {
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+    }
+    .ai-step {
+      display: grid;
+      gap: 0.8rem;
+      padding: 1.15rem 1.35rem;
+      border-radius: var(--radius-sm);
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--stroke-soft);
+    }
+    .ai-step.optional {
+      background: rgba(255, 255, 255, 0.02);
+    }
+    .ai-step-label {
+      font-size: 0.84rem;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--text-tertiary);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+    }
+    .ai-helper {
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: 0.92rem;
+    }
+    .prompt-input-group {
+      display: grid;
+      gap: 0.75rem;
+    }
+    .quick-prompts.example-prompts {
+      justify-content: flex-start;
+    }
+    .quick-prompts.example-prompts button {
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text-primary);
+      border-color: rgba(255, 255, 255, 0.16);
+    }
+    .quick-prompts.example-prompts button:hover,
+    .quick-prompts.example-prompts button:focus-visible {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: rgba(255, 118, 63, 0.4);
+    }
+    .vibe-carousel {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      gap: 1rem;
+    }
+    .vibe-card {
+      display: grid;
+      gap: 1rem;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--stroke);
+      border-radius: var(--radius-md);
+      padding: clamp(1.2rem, 3vw, 1.6rem);
+    }
+    .vibe-case {
+      width: clamp(120px, 30vw, 160px);
+      height: clamp(240px, 60vw, 300px);
+      border-radius: 28px;
+      background: linear-gradient(160deg, rgba(255, 255, 255, 0.12), rgba(12, 16, 28, 0.12));
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.18), 0 18px 38px rgba(5, 8, 14, 0.55);
+      position: relative;
+      overflow: hidden;
+      display: grid;
+      place-items: center;
+      color: rgba(255, 255, 255, 0.88);
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-size: 0.82rem;
+    }
+    .vibe-case::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 28px;
+      border: 2px solid rgba(255, 255, 255, 0.18);
+      pointer-events: none;
+    }
+    .vibe-case-label {
+      padding: 0.35rem 0.75rem;
+      border-radius: 999px;
+      background: rgba(0, 0, 0, 0.35);
+      backdrop-filter: blur(6px);
+    }
+    .vibe-meta {
+      display: grid;
+      gap: 0.55rem;
+    }
+    .vibe-name {
+      margin: 0;
+      font-size: 1.12rem;
+      font-weight: 600;
+    }
+    .vibe-description {
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+    }
+    .vibe-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+    }
+    .vibe-tag {
+      padding: 0.25rem 0.75rem;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      font-size: 0.82rem;
+      letter-spacing: 0.02em;
+      color: var(--text-secondary);
+      background: rgba(255, 255, 255, 0.05);
+    }
+    .vibe-nav {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      border: 1px solid var(--stroke);
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--text-primary);
+      display: grid;
+      place-items: center;
+      font-size: 1.1rem;
+    }
+    .vibe-nav:hover,
+    .vibe-nav:focus-visible {
+      border-color: rgba(255, 118, 63, 0.45);
+      color: var(--accent-strong);
+    }
+    .vibe-nav:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+    .vibe-dots {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      justify-content: center;
+    }
+    .vibe-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      background: rgba(255, 255, 255, 0.08);
+      padding: 0;
+    }
+    .vibe-dot.active {
+      border-color: rgba(255, 118, 63, 0.8);
+      background: rgba(255, 118, 63, 0.6);
+    }
+    .finish-grid {
+      display: grid;
+      gap: 1.1rem;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    }
+    .layout-options {
+      border: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      gap: 0.75rem;
+    }
+    .layout-options legend {
+      font-size: 0.86rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      margin-bottom: 0.65rem;
+      color: var(--text-tertiary);
+    }
+    .layout-option {
+      display: grid;
+      gap: 0.25rem;
+      padding: 0.65rem 0.75rem;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--stroke-soft);
+      background: rgba(255, 255, 255, 0.02);
+      grid-template-columns: auto 1fr;
+      align-items: start;
+      column-gap: 0.6rem;
+    }
+    .layout-option label {
+      font-size: 0.96rem;
+      letter-spacing: 0.02em;
+      font-weight: 600;
+      text-transform: none;
+      color: var(--text-primary);
+      grid-column: 2;
+    }
+    .layout-option span {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      letter-spacing: 0.01em;
+    }
+    .layout-option input[type="radio"] {
+      width: 18px;
+      height: 18px;
+      margin: 0.2rem 0 0 0;
+      grid-column: 1;
+    }
+    .finish-column {
+      display: grid;
+      gap: 0.55rem;
+    }
+    .finish-column label {
+      font-size: 0.86rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-tertiary);
+    }
+    .finish-column input,
+    .finish-column select {
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--text-primary);
+    }
+    .finish-column option {
+      color: #111827;
+    }
+    .ai-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.9rem;
+      align-items: center;
+    }
+    .ai-actions .ai-helper {
+      font-size: 0.82rem;
+      color: var(--text-tertiary);
+    }
+    .surprise-action {
+      justify-self: start;
+      width: fit-content;
+    }
     .actions {
       display: flex;
       flex-wrap: wrap;
@@ -757,20 +1002,90 @@
           </div>
           <div class="card-grid two">
             <article class="card" id="ai" aria-labelledby="ai-title">
-              <div>
-                <h3 id="ai-title">AI Designer</h3>
-                <p class="card-subtitle">Describe what you want, pick a preset vibe, and let Gemini sketch it out.</p>
+              <div class="ai-card-header">
+                <div>
+                  <h3 id="ai-title">AI Designer</h3>
+                  <p class="card-subtitle">Describe your dream case, pick a vibe, and watch it come to life.</p>
+                  <p class="ai-card-lede">Type anything you like, from "Y2K glitter with my name in bold" to "sunset over Tokyo skyline with sakura petals." Then customize with styles, moods, and flips until it is perfect.</p>
+                </div>
               </div>
-              <label for="promptInput">Describe your dream case</label>
-              <textarea id="promptInput" placeholder="Neon koi fish swimming through a digital cityscape"></textarea>
-              <div class="quick-prompts" role="group" aria-label="Preset styles">
-                <button class="btn-ghost" type="button" data-prompt="Minimalist">Minimalist</button>
-                <button class="btn-ghost" type="button" data-prompt="Cyberpunk">Cyberpunk</button>
-                <button class="btn-ghost" type="button" data-prompt="Nature">Nature</button>
-                <button class="btn-ghost" type="button" data-prompt="Abstract">Abstract</button>
-                <button class="btn-ghost" type="button" data-prompt="Anime">Anime</button>
+
+              <section class="ai-step" aria-labelledby="ai-step-1">
+                <div class="ai-step-label" id="ai-step-1">🟦 Step 1 · Describe your case</div>
+                <p class="ai-helper">Type anything you would love on your case - characters, colors, patterns, or text. This part is powered by AI image generation plus optional overlays.</p>
+                <div class="prompt-input-group">
+                  <label class="sr-only" for="promptInput">Describe your dream case</label>
+                  <textarea id="promptInput" placeholder="Type anything you'd love on your case... like 'purple moon and stars with my name'"></textarea>
+                </div>
+                <p class="ai-helper">Need ideas? Tap one of these:</p>
+                <div class="quick-prompts example-prompts" role="group" aria-label="Prompt examples">
+                  <button class="btn-ghost" type="button" data-prompt="Dark ocean waves with glowing jellyfish and neon text">Dark ocean waves with glowing jellyfish and neon text</button>
+                  <button class="btn-ghost" type="button" data-prompt="Cute pink mushrooms and tiny frogs">Cute pink mushrooms and tiny frogs</button>
+                  <button class="btn-ghost" type="button" data-prompt="My dog flying through space with rainbow trails">My dog flying through space with rainbow trails</button>
+                </div>
+              </section>
+
+              <section class="ai-step" aria-labelledby="ai-step-2">
+                <div class="ai-step-label" id="ai-step-2">🟪 Step 2 · Pick your vibe</div>
+                <p class="ai-helper">Choose a vibe and we will show a live preview of how your design leans in that style.</p>
+                <div class="vibe-carousel">
+                  <button class="vibe-nav" id="vibePrevBtn" type="button" aria-label="Previous vibe">&#8592;</button>
+                  <div class="vibe-card">
+                    <div class="vibe-case" id="vibeCase" aria-hidden="true"></div>
+                    <div class="vibe-meta">
+                      <p class="vibe-name" id="vibeName"></p>
+                      <p class="vibe-description" id="vibeDescription"></p>
+                      <div class="vibe-tags" id="vibeTags"></div>
+                    </div>
+                  </div>
+                  <button class="vibe-nav" id="vibeNextBtn" type="button" aria-label="Next vibe">&#8594;</button>
+                </div>
+                <div class="vibe-dots" id="vibeDots" role="tablist" aria-label="Available vibes"></div>
+              </section>
+
+              <section class="ai-step" aria-labelledby="ai-step-3">
+                <div class="ai-step-label" id="ai-step-3">🟥 Step 3 · Finish & add custom stuff</div>
+                <p class="ai-helper">Want to add your name? Or a small icon? You can!</p>
+                <div class="finish-grid">
+                  <fieldset class="layout-options">
+                    <legend>Layout</legend>
+                    <div class="layout-option">
+                      <input type="radio" name="layoutOption" value="center" id="layout-center" checked />
+                      <label for="layout-center">Center focus<span>Hero element in the middle</span></label>
+                    </div>
+                    <div class="layout-option">
+                      <input type="radio" name="layoutOption" value="scatter" id="layout-scatter" />
+                      <label for="layout-scatter">Scattered collage<span>Playful cluster with stickers and cutouts</span></label>
+                    </div>
+                    <div class="layout-option">
+                      <input type="radio" name="layoutOption" value="border" id="layout-border" />
+                      <label for="layout-border">Border frame<span>Design wraps the edges with clear center</span></label>
+                    </div>
+                    <div class="layout-option">
+                      <input type="radio" name="layoutOption" value="corner" id="layout-corner" />
+                      <label for="layout-corner">Corner tag<span>Statement badge in a single corner</span></label>
+                    </div>
+                  </fieldset>
+                  <div class="finish-column">
+                    <label for="overlayTextInput">Add text overlay</label>
+                    <input id="overlayTextInput" type="text" placeholder="e.g., Luna, Stay Bold, or 1998" />
+                    <label for="overlayIconSelect">Add a symbol</label>
+                    <select id="overlayIconSelect"></select>
+                    <p class="ai-helper">We will blend these into the AI prompt for you.</p>
+                  </div>
+                </div>
+              </section>
+
+              <section class="ai-step optional" aria-labelledby="ai-step-4">
+                <div class="ai-step-label" id="ai-step-4">🟨 Step 4 · Surprise me!</div>
+                <p class="ai-helper">Not sure what to make? Shuffle to get a full vibe, layout, and effect you can tweak.</p>
+                <button class="btn-ghost surprise-action" id="surpriseBtn" type="button">Shuffle a ready-made idea ✨</button>
+              </section>
+
+              <div class="ai-actions">
+                <button id="generateBtn" class="btn-accent" type="button">Generate with Gemini</button>
+                <p class="ai-helper">Tip: Press Cmd/Ctrl + Enter to generate fast.</p>
               </div>
-              <button id="generateBtn" class="btn-accent" type="button">Generate with Gemini</button>
               <div id="aiStatus" class="status" role="status" aria-live="polite"></div>
             </article>
 
@@ -847,6 +1162,16 @@
             </div>
           </div>
         </section>
+
+        <section class="workspace-section" aria-labelledby="category-library-title">
+          <div class="section-heading">
+            <h2 id="category-library-title">Design category library</h2>
+            <p>Curated presets with palettes, prompts, and guardrails tuned for Edge's premium phone case aesthetic.</p>
+          </div>
+          <div class="card">
+            <div id="categoryLibrary" class="category-grid" role="list"></div>
+          </div>
+        </section>
       </div>
 
       <aside class="preview-rail" aria-labelledby="preview-title">
@@ -908,10 +1233,460 @@
       const templateButtons = document.querySelectorAll('[data-template]');
       const quickPromptButtons = document.querySelectorAll('[data-prompt]');
 
+      const CATEGORY_LIBRARY = [
+        {
+          id: 'midnight-operator',
+          name: 'Midnight Operator',
+          icon: '🎯',
+          description: 'Neo-noir operator energy with cinematic open-world grit layered across polished tactical geometry.',
+          keywords: [
+            'urban tactical',
+            'neon noir',
+            'night cityscape',
+            'motion blur',
+            'stealth silhouette',
+            'reflective chrome',
+            'cinematic rain',
+            'holographic HUD',
+            'modular armor',
+            'industrial grit'
+          ],
+          palette: ['#0A101F', '#1E2B45', '#3F5C87', '#7DD1F2', '#F2A516'],
+          guardrails: {
+            do: [
+              'Stage dramatic key lighting, long-lens depth, and motion streaks for momentum.',
+              'Keep gear silhouettes sleek, modular, and suggestive rather than weapon-specific.'
+            ],
+            dont: [
+              'Use copyrighted logos/IP, faction patches, or recognizable franchise insignia.',
+              'Show gore, muzzle flashes, or realistic brand-name firearms and vehicles.'
+            ]
+          },
+          prompts: [
+            'Elite urban operator outline stepping through midnight rain, teal neon reflections, layered HUD glyphs, isolated on transparent background, ultra high resolution.',
+            'Cinematic drone-eye view of luminous skyscraper canyon, tactical arrow overlays, magenta motion blur streaks, transparent PNG finish, premium case art.',
+            'Minimalist armored figure backlit by amber helipad lights, smoke wisps, angular grid horizon, transparent background, moody editorial lighting.',
+            'Holographic map shards orbiting matte black helmet, cyan accent glow, gritty texture haze, centered composition, transparent backdrop.',
+            'Dynamic motorcycle chase silhouette, neon tire light trails, rain-specked lens flare, futuristic signage fragments, transparent PNG output.',
+            'Abstract city skyline cutouts stitched with tactical UI nodes, graphite concrete texture, electric blue highlights, transparent floating layout.'
+          ],
+          config: {
+            id: 'midnight-operator',
+            name: 'Midnight Operator',
+            description: 'Cinematic neon-noir tactical energy.',
+            icon: '🎯',
+            tags: ['urban', 'tactical', 'neon'],
+            palette: ['#0A101F', '#1E2B45', '#3F5C87', '#7DD1F2', '#F2A516'],
+            examplePrompts: [
+              'Elite urban operator outline stepping through midnight rain, teal neon reflections, layered HUD glyphs, isolated on transparent background, ultra high resolution.',
+              'Cinematic drone-eye view of luminous skyscraper canyon, tactical arrow overlays, magenta motion blur streaks, transparent PNG finish, premium case art.',
+              'Abstract city skyline cutouts stitched with tactical UI nodes, graphite concrete texture, electric blue highlights, transparent floating layout.'
+            ]
+          }
+        },
+        {
+          id: 'petal-atelier',
+          name: 'Petal Atelier',
+          icon: '🌸',
+          description: 'Botanical couture compositions blending soft pastels with sculptural negative space for refined femininity.',
+          keywords: [
+            'botanical couture',
+            'artisan florals',
+            'soft pastel',
+            'champagne shimmer',
+            'watercolor wash',
+            'negative space',
+            'sculpted petals',
+            'satin texture',
+            'modern calligraphy',
+            'golden hour glow'
+          ],
+          palette: ['#F6E6EB', '#F3D2C1', '#D3B8A4', '#A7C4BC', '#7F8C88'],
+          guardrails: {
+            do: [
+              'Layer hand-painted florals with gentle gradients and intentional breathing room.',
+              'Introduce subtle metallic glints or pearlescent dusting for upscale finish.'
+            ],
+            dont: [
+              'Use copyrighted logos/IP, monograms, or celebrity likenesses.',
+              'Overcrowd with clipart repeats, literal wedding motifs, or dated lace patterns.'
+            ]
+          },
+          prompts: [
+            'Airy watercolor peonies with sculpted gold leaf ribs, champagne mist accents, floating on transparent background, high-resolution botanical fashion editorial.',
+            'Pastel magnolia petals arranged in asymmetrical negative space, soft blush gradients, pearl dust overlay, transparent PNG.',
+            'Stylized fern silhouettes with muted sage wash, hand-inked contour lines, touches of rose gold foil sparkle, transparent background.',
+            'Layered ranunculus rosettes with translucent vellum overlays, soft mauve haze, muse-inspired composition, transparent case-ready art.',
+            'Minimal orchid stem sweeping across airy negative space, watercolor droplets, champagne shimmer speckles, transparent PNG canvas.',
+            'Floating bouquet ribbons abstracted into soft curves, pastel ombre petals, subtle bokeh flecks, transparent background premium finish.'
+          ],
+          config: {
+            id: 'petal-atelier',
+            name: 'Petal Atelier',
+            description: 'Botanical couture with refined softness.',
+            icon: '🌸',
+            tags: ['botanical', 'pastel', 'couture'],
+            palette: ['#F6E6EB', '#F3D2C1', '#D3B8A4', '#A7C4BC', '#7F8C88'],
+            examplePrompts: [
+              'Airy watercolor peonies with sculpted gold leaf ribs, champagne mist accents, floating on transparent background, high-resolution botanical fashion editorial.',
+              'Stylized fern silhouettes with muted sage wash, hand-inked contour lines, touches of rose gold foil sparkle, transparent background.',
+              'Floating bouquet ribbons abstracted into soft curves, pastel ombre petals, subtle bokeh flecks, transparent background premium finish.'
+            ]
+          }
+        },
+        {
+          id: 'velvet-aurora',
+          name: 'Velvet Aurora',
+          icon: '🪐',
+          description: 'Luminous cosmic gradients fused with feminine futurism and editorial polish.',
+          keywords: [
+            'cosmic satin',
+            'iridescent glow',
+            'aurora gradients',
+            'velvet shimmer',
+            'prismatic haze',
+            'orbital motifs',
+            'sculpted typography',
+            'electric lavender',
+            'luxe minimalism',
+            'soft nebula'
+          ],
+          palette: ['#150D26', '#3B1F6B', '#7A3FF0', '#D68CFF', '#F8C7EB', '#F5E8FF'],
+          guardrails: {
+            do: [
+              'Blend smooth aurora ribbons with soft-focus light blooms and sculpted silhouettes.',
+              'Use minimalist astronomical symbols or jewelry-like orbits for balance.'
+            ],
+            dont: [
+              'Use copyrighted logos/IP, franchise space suits, or recognizable spacecraft.',
+              'Add harsh glitch noise, dated galaxy stock textures, or juvenile star doodles.'
+            ]
+          },
+          prompts: [
+            'Elegant aurora swirl cascading in velvet purple and blush, crystalline spark dust, minimal orbit rings, transparent background, ultra high fidelity.',
+            'Floating crescent halo with prismatic gradient trail, luminous soft lighting, premium fashion editorial tone, transparent PNG.',
+            'Nebula-inspired silk folds, electric lavender edge glow, minimalist planetary glyphs, transparent background, luxury finish.',
+            'Soft-focus silhouette of figure wrapped in iridescent ribbons, cosmic sparkles, centered composition, transparent backdrop.',
+            'Orb cluster with glassy refraction, gradient mist from deep indigo to peach, subtle metallic sheen, transparent PNG output.',
+            'Minimal star chart lines weaving through blush and violet haze, diffuse light bloom, futuristic jewelry cues, transparent case-ready art.'
+          ],
+          config: {
+            id: 'velvet-aurora',
+            name: 'Velvet Aurora',
+            description: 'Cosmic gradients with feminine futurism.',
+            icon: '🪐',
+            tags: ['cosmic', 'feminine', 'luxury'],
+            palette: ['#150D26', '#3B1F6B', '#7A3FF0', '#D68CFF', '#F8C7EB', '#F5E8FF'],
+            examplePrompts: [
+              'Elegant aurora swirl cascading in velvet purple and blush, crystalline spark dust, minimal orbit rings, transparent background, ultra high fidelity.',
+              'Nebula-inspired silk folds, electric lavender edge glow, minimalist planetary glyphs, transparent background, luxury finish.',
+              'Minimal star chart lines weaving through blush and violet haze, diffuse light bloom, futuristic jewelry cues, transparent case-ready art.'
+            ]
+          }
+        }
+      ];
+
+      const VIBE_CATEGORIES = [
+        {
+          id: 'art-aesthetics',
+          name: 'Art & Aesthetics',
+          emoji: '🎨',
+          description: 'Painterly blends, Y2K sheen, vaporwave glow, or stripped-down brutalist grids.',
+          tags: ['Y2K', 'Vaporwave', 'Minimal', 'Painterly'],
+          stylePrompt: 'artistic color blocking, confident gradients, and gallery-ready typography',
+          preview: {
+            gradient: ['#FF9DE4', '#6C5CE7'],
+            shapes: [
+              { type: 'circle', x: 0.28, y: 0.32, radius: 0.28, color: 'rgba(255, 210, 102, 0.45)', blur: 70 },
+              { type: 'stripe', angle: -18, thickness: 0.22, color: 'rgba(255, 255, 255, 0.12)' },
+              { type: 'ring', x: 0.68, y: 0.65, radius: 0.22, lineWidth: 0.05, color: 'rgba(108, 92, 231, 0.55)' }
+            ],
+            overlayText: 'Art Mode'
+          }
+        },
+        {
+          id: 'pop-culture-icons',
+          name: 'Pop Culture & Icons',
+          emoji: '🕹️',
+          description: 'Anime energy, retro tech, streetwear graphics, and bold cartoon mashups.',
+          tags: ['Anime', 'Retro', 'Streetwear', 'Playful'],
+          stylePrompt: 'bold iconography, sticker layering, and high-contrast outlines',
+          preview: {
+            gradient: ['#FF6B6B', '#39C0FF'],
+            shapes: [
+              { type: 'circle', x: 0.3, y: 0.28, radius: 0.24, color: 'rgba(255, 255, 255, 0.18)', blur: 40 },
+              { type: 'stripe', angle: 22, thickness: 0.18, color: 'rgba(255, 214, 102, 0.3)' },
+              { type: 'dots', offsetX: 0.68, offsetY: 0.62, spread: 0.22, count: 5, radius: 0.04, color: 'rgba(0, 0, 0, 0.25)' }
+            ],
+            overlayText: 'Pop Pop'
+          }
+        },
+        {
+          id: 'nature-landscapes',
+          name: 'Nature & Landscapes',
+          emoji: '🌄',
+          description: 'Mountains, oceans, forests, skies, and calming cosmic horizons.',
+          tags: ['Coastal', 'Forests', 'Skies', 'Organic'],
+          stylePrompt: 'lush gradients, misty atmosphere, and organic layering',
+          preview: {
+            gradient: ['#0B3D2E', '#68C4A3'],
+            shapes: [
+              { type: 'circle', x: 0.72, y: 0.28, radius: 0.22, color: 'rgba(255, 237, 160, 0.45)', blur: 50 },
+              { type: 'stripe', angle: -12, thickness: 0.16, color: 'rgba(12, 61, 49, 0.4)' },
+              { type: 'dots', offsetX: 0.35, offsetY: 0.68, spread: 0.2, count: 6, radius: 0.03, color: 'rgba(255, 255, 255, 0.22)' }
+            ],
+            overlayText: 'Wander'
+          }
+        },
+        {
+          id: 'fantasy-myth',
+          name: 'Fantasy & Myth',
+          emoji: '🔮',
+          description: 'Dragons, angels, tarot, celestial portals, and legendary realms.',
+          tags: ['Tarot', 'Cosmic', 'Mystic', 'Epic'],
+          stylePrompt: 'mythic lighting, ethereal glow, and ornate detailing',
+          preview: {
+            gradient: ['#1D0A3C', '#8F57FF'],
+            shapes: [
+              { type: 'circle', x: 0.26, y: 0.66, radius: 0.26, color: 'rgba(118, 220, 255, 0.3)', blur: 60 },
+              { type: 'stripe', angle: 35, thickness: 0.16, color: 'rgba(255, 255, 255, 0.1)' },
+              { type: 'ring', x: 0.7, y: 0.32, radius: 0.2, lineWidth: 0.04, color: 'rgba(255, 204, 255, 0.55)' }
+            ],
+            overlayText: 'Mythic'
+          }
+        },
+        {
+          id: 'personal-identity',
+          name: 'Personal & Identity',
+          emoji: '💖',
+          description: 'Names, initials, slogans, pets, astrology, and personal symbols.',
+          tags: ['Monogram', 'Zodiac', 'Pets', 'Quotes'],
+          stylePrompt: 'personalized lettering, clean shapes, and soft gradients',
+          preview: {
+            gradient: ['#FDBA74', '#F472B6'],
+            shapes: [
+              { type: 'circle', x: 0.32, y: 0.35, radius: 0.24, color: 'rgba(255, 255, 255, 0.18)', blur: 40 },
+              { type: 'stripe', angle: -24, thickness: 0.18, color: 'rgba(255, 255, 255, 0.1)' },
+              { type: 'ring', x: 0.68, y: 0.68, radius: 0.2, lineWidth: 0.04, color: 'rgba(255, 255, 255, 0.45)' }
+            ],
+            overlayText: 'Signature'
+          }
+        },
+        {
+          id: 'collage-chaos',
+          name: 'Collage & Chaos',
+          emoji: '🌀',
+          description: 'Stickerbomb energy, surreal mashups, glitch layers, and bold cutouts.',
+          tags: ['Sticker', 'Graffiti', 'Surreal', 'Remix'],
+          stylePrompt: 'chaotic collage, layered stickers, and energetic scribbles',
+          preview: {
+            gradient: ['#111827', '#EF4444'],
+            shapes: [
+              { type: 'dots', offsetX: 0.3, offsetY: 0.35, spread: 0.25, count: 7, radius: 0.035, color: 'rgba(255, 255, 255, 0.3)' },
+              { type: 'stripe', angle: 15, thickness: 0.2, color: 'rgba(239, 68, 68, 0.3)' },
+              { type: 'ring', x: 0.72, y: 0.65, radius: 0.24, lineWidth: 0.05, color: 'rgba(253, 224, 71, 0.45)' }
+            ],
+            overlayText: 'Remix'
+          }
+        }
+      ];
+
+      const LAYOUT_OPTIONS = [
+        {
+          id: 'center',
+          label: 'Center focus',
+          prompt: 'a center-focused layout highlighting the primary subject',
+          preview: { textX: 0.5, textY: 0.55, align: 'center', iconX: 0.5, iconY: 0.28 }
+        },
+        {
+          id: 'scatter',
+          label: 'Scattered collage',
+          prompt: 'a playful scattered composition with layered stickers',
+          preview: { textX: 0.26, textY: 0.38, align: 'left', iconX: 0.68, iconY: 0.65 }
+        },
+        {
+          id: 'border',
+          label: 'Border frame',
+          prompt: 'a border-framed layout that hugs the edges and leaves breathing room in the middle',
+          preview: { textX: 0.5, textY: 0.85, align: 'center', iconX: 0.5, iconY: 0.2 }
+        },
+        {
+          id: 'corner',
+          label: 'Corner tag',
+          prompt: 'a corner badge feature with supporting accents around it',
+          preview: { textX: 0.72, textY: 0.78, align: 'right', iconX: 0.28, iconY: 0.28 }
+        }
+      ];
+
+      const ICON_OPTIONS = [
+        { id: '', label: 'No extra icon', prompt: '' },
+        { id: 'spark', label: '✨ Sparkles', prompt: 'a dusting of iridescent sparkle icons' },
+        { id: 'heart', label: '♥ Heart', prompt: 'a small glossy heart badge' },
+        { id: 'bolt', label: '⚡ Lightning', prompt: 'a sleek lightning bolt accent' },
+        { id: 'star', label: '⭐ Starburst', prompt: 'mini starburst stickers for extra energy' },
+        { id: 'orbit', label: '🪐 Orbit', prompt: 'a tiny orbit or planet charm' }
+      ];
+
+      const ICON_GLYPHS = {
+        spark: '✨',
+        heart: '♥',
+        bolt: '⚡',
+        star: '★',
+        orbit: '🪐',
+      };
+
+      const SURPRISE_PRESETS = [
+        {
+          prompt: 'retro arcade skyline with neon scoreboards and glitch haze',
+          vibeId: 'pop-culture-icons',
+          layout: 'scatter',
+          overlayText: 'Level Up',
+          overlayIcon: 'bolt'
+        },
+        {
+          prompt: 'misty mountains at sunrise with koi fish clouds',
+          vibeId: 'nature-landscapes',
+          layout: 'border',
+          overlayText: 'Wander',
+          overlayIcon: 'spark'
+        },
+        {
+          prompt: 'cosmic dragon guarding a crystal tarot portal',
+          vibeId: 'fantasy-myth',
+          layout: 'center',
+          overlayText: 'Mythic',
+          overlayIcon: 'orbit'
+        },
+        {
+          prompt: 'collage of vintage magazines, doodle faces, and graffiti streaks',
+          vibeId: 'collage-chaos',
+          layout: 'scatter',
+          overlayText: 'Remix',
+          overlayIcon: 'star'
+        },
+        {
+          prompt: 'soft blush gradient with minimalist monogram and gold foil flecks',
+          vibeId: 'personal-identity',
+          layout: 'corner',
+          overlayText: 'AB',
+          overlayIcon: 'heart'
+        },
+        {
+          prompt: 'dreamy vaporwave sunset grid with chrome statues and palm trees',
+          vibeId: 'art-aesthetics',
+          layout: 'center',
+          overlayText: 'Paradise',
+          overlayIcon: 'spark'
+        }
+      ];
+
+      const randomFrom = (arr) => arr[Math.floor(Math.random() * arr.length)];
+
+      const vibePrevBtn = document.getElementById('vibePrevBtn');
+      const vibeNextBtn = document.getElementById('vibeNextBtn');
+      const vibeName = document.getElementById('vibeName');
+      const vibeDescription = document.getElementById('vibeDescription');
+      const vibeTags = document.getElementById('vibeTags');
+      const vibeCase = document.getElementById('vibeCase');
+      const vibeDots = document.getElementById('vibeDots');
+      const overlayTextInput = document.getElementById('overlayTextInput');
+      const overlayIconSelect = document.getElementById('overlayIconSelect');
+      const layoutRadios = document.querySelectorAll('input[name="layoutOption"]');
+      const surpriseBtn = document.getElementById('surpriseBtn');
+      const categoryLibraryRoot = document.getElementById('categoryLibrary');
+
       const has3DPreviewSection = Boolean(preview3dContainer && preview3dPlaceholder);
       if (!has3DPreviewSection && toggle3d) {
         toggle3d.checked = false;
         toggle3d.disabled = true;
+      }
+
+      if (categoryLibraryRoot) {
+        const createElement = (tag, className, text) => {
+          const element = document.createElement(tag);
+          if (className) element.className = className;
+          if (text) element.textContent = text;
+          return element;
+        };
+
+        CATEGORY_LIBRARY.forEach((category) => {
+          const card = createElement('article', 'category-card');
+          card.setAttribute('role', 'listitem');
+
+          const header = createElement('header');
+          header.append(
+            createElement('span', 'category-icon', category.icon),
+            createElement('h3', 'category-name', category.name)
+          );
+          card.append(header);
+
+          card.append(createElement('p', 'category-description', category.description));
+
+          const keywordsSection = createElement('div', 'category-section');
+          keywordsSection.append(createElement('span', 'category-label', 'Keywords'));
+          const keywordList = createElement('div', 'keyword-list');
+          category.keywords.forEach((keyword) => {
+            keywordList.append(createElement('span', 'keyword-pill', keyword));
+          });
+          keywordsSection.append(keywordList);
+          card.append(keywordsSection);
+
+          const paletteSection = createElement('div', 'category-section');
+          paletteSection.append(createElement('span', 'category-label', 'Palette'));
+          const paletteList = createElement('div', 'palette-list');
+          category.palette.forEach((hex) => {
+            const swatch = createElement('span', 'palette-swatch', hex);
+            swatch.style.setProperty('--swatch-color', hex);
+            paletteList.append(swatch);
+          });
+          paletteSection.append(paletteList);
+          card.append(paletteSection);
+
+          const guardrailSection = createElement('div', 'category-section');
+          guardrailSection.append(createElement('span', 'category-label', 'Guardrails'));
+          const guardrailColumns = createElement('div', 'guardrail-columns');
+
+          const doColumn = createElement('div');
+          doColumn.append(createElement('p', 'guardrail-heading', 'Do'));
+          const doList = createElement('ul', 'guardrail-list');
+          category.guardrails.do.forEach((item) => {
+            doList.append(createElement('li', '', item));
+          });
+          doColumn.append(doList);
+          guardrailColumns.append(doColumn);
+
+          const dontColumn = createElement('div');
+          dontColumn.append(createElement('p', 'guardrail-heading', "Don't"));
+          const dontList = createElement('ul', 'guardrail-list');
+          category.guardrails.dont.forEach((item) => {
+            dontList.append(createElement('li', '', item));
+          });
+          dontColumn.append(dontList);
+          guardrailColumns.append(dontColumn);
+
+          guardrailSection.append(guardrailColumns);
+          card.append(guardrailSection);
+
+          const promptSection = createElement('div', 'category-section');
+          promptSection.append(createElement('span', 'category-label', 'AI Image Prompts'));
+          const promptList = createElement('ul', 'prompt-list');
+          category.prompts.forEach((prompt) => {
+            promptList.append(createElement('li', '', prompt));
+          });
+          promptSection.append(promptList);
+          card.append(promptSection);
+
+          const jsonSection = createElement('div', 'category-section');
+          jsonSection.append(createElement('span', 'category-label', 'JSON Config'));
+          const jsonPre = createElement('pre', 'category-json');
+          const jsonCode = createElement('code');
+          jsonCode.textContent = JSON.stringify(category.config, null, 2);
+          jsonPre.append(jsonCode);
+          jsonSection.append(jsonPre);
+          card.append(jsonSection);
+
+          categoryLibraryRoot.append(card);
+        });
       }
 
       const GEMINI_ENDPOINT = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image-preview:generateContent';
@@ -936,6 +1711,13 @@
         initialPos: { x: 0, y: 0 },
         needsRender: true,
         showMask: false,
+        vibePreviewActive: true,
+        selections: {
+          vibeIndex: 0,
+          layout: 'center',
+          overlayText: '',
+          overlayIcon: '',
+        },
         three: {
           enabled: false,
           scene: null,
@@ -947,6 +1729,8 @@
           raf: 0,
         },
       };
+
+      const vibeDotsButtons = [];
 
       // Lightweight WebP templates for instant previews (kept inline for offline use)
       const TEMPLATE_DATA = {
@@ -1090,11 +1874,180 @@
         ctx.restore();
       };
 
+      const getActiveVibe = () => {
+        if (!Array.isArray(VIBE_CATEGORIES) || VIBE_CATEGORIES.length === 0) return null;
+        const index = Math.max(0, Math.min(state.selections.vibeIndex, VIBE_CATEGORIES.length - 1));
+        return VIBE_CATEGORIES[index];
+      };
+
+      const getSelectedLayout = () => LAYOUT_OPTIONS.find((layout) => layout.id === state.selections.layout) || LAYOUT_OPTIONS[0];
+
+      const getSelectedIcon = () => ICON_OPTIONS.find((icon) => icon.id === state.selections.overlayIcon) || ICON_OPTIONS[0];
+
+      const updateVibeDisplay = () => {
+        const vibe = getActiveVibe();
+        if (!vibe) return;
+        if (vibeName) vibeName.textContent = `${vibe.emoji} ${vibe.name}`;
+        if (vibeDescription) vibeDescription.textContent = vibe.description;
+        if (vibeTags) {
+          vibeTags.innerHTML = '';
+          vibe.tags?.forEach((tag) => {
+            const tagEl = document.createElement('span');
+            tagEl.className = 'vibe-tag';
+            tagEl.textContent = tag;
+            vibeTags.append(tagEl);
+          });
+        }
+        if (vibeCase) {
+          if (Array.isArray(vibe.preview?.gradient)) {
+            const [start, end] = vibe.preview.gradient;
+            vibeCase.style.background = `linear-gradient(140deg, ${start}, ${end || start})`;
+          }
+          vibeCase.innerHTML = '';
+          const label = document.createElement('span');
+          label.className = 'vibe-case-label';
+          label.textContent = vibe.preview?.overlayText || vibe.name;
+          vibeCase.append(label);
+        }
+        vibeDotsButtons.forEach((dot, idx) => {
+          dot.classList.toggle('active', idx === state.selections.vibeIndex);
+          dot.setAttribute('aria-pressed', idx === state.selections.vibeIndex ? 'true' : 'false');
+        });
+      };
+
+      const setVibeIndex = (index) => {
+        if (!Array.isArray(VIBE_CATEGORIES) || VIBE_CATEGORIES.length === 0) return;
+        const total = VIBE_CATEGORIES.length;
+        const normalized = ((index % total) + total) % total;
+        state.selections.vibeIndex = normalized;
+        if (!state.imageBitmap) {
+          state.vibePreviewActive = true;
+        }
+        updateVibeDisplay();
+        state.needsRender = true;
+      };
+
+      const cycleVibe = (delta) => {
+        setVibeIndex(state.selections.vibeIndex + delta);
+      };
+
+      const drawVibePreview = () => {
+        const vibe = getActiveVibe();
+        ctx.save();
+        ctx.clip(phoneMaskPath);
+        const minDim = Math.min(caseWidth, caseHeight);
+        const gradientColors = vibe?.preview?.gradient || ['#1f2937', '#0b1120'];
+        const gradient = ctx.createLinearGradient(0, 0, caseWidth, caseHeight);
+        gradient.addColorStop(0, gradientColors[0]);
+        gradient.addColorStop(1, gradientColors[1] || gradientColors[0]);
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, caseWidth, caseHeight);
+
+        const shapes = Array.isArray(vibe?.preview?.shapes) ? vibe.preview.shapes : [];
+        shapes.forEach((shape, idx) => {
+          if (!shape || !shape.type) return;
+          const type = shape.type;
+          if (type === 'circle') {
+            ctx.save();
+            const radius = (shape.radius || 0.24) * minDim;
+            const x = (shape.x || 0.5) * caseWidth;
+            const y = (shape.y || 0.5) * caseHeight;
+            ctx.fillStyle = shape.color || 'rgba(255, 255, 255, 0.18)';
+            if (shape.blur) {
+              ctx.shadowColor = shape.color || 'rgba(255, 255, 255, 0.18)';
+              ctx.shadowBlur = shape.blur;
+            }
+            ctx.beginPath();
+            ctx.arc(x, y, radius, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.restore();
+          } else if (type === 'stripe') {
+            ctx.save();
+            const angle = ((shape.angle || 0) * Math.PI) / 180;
+            ctx.translate(caseWidth / 2, caseHeight / 2);
+            ctx.rotate(angle);
+            const thickness = (shape.thickness || 0.18) * minDim;
+            ctx.fillStyle = shape.color || 'rgba(255, 255, 255, 0.08)';
+            ctx.fillRect(-caseWidth, -thickness / 2, caseWidth * 2, thickness);
+            ctx.restore();
+          } else if (type === 'ring') {
+            ctx.save();
+            const radius = (shape.radius || 0.2) * minDim;
+            const lineWidth = (shape.lineWidth || 0.04) * minDim;
+            const x = (shape.x || 0.5) * caseWidth;
+            const y = (shape.y || 0.5) * caseHeight;
+            ctx.lineWidth = lineWidth;
+            ctx.strokeStyle = shape.color || 'rgba(255, 255, 255, 0.28)';
+            ctx.beginPath();
+            ctx.arc(x, y, radius, 0, Math.PI * 2);
+            ctx.stroke();
+            ctx.restore();
+          } else if (type === 'dots') {
+            ctx.save();
+            const count = Math.max(1, shape.count || 5);
+            const spread = shape.spread || 0.2;
+            const offsetX = (shape.offsetX || 0.5) * caseWidth;
+            const offsetY = (shape.offsetY || 0.5) * caseHeight;
+            const radius = (shape.radius || 0.03) * minDim;
+            ctx.fillStyle = shape.color || 'rgba(255, 255, 255, 0.2)';
+            for (let i = 0; i < count; i += 1) {
+              const angle = (i / count) * Math.PI * 2;
+              const x = offsetX + Math.cos(angle) * spread * caseWidth;
+              const y = offsetY + Math.sin(angle) * spread * caseHeight;
+              ctx.beginPath();
+              ctx.arc(x, y, radius, 0, Math.PI * 2);
+              ctx.fill();
+            }
+            ctx.restore();
+          }
+        });
+
+        const layout = getSelectedLayout();
+        const displayText = (state.selections.overlayText || '').trim() || vibe?.preview?.overlayText || '';
+        if (displayText) {
+          ctx.save();
+          ctx.fillStyle = 'rgba(255, 255, 255, 0.92)';
+          const fontSize = Math.max(28, minDim * 0.08);
+          ctx.font = `600 ${fontSize}px "Plus Jakarta Sans", "Inter", sans-serif`;
+          ctx.textBaseline = 'middle';
+          ctx.textAlign = layout?.preview?.align || 'center';
+          const textX = (layout?.preview?.textX ?? 0.5) * caseWidth;
+          const textY = (layout?.preview?.textY ?? 0.55) * caseHeight;
+          ctx.shadowColor = 'rgba(0, 0, 0, 0.35)';
+          ctx.shadowBlur = 20;
+          ctx.fillText(displayText, textX, textY);
+          ctx.restore();
+        }
+
+        const iconOption = getSelectedIcon();
+        if (iconOption?.id && ICON_GLYPHS[iconOption.id]) {
+          ctx.save();
+          const glyph = ICON_GLYPHS[iconOption.id];
+          const iconSize = Math.max(30, minDim * 0.12);
+          ctx.font = `700 ${iconSize}px "Plus Jakarta Sans", "Inter", sans-serif`;
+          ctx.textBaseline = 'middle';
+          ctx.textAlign = 'center';
+          const iconX = (layout?.preview?.iconX ?? 0.5) * caseWidth;
+          const iconY = (layout?.preview?.iconY ?? 0.3) * caseHeight;
+          ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+          ctx.shadowColor = 'rgba(0, 0, 0, 0.35)';
+          ctx.shadowBlur = 16;
+          ctx.fillText(glyph, iconX, iconY);
+          ctx.restore();
+        }
+
+        ctx.restore();
+      };
+
       const render = () => {
         if (!state.needsRender) return;
         state.needsRender = false;
         clearCanvas();
-        drawDesign();
+        if (state.imageBitmap) {
+          drawDesign();
+        } else if (state.vibePreviewActive) {
+          drawVibePreview();
+        }
         drawCaseOverlay();
         update3DTexture();
       };
@@ -1137,6 +2090,7 @@
         const { focusPreview = false } = options;
         state.image = img;
         state.imageBitmap = await createImageBitmapSafe(img);
+        state.vibePreviewActive = false;
         const coverScale = Math.max(caseWidth / img.width, caseHeight / img.height);
         state.baseScale = coverScale;
         resetTransform();
@@ -1212,6 +2166,41 @@
         }
       };
 
+      const buildStructuredPrompt = () => {
+        const sanitize = (text = '') => text.replace(/"/g, "'");
+        const basePrompt = sanitize(promptInput.value.trim());
+        const vibe = getActiveVibe();
+        const layout = getSelectedLayout();
+        const icon = getSelectedIcon();
+        const overlayText = sanitize((state.selections.overlayText || '').trim());
+
+        const safePrompt = basePrompt || 'abstract light trails with premium polish';
+        const parts = [
+          `Create a premium phone case design based on the prompt: "${safePrompt}".`
+        ];
+
+        if (vibe) {
+          const styleDetail = vibe.stylePrompt ? `, emphasizing ${vibe.stylePrompt}.` : '.';
+          parts.push(`Style it in the "${vibe.name}" aesthetic${styleDetail}`);
+        }
+
+        if (layout?.prompt) {
+          parts.push(`Use ${layout.prompt}.`);
+        }
+
+        if (overlayText) {
+          parts.push(`Include the text "${overlayText}" as a polished overlay that remains legible on a phone case.`);
+        }
+
+        if (icon?.prompt) {
+          parts.push(`Incorporate ${icon.prompt}.`);
+        }
+
+        parts.push('Maintain balanced composition, crisp detail, and keep the artwork printable for a phone case.');
+
+        return parts.join(' ');
+      };
+
       // Direct Gemini image generation call using the official REST payload
       const generateWithGemini = async (prompt) => {
         const response = await fetch(GEMINI_ENDPOINT, {
@@ -1223,7 +2212,7 @@
           body: JSON.stringify({
             contents: [{
               parts: [{
-                text: `Create a phone case design: ${prompt}. Make it suitable for printing on a phone case. Generate a vibrant, high-quality design.`
+                text: `${prompt}\n\nMake it suitable for printing on a phone case. Generate a vibrant, high-quality design.`
               }]
             }],
             generationConfig: {
@@ -1279,12 +2268,13 @@
       };
 
       const handleGeminiGeneration = async () => {
-        const prompt = promptInput.value.trim();
-        if (!prompt) {
+        const rawPrompt = promptInput.value.trim();
+        if (!rawPrompt) {
           setStatus(aiStatus, 'Add a prompt first.');
           return;
         }
-        const cached = getCachedDesign(prompt);
+        const finalPrompt = buildStructuredPrompt();
+        const cached = getCachedDesign(finalPrompt);
         if (cached) {
           setStatus(aiStatus, 'Loaded from session cache.');
           const img = await loadImageFromSource(cached, 'cached design');
@@ -1302,12 +2292,12 @@
         try {
           setLoading(true);
           setStatus(aiStatus, 'Contacting Gemini…');
-          const payload = await generateWithGemini(prompt);
+          const payload = await generateWithGemini(finalPrompt);
           const dataUrl = extractImageFromGemini(payload);
           const img = await loadImageFromSource(dataUrl, 'Gemini design');
           await applyImage(img, { focusPreview: true });
           rateLimitUntil = 0;
-          cacheDesign(prompt, dataUrl);
+          cacheDesign(finalPrompt, dataUrl);
           setStatus(aiStatus, 'Design ready! Drag to fine-tune.');
         } catch (err) {
           console.error(err);
@@ -1553,11 +2543,119 @@
       quickPromptButtons.forEach((btn) => {
         btn.addEventListener('click', () => {
           const preset = btn.dataset.prompt;
-          const base = promptInput.value.trim();
-          promptInput.value = base ? `${base}, ${preset}` : preset;
+          promptInput.value = preset || '';
+          setStatus(aiStatus, 'Prompt loaded. Pick a vibe next.');
+          if (!state.imageBitmap) {
+            state.vibePreviewActive = true;
+            state.needsRender = true;
+          }
           promptInput.focus();
         });
       });
+
+      if (overlayIconSelect && overlayIconSelect.options.length === 0) {
+        ICON_OPTIONS.forEach((option) => {
+          const optionEl = document.createElement('option');
+          optionEl.value = option.id;
+          optionEl.textContent = option.label;
+          overlayIconSelect.append(optionEl);
+        });
+        overlayIconSelect.value = state.selections.overlayIcon;
+      }
+
+      const applyLayoutSelection = (layoutId) => {
+        state.selections.layout = layoutId;
+        layoutRadios.forEach((radio) => {
+          radio.checked = radio.value === layoutId;
+        });
+        if (!state.imageBitmap) {
+          state.vibePreviewActive = true;
+          state.needsRender = true;
+        }
+      };
+
+      layoutRadios.forEach((radio) => {
+        radio.addEventListener('change', () => {
+          if (radio.checked) {
+            applyLayoutSelection(radio.value);
+          }
+        });
+      });
+
+      applyLayoutSelection(state.selections.layout);
+
+      if (overlayTextInput) {
+        overlayTextInput.addEventListener('input', () => {
+          state.selections.overlayText = overlayTextInput.value;
+          if (!state.imageBitmap) {
+            state.vibePreviewActive = true;
+            state.needsRender = true;
+          }
+        });
+      }
+
+      if (overlayIconSelect) {
+        overlayIconSelect.addEventListener('change', () => {
+          state.selections.overlayIcon = overlayIconSelect.value;
+          if (!state.imageBitmap) {
+            state.vibePreviewActive = true;
+            state.needsRender = true;
+          }
+        });
+      }
+
+      if (vibeDots) {
+        vibeDots.innerHTML = '';
+        VIBE_CATEGORIES.forEach((vibe, index) => {
+          const dot = document.createElement('button');
+          dot.type = 'button';
+          dot.className = 'vibe-dot';
+          dot.setAttribute('aria-label', `${vibe.name} vibe`);
+          dot.setAttribute('aria-pressed', index === state.selections.vibeIndex ? 'true' : 'false');
+          dot.addEventListener('click', () => setVibeIndex(index));
+          vibeDots.append(dot);
+          vibeDotsButtons.push(dot);
+        });
+      }
+
+      if (vibePrevBtn) {
+        vibePrevBtn.addEventListener('click', () => cycleVibe(-1));
+      }
+
+      if (vibeNextBtn) {
+        vibeNextBtn.addEventListener('click', () => cycleVibe(1));
+      }
+
+      const handleSurprise = () => {
+        const preset = randomFrom(SURPRISE_PRESETS);
+        if (!preset) return;
+        promptInput.value = preset.prompt;
+        setStatus(aiStatus, 'Shuffling a fresh concept for you...');
+        const vibeIndex = VIBE_CATEGORIES.findIndex((vibe) => vibe.id === preset.vibeId);
+        if (vibeIndex >= 0) {
+          setVibeIndex(vibeIndex);
+        }
+        if (preset.layout) {
+          applyLayoutSelection(preset.layout);
+        }
+        if (overlayTextInput) {
+          overlayTextInput.value = preset.overlayText || '';
+        }
+        state.selections.overlayText = preset.overlayText || '';
+        if (overlayIconSelect) {
+          overlayIconSelect.value = preset.overlayIcon || '';
+        }
+        state.selections.overlayIcon = preset.overlayIcon || '';
+        state.vibePreviewActive = true;
+        state.needsRender = true;
+        handleGeminiGeneration();
+      };
+
+      if (surpriseBtn) {
+        surpriseBtn.addEventListener('click', handleSurprise);
+      }
+
+      setVibeIndex(state.selections.vibeIndex);
 
       dropZone.addEventListener('click', () => fileInput.click());
       dropZone.addEventListener('keydown', (event) => {
@@ -1647,10 +2745,6 @@
       updateTransformInfo();
 
       // Provide immediate template for quick start
-      applyTemplate('gradient', { focusPreview: false }).catch((err) => {
-        console.error('Failed to load default template', err);
-        setStatus(uploadStatus, 'Default template failed to load.', 'error');
-      });
     })();
   </script>
 </body>
