@@ -1806,19 +1806,36 @@
       const vibeDotsButtons = [];
 
       // Path2D mask keeps artwork perfectly contained within the case outline
-      const phoneMaskPath = (() => {
+      const phoneMask = (() => {
+        const outer = new Path2D();
+        outer.moveTo(cornerRadius, 0);
+        outer.lineTo(caseWidth - cornerRadius, 0);
+        outer.quadraticCurveTo(caseWidth, 0, caseWidth, cornerRadius);
+        outer.lineTo(caseWidth, caseHeight - cornerRadius);
+        outer.quadraticCurveTo(caseWidth, caseHeight, caseWidth - cornerRadius, caseHeight);
+        outer.lineTo(cornerRadius, caseHeight);
+        outer.quadraticCurveTo(0, caseHeight, 0, caseHeight - cornerRadius);
+        outer.lineTo(0, cornerRadius);
+        outer.quadraticCurveTo(0, 0, cornerRadius, 0);
+        outer.closePath();
+
+        const cameraRadius = Math.min(caseWidth, caseHeight) * 0.058;
+        const cameraX = caseWidth * 0.18;
+        const cameraY = caseHeight * 0.13;
+        const cameraPath = new Path2D();
+        cameraPath.moveTo(cameraX + cameraRadius, cameraY);
+        cameraPath.arc(cameraX, cameraY, cameraRadius, 0, Math.PI * 2);
+
         const path = new Path2D();
-        path.moveTo(cornerRadius, 0);
-        path.lineTo(caseWidth - cornerRadius, 0);
-        path.quadraticCurveTo(caseWidth, 0, caseWidth, cornerRadius);
-        path.lineTo(caseWidth, caseHeight - cornerRadius);
-        path.quadraticCurveTo(caseWidth, caseHeight, caseWidth - cornerRadius, caseHeight);
-        path.lineTo(cornerRadius, caseHeight);
-        path.quadraticCurveTo(0, caseHeight, 0, caseHeight - cornerRadius);
-        path.lineTo(0, cornerRadius);
-        path.quadraticCurveTo(0, 0, cornerRadius, 0);
-        path.closePath();
-        return path;
+        path.addPath(outer);
+        path.addPath(cameraPath);
+
+        return {
+          path,
+          outer,
+          camera: { x: cameraX, y: cameraY, radius: cameraRadius },
+          clipRule: 'evenodd',
+        };
       })();
 
       // Pre-rendered lighting overlay keeps the case feeling three-dimensional while allowing transparent background
@@ -1828,8 +1845,10 @@
         overlay.height = caseHeight;
         const gctx = overlay.getContext('2d');
 
+        const { path: maskPath, clipRule, outer, camera } = phoneMask;
+
         gctx.save();
-        gctx.clip(phoneMaskPath);
+        gctx.clip(maskPath, clipRule);
 
         // Subtle vignette darkens the wrapped edges so artwork feels like it hugs the case
         const edgeDarken = gctx.createRadialGradient(
@@ -1873,10 +1892,31 @@
         gctx.lineCap = 'round';
         gctx.lineWidth = 2.4;
         gctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
-        gctx.stroke(phoneMaskPath);
+        gctx.stroke(outer);
         gctx.lineWidth = 6;
         gctx.strokeStyle = 'rgba(0, 0, 0, 0.45)';
-        gctx.stroke(phoneMaskPath);
+        gctx.stroke(outer);
+
+        // Camera module detail
+        if (camera) {
+          gctx.save();
+          gctx.shadowColor = 'rgba(0, 0, 0, 0.55)';
+          gctx.shadowBlur = 12;
+          gctx.fillStyle = 'rgba(12, 14, 22, 0.95)';
+          gctx.beginPath();
+          gctx.arc(camera.x, camera.y, camera.radius + 6, 0, Math.PI * 2);
+          gctx.fill();
+          gctx.shadowBlur = 0;
+          gctx.fillStyle = 'rgba(32, 36, 48, 0.96)';
+          gctx.beginPath();
+          gctx.arc(camera.x, camera.y, camera.radius, 0, Math.PI * 2);
+          gctx.fill();
+          gctx.fillStyle = 'rgba(255, 255, 255, 0.28)';
+          gctx.beginPath();
+          gctx.arc(camera.x - camera.radius * 0.32, camera.y - camera.radius * 0.28, camera.radius * 0.32, 0, Math.PI * 2);
+          gctx.fill();
+          gctx.restore();
+        }
 
         return overlay;
       })();
@@ -1887,6 +1927,10 @@
           clearTimeout(timer);
           timer = setTimeout(() => fn.apply(null, args), delay);
         };
+      };
+
+      const clipToPhoneMask = (context) => {
+        context.clip(phoneMask.path, phoneMask.clipRule);
       };
 
       const setLoading = (isLoading) => {
@@ -1924,7 +1968,7 @@
       const drawDesign = () => {
         if (!state.imageBitmap && !state.customOverlay?.bitmap) return;
         ctx.save();
-        ctx.clip(phoneMaskPath);
+        clipToPhoneMask(ctx);
         if (state.imageBitmap) {
           ctx.save();
           ctx.translate(state.transform.x, state.transform.y);
@@ -2018,7 +2062,7 @@
       const drawVibePreview = () => {
         const vibe = getActiveVibe();
         ctx.save();
-        ctx.clip(phoneMaskPath);
+        clipToPhoneMask(ctx);
         const minDim = Math.min(caseWidth, caseHeight);
         const gradientColors = vibe?.preview?.gradient || ['#1f2937', '#0b1120'];
         const gradient = ctx.createLinearGradient(0, 0, caseWidth, caseHeight);
@@ -2736,7 +2780,7 @@
           eCtx.scale(EXPORT_SCALE, EXPORT_SCALE);
           eCtx.clearRect(0, 0, caseWidth, caseHeight);
           eCtx.save();
-          eCtx.clip(phoneMaskPath);
+          clipToPhoneMask(eCtx);
           if (state.imageBitmap) {
             eCtx.save();
             eCtx.translate(state.transform.x, state.transform.y);
