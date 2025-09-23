@@ -1305,7 +1305,7 @@
               <div class="ai-card-header">
                 <div>
                   <h3 id="ai-title">AI Designer</h3>
-                  <p class="card-subtitle">Describe your dream case, pick a vibe, and watch it come to life.</p>
+                  <p class="card-subtitle">Describe your dream case and watch it come to life.</p>
                   <p class="ai-card-lede">Type anything you like, from "Y2K glitter with my name in bold" to "sunset over Tokyo skyline with sakura petals." Then customize with styles, moods, and flips until it is perfect.</p>
                 </div>
               </div>
@@ -1339,29 +1339,8 @@
 
               <section class="ai-step" aria-labelledby="ai-step-2">
                 <div class="ai-step-label" id="ai-step-2">
-                  <span class="ai-step-icon" aria-hidden="true">🟪</span>
-                  <span class="ai-step-text">STEP 2 — PICK YOUR VIBE</span>
-                </div>
-                <p class="ai-helper">Choose a vibe and we will show a live preview of how your design leans in that style.</p>
-                <div class="vibe-carousel">
-                  <button class="vibe-nav" id="vibePrevBtn" type="button" aria-label="Previous vibe">&#8592;</button>
-                  <div class="vibe-card">
-                    <div class="vibe-case" id="vibeCase" aria-hidden="true"></div>
-                    <div class="vibe-meta">
-                      <p class="vibe-name" id="vibeName"></p>
-                      <p class="vibe-description" id="vibeDescription"></p>
-                      <div class="vibe-tags" id="vibeTags"></div>
-                    </div>
-                  </div>
-                  <button class="vibe-nav" id="vibeNextBtn" type="button" aria-label="Next vibe">&#8594;</button>
-                </div>
-                <div class="vibe-dots" id="vibeDots" role="tablist" aria-label="Available vibes"></div>
-              </section>
-
-              <section class="ai-step" aria-labelledby="ai-step-3">
-                <div class="ai-step-label" id="ai-step-3">
                   <span class="ai-step-icon" aria-hidden="true">🟥</span>
-                  <span class="ai-step-text">STEP 3 — FINISH & ADD CUSTOM DETAILS</span>
+                  <span class="ai-step-text">STEP 2 — FINISH & ADD CUSTOM DETAILS</span>
                 </div>
                 <p class="ai-helper">Want to add your name? Or a small icon? You can!</p>
                 <div class="finish-grid">
@@ -1399,10 +1378,10 @@
                 </div>
               </section>
 
-              <section class="ai-step optional" aria-labelledby="ai-step-4">
-                <div class="ai-step-label" id="ai-step-4">
+              <section class="ai-step optional" aria-labelledby="ai-step-3">
+                <div class="ai-step-label" id="ai-step-3">
                   <span class="ai-step-icon" aria-hidden="true">🟨</span>
-                  <span class="ai-step-text">STEP 4 — SURPRISE ME!</span>
+                  <span class="ai-step-text">STEP 3 — SURPRISE ME!</span>
                 </div>
                 <p class="ai-helper">Not sure what to make? Shuffle to get a full vibe, layout, and effect you can tweak.</p>
                 <button class="btn-ghost surprise-action" id="surpriseBtn" type="button">Shuffle a ready-made idea ✨</button>
@@ -2899,7 +2878,7 @@
         btn.addEventListener('click', () => {
           const preset = btn.dataset.prompt;
           promptInput.value = preset || '';
-          setStatus(aiStatus, 'Prompt loaded. Pick a vibe next.');
+          setStatus(aiStatus, 'Prompt loaded. Adjust the details and generate when ready.');
           if (!state.imageBitmap) {
             state.vibePreviewActive = true;
             state.showEdgeDefault = false;
