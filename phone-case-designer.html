@@ -3,11 +3,34 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Neon Case Lab</title>
+  <title>Edge — Custom Phone Case Designer</title>
+  <meta name="description" content="Edge is the premium phone case design studio for crafting custom daily carry art with AI and precision controls." />
+  <meta property="og:title" content="Edge — Custom Phone Case Designer" />
+  <meta property="og:description" content="Edge is the premium phone case studio built for sharp ideas, AI generation, and precise print-ready control." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://edge.design/phone-case-designer" />
+  <meta property="og:site_name" content="Edge" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Edge — Custom Phone Case Designer" />
+  <meta name="twitter:description" content="Edge is the premium phone case studio built for sharp ideas, AI generation, and precise print-ready control." />
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "name": "Edge Phone Case Designer",
+      "brand": {
+        "@type": "Brand",
+        "name": "Edge"
+      },
+      "description": "Edge is the premium phone case studio for crafting custom cases with AI-assisted design tools.",
+      "url": "https://edge.design/phone-case-designer"
+    }
+  </script>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
   <style>
     :root {
       color-scheme: dark;
+      --brand-name: "Edge";
       --bg: #050507;
       --bg-accent: radial-gradient(circle at 18% 22%, rgba(255, 77, 31, 0.16), transparent 55%);
       --bg-accent-2: radial-gradient(circle at 82% 0%, rgba(98, 111, 255, 0.12), transparent 64%);
@@ -155,14 +178,19 @@
       gap: clamp(3.2rem, 6vw, 6rem);
       padding-bottom: clamp(3rem, 8vw, 6rem);
     }
-    .hero {
-      padding-top: clamp(4rem, 9vw, 6.5rem);
-    }
-    .hero-grid {
+    .layout-grid {
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: clamp(2.4rem, 7vw, 5.5rem);
-      align-items: center;
+      gap: clamp(2.4rem, 5vw, 4rem);
+      grid-template-columns: minmax(0, 1fr);
+      align-items: flex-start;
+    }
+    .workspace-column {
+      display: flex;
+      flex-direction: column;
+      gap: clamp(2.5rem, 5vw, 3.5rem);
+    }
+    .hero-intro {
+      padding-top: clamp(4rem, 9vw, 6.5rem);
     }
     .hero-eyebrow {
       text-transform: uppercase;
@@ -172,13 +200,13 @@
       font-weight: 700;
       margin-bottom: 1rem;
     }
-    .hero h1 {
+    .hero-intro h1 {
       margin: 0 0 1.6rem;
       font-size: clamp(3rem, 5vw, 4.4rem);
       line-height: 1.04;
       letter-spacing: -0.03em;
     }
-    .hero p {
+    .hero-intro p {
       margin: 0 0 2rem;
       color: var(--text-secondary);
       max-width: 44ch;
@@ -206,8 +234,14 @@
       color: var(--accent-strong);
       border-color: rgba(255, 77, 31, 0.45);
     }
-    .hero-preview {
-      display: grid;
+    .preview-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 1.8rem;
+    }
+    .preview-rail {
+      display: flex;
+      flex-direction: column;
       gap: 1.8rem;
     }
     .preview-card {
@@ -233,7 +267,7 @@
     .canvas-wrapper {
       position: relative;
       width: min(420px, 92vw);
-      margin: 0 auto;
+      margin: 0;
     }
     canvas {
       width: 100%;
@@ -269,7 +303,8 @@
       color: var(--text-tertiary);
       margin-bottom: 1rem;
     }
-    .section {
+    .section,
+    .workspace-section {
       display: flex;
       flex-direction: column;
       gap: 1.6rem;
@@ -628,6 +663,19 @@
         transform: rotate(360deg);
       }
     }
+    @media (min-width: 1100px) {
+      .layout-grid {
+        grid-template-columns: minmax(0, 1fr) minmax(320px, 420px);
+      }
+      .preview-rail {
+        position: sticky;
+        top: clamp(6rem, 9vw, 6.5rem);
+        align-self: flex-start;
+      }
+      .canvas-wrapper {
+        margin: 0 auto;
+      }
+    }
     @media (max-width: 1100px) {
       nav {
         display: none;
@@ -635,8 +683,14 @@
       .site-header {
         justify-content: space-between;
       }
-      .hero-grid {
+      .layout-grid {
         grid-template-columns: minmax(0, 1fr);
+      }
+      .preview-rail {
+        position: static;
+      }
+      .canvas-wrapper {
+        margin: 0 auto;
       }
     }
     @media (max-width: 768px) {
@@ -644,10 +698,10 @@
       .card-grid.three {
         grid-template-columns: minmax(0, 1fr);
       }
-      .hero h1 {
+      .hero-intro h1 {
         font-size: clamp(2.6rem, 8vw, 3.3rem);
       }
-      .hero p {
+      .hero-intro p {
         font-size: 1rem;
       }
     }
@@ -667,12 +721,12 @@
     }
   </style>
 </head>
-<body>
+<body data-brand="Edge">
   <header>
     <div class="container site-header">
-      <a class="branding" href="#">
-        <span class="brand-mark">NC</span>
-        <span>Neon Case Lab</span>
+      <a class="branding" href="#" aria-label="Edge home">
+        <span class="brand-mark">ED</span>
+        <span>Edge</span>
       </a>
       <nav aria-label="Primary">
         <a href="#ai">AI Studio</a>
@@ -684,144 +738,153 @@
     </div>
   </header>
   <main class="page">
-    <section class="hero" id="preview">
-      <div class="container hero-grid">
-        <div class="hero-copy">
+    <div class="container layout-grid">
+      <div class="workspace-column">
+        <section class="workspace-section hero-intro" aria-labelledby="hero-title">
           <p class="hero-eyebrow">Phone Case Studio</p>
-          <h1>Transform bold ideas into daily carry art.</h1>
-          <p>Generate striking phone case artwork with Gemini, drop in existing assets, and fine-tune every pixel before you order.</p>
+          <h1 id="hero-title">Edge turns bold ideas into daily carry art.</h1>
+          <p>Edge is the premium phone case studio built for sharp ideas, AI-powered generation, and meticulous, print-ready control.</p>
           <div class="hero-actions">
             <a class="primary-cta" href="#ai">Generate with Gemini</a>
             <a class="secondary-link" href="#upload">Upload your design -></a>
           </div>
-        </div>
-          <div class="hero-preview">
-            <div class="preview-card dark">
-              <div class="live-info">
-                <span id="transformInfo">Scale 100% · Rotation 0° · Opacity 100%</span>
-                <span>iPhone 15 Pro</span>
+        </section>
+
+        <section class="workspace-section" aria-labelledby="ai-section-title">
+          <div class="section-heading">
+            <h2 id="ai-section-title">Craft with AI or upload instantly</h2>
+            <p>Kickstart a new concept with Gemini, remix a template, or import your finished artwork. Everything lives in one studio.</p>
+          </div>
+          <div class="card-grid two">
+            <article class="card" id="ai" aria-labelledby="ai-title">
+              <div>
+                <h3 id="ai-title">AI Designer</h3>
+                <p class="card-subtitle">Describe what you want, pick a preset vibe, and let Gemini sketch it out.</p>
               </div>
-              <div class="canvas-wrapper" id="canvasWrapper">
-                <canvas id="phoneCanvas" width="400" height="800" aria-label="Phone case preview"></canvas>
-                <div class="canvas-overlay"></div>
+              <label for="promptInput">Describe your dream case</label>
+              <textarea id="promptInput" placeholder="Neon koi fish swimming through a digital cityscape"></textarea>
+              <div class="quick-prompts" role="group" aria-label="Preset styles">
+                <button class="btn-ghost" type="button" data-prompt="Minimalist">Minimalist</button>
+                <button class="btn-ghost" type="button" data-prompt="Cyberpunk">Cyberpunk</button>
+                <button class="btn-ghost" type="button" data-prompt="Nature">Nature</button>
+                <button class="btn-ghost" type="button" data-prompt="Abstract">Abstract</button>
+                <button class="btn-ghost" type="button" data-prompt="Anime">Anime</button>
               </div>
+              <button id="generateBtn" class="btn-accent" type="button">Generate with Gemini</button>
+              <div id="aiStatus" class="status" role="status" aria-live="polite"></div>
+            </article>
+
+            <article class="card" id="upload" aria-labelledby="upload-title">
+              <div>
+                <h3 id="upload-title">Upload your artwork</h3>
+                <p class="card-subtitle">Drop in PNG, JPG, or WebP files up to 5MB. We'll keep everything crisp for print.</p>
+              </div>
+              <div id="dropZone" class="drop-zone" role="button" tabindex="0" aria-label="Drop image or browse">Drop image here or click to browse</div>
+              <input id="fileInput" class="sr-only" type="file" accept="image/png,image/jpeg,image/webp" aria-hidden="true" />
+              <div id="uploadStatus" class="status" role="status" aria-live="polite"></div>
+            </article>
+          </div>
+        </section>
+
+        <section class="workspace-section" id="controls" aria-labelledby="controls-title">
+          <div class="section-heading">
+            <h2 id="controls-title">Fine-tune every angle</h2>
+            <p>Adjust scale, rotation, and opacity on the fly. Drag directly on the canvas or use the precision controls.</p>
+          </div>
+          <div class="card">
+            <div class="controls-grid">
+              <label class="control">Position
+                <div id="dragHint">Drag design directly on canvas</div>
+              </label>
+              <label class="control">Scale
+                <input id="scaleSlider" type="range" min="0.3" max="2.5" step="0.01" value="1" />
+              </label>
+              <label class="control">Rotation
+                <input id="rotationSlider" type="range" min="-180" max="180" step="1" value="0" />
+              </label>
+              <label class="control">Opacity
+                <input id="opacitySlider" type="range" min="0.2" max="1" step="0.01" value="1" />
+              </label>
+            </div>
+            <label class="toggle">
+              <span>Enable 3D preview</span>
+              <input id="toggle3d" type="checkbox" />
+            </label>
+          </div>
+        </section>
+
+        <section class="workspace-section" aria-labelledby="templates-title">
+          <div class="section-heading">
+            <h2 id="templates-title">Quick templates to spark ideas</h2>
+            <p>Start from proven compositions, then remix colors, copy, and overlays to make it yours.</p>
+          </div>
+          <div class="card templates-card">
+            <div class="template-list" role="list">
+              <article class="template-card" role="listitem">
+                <div class="template-thumb" style="background-image: linear-gradient(160deg, #00ffd1, #0069ff);"></div>
+                <div>
+                  <strong>Gradient Wave</strong>
+                  <p class="status">Soft neon gradient ribbons</p>
+                </div>
+                <button class="btn-ghost" data-template="gradient">Use</button>
+              </article>
+              <article class="template-card" role="listitem">
+                <div class="template-thumb" style="background-image: linear-gradient(115deg, #1f2937 0%, #111827 40%), url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22200%22 viewBox=%220 0 100 200%22%3E%3Crect width=%22100%22 height=%22200%22 fill=%22%23111827%22/%3E%3Cpath d=%22M10 20h80v10H10zM10 60h80v10H10zM10 100h80v10H10zM10 140h80v10H10zM10 180h80v10H10z%22 fill=%22%23222f3f%22/%3E%3C/svg%3E'); background-size: cover;"></div>
+                <div>
+                  <strong>Geometric Pattern</strong>
+                  <p class="status">Clean modular lines</p>
+                </div>
+                <button class="btn-ghost" data-template="geo">Use</button>
+              </article>
+              <article class="template-card" role="listitem">
+                <div class="template-thumb" style="background-image: url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22200%22 viewBox=%220 0 100 200%22%3E%3Crect width=%22100%22 height=%22200%22 fill=%22000233%22/%3E%3Ccircle cx=%2250%22 cy=%2290%22 r=%2230%22 fill=%22%236c2aff%22 opacity=%220.45%22/%3E%3Ccircle cx=%2230%22 cy=%2240%22 r=%2215%22 fill=%22%23fff%22 opacity=%220.75%22/%3E%3Ccircle cx=%2280%22 cy=%22130%22 r=%2220%22 fill=%22%23ff00aa%22 opacity=%220.35%22/%3E%3C/svg%3E'); background-size: cover; background-position: center;"></div>
+                <div>
+                  <strong>Space Theme</strong>
+                  <p class="status">Nebula glow &amp; stars</p>
+                </div>
+                <button class="btn-ghost" data-template="space">Use</button>
+              </article>
             </div>
           </div>
+        </section>
       </div>
-    </section>
 
-    <section class="container section" aria-labelledby="ai-section-title">
-      <div class="section-heading">
-        <h2 id="ai-section-title">Craft with AI or upload instantly</h2>
-        <p>Kickstart a new concept with Gemini, remix a template, or import your finished artwork. Everything lives in one studio.</p>
-      </div>
-      <div class="card-grid two">
-        <article class="card" id="ai" aria-labelledby="ai-title">
-          <div>
-            <h3 id="ai-title">AI Designer</h3>
-            <p class="card-subtitle">Describe what you want, pick a preset vibe, and let Gemini sketch it out.</p>
-          </div>
-          <label for="promptInput">Describe your dream case</label>
-          <textarea id="promptInput" placeholder="Neon koi fish swimming through a digital cityscape"></textarea>
-          <div class="quick-prompts" role="group" aria-label="Preset styles">
-            <button class="btn-ghost" type="button" data-prompt="Minimalist">Minimalist</button>
-            <button class="btn-ghost" type="button" data-prompt="Cyberpunk">Cyberpunk</button>
-            <button class="btn-ghost" type="button" data-prompt="Nature">Nature</button>
-            <button class="btn-ghost" type="button" data-prompt="Abstract">Abstract</button>
-            <button class="btn-ghost" type="button" data-prompt="Anime">Anime</button>
-          </div>
-          <button id="generateBtn" class="btn-accent" type="button">Generate with Gemini</button>
-          <div id="aiStatus" class="status" role="status" aria-live="polite"></div>
-        </article>
+      <aside class="preview-rail" aria-labelledby="preview-title">
+        <div class="preview-stack">
+          <section class="preview-card dark" id="preview">
+            <div class="live-info">
+              <span id="transformInfo">Scale 100% · Rotation 0° · Opacity 100%</span>
+              <span>iPhone 15 Pro</span>
+            </div>
+            <div class="canvas-wrapper" id="canvasWrapper">
+              <canvas id="phoneCanvas" width="400" height="800" aria-label="Phone case preview"></canvas>
+              <div class="canvas-overlay"></div>
+            </div>
+          </section>
 
-        <article class="card" id="upload" aria-labelledby="upload-title">
-          <div>
-            <h3 id="upload-title">Upload your artwork</h3>
-            <p class="card-subtitle">Drop in PNG, JPG, or WebP files up to 5MB. We'll keep everything crisp for print.</p>
-          </div>
-          <div id="dropZone" class="drop-zone" role="button" tabindex="0" aria-label="Drop image or browse">Drop image here or click to browse</div>
-          <input id="fileInput" class="sr-only" type="file" accept="image/png,image/jpeg,image/webp" aria-hidden="true" />
-          <div id="uploadStatus" class="status" role="status" aria-live="polite"></div>
-        </article>
-      </div>
-    </section>
+          <section class="preview-card">
+            <h3 id="preview-title">Orbit your concept in 3D</h3>
+            <p>Toggle the 3D view to inspect lighting, edges, and camera-ready angles before exporting the final artwork.</p>
+            <div id="preview3d">
+              <p id="preview3dPlaceholder">Enable 3D preview to orbit the device.</p>
+            </div>
+          </section>
 
-    <section class="container section" id="controls" aria-labelledby="controls-title">
-      <div class="section-heading">
-        <h2 id="controls-title">Fine-tune every angle</h2>
-        <p>Adjust scale, rotation, and opacity on the fly. Drag directly on the canvas or use the precision controls.</p>
-      </div>
-      <div class="card">
-        <div class="controls-grid">
-          <label class="control">Position
-            <div id="dragHint">Drag design directly on canvas</div>
-          </label>
-          <label class="control">Scale
-            <input id="scaleSlider" type="range" min="0.3" max="2.5" step="0.01" value="1" />
-          </label>
-          <label class="control">Rotation
-            <input id="rotationSlider" type="range" min="-180" max="180" step="1" value="0" />
-          </label>
-          <label class="control">Opacity
-            <input id="opacitySlider" type="range" min="0.2" max="1" step="0.01" value="1" />
-          </label>
-        </div>
-        <label class="toggle">
-          <span>Enable 3D preview</span>
-          <input id="toggle3d" type="checkbox" />
-        </label>
-      </div>
-    </section>
-
-    <section class="container section" aria-labelledby="templates-title">
-      <div class="section-heading">
-        <h2 id="templates-title">Quick templates to spark ideas</h2>
-        <p>Start from proven compositions, then remix colors, copy, and overlays to make it yours.</p>
-      </div>
-      <div class="card templates-card">
-        <div class="template-list" role="list">
-          <article class="template-card" role="listitem">
-            <div class="template-thumb" style="background-image: linear-gradient(160deg, #00ffd1, #0069ff);"></div>
+          <section class="final-card">
             <div>
-              <strong>Gradient Wave</strong>
-              <p class="status">Soft neon gradient ribbons</p>
+              <h3>Ready when you are</h3>
+              <p>Preview the print mask, export a production-ready PNG, or jump straight to checkout.</p>
             </div>
-            <button class="btn-ghost" data-template="gradient">Use</button>
-          </article>
-          <article class="template-card" role="listitem">
-            <div class="template-thumb" style="background-image: linear-gradient(115deg, #1f2937 0%, #111827 40%), url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22200%22 viewBox=%220 0 100 200%22%3E%3Crect width=%22100%22 height=%22200%22 fill=%22%23111827%22/%3E%3Cpath d=%22M10 20h80v10H10zM10 60h80v10H10zM10 100h80v10H10zM10 140h80v10H10zM10 180h80v10H10z%22 fill=%22%23222f3f%22/%3E%3C/svg%3E'); background-size: cover;"></div>
-            <div>
-              <strong>Geometric Pattern</strong>
-              <p class="status">Clean modular lines</p>
+            <div class="actions">
+              <button class="btn-ghost" id="previewBtn" type="button">Preview Mask</button>
+              <button class="btn-accent" id="downloadBtn" type="button">Download Design (PNG)</button>
+              <a id="orderBtn" class="btn-ghost" href="https://example.com/order" target="_blank" rel="noopener">Order Now</a>
             </div>
-            <button class="btn-ghost" data-template="geo">Use</button>
-          </article>
-          <article class="template-card" role="listitem">
-            <div class="template-thumb" style="background-image: url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22200%22 viewBox=%220 0 100 200%22%3E%3Crect width=%22100%22 height=%22200%22 fill=%22000233%22/%3E%3Ccircle cx=%2250%22 cy=%2290%22 r=%2230%22 fill=%22%236c2aff%22 opacity=%220.45%22/%3E%3Ccircle cx=%2230%22 cy=%2240%22 r=%2215%22 fill=%22%23fff%22 opacity=%220.75%22/%3E%3Ccircle cx=%2280%22 cy=%22130%22 r=%2220%22 fill=%22%23ff00aa%22 opacity=%220.35%22/%3E%3C/svg%3E'); background-size: cover; background-position: center;"></div>
-            <div>
-              <strong>Space Theme</strong>
-              <p class="status">Nebula glow &amp; stars</p>
-            </div>
-            <button class="btn-ghost" data-template="space">Use</button>
-          </article>
+            <div id="exportStatus" class="status" role="status" aria-live="polite"></div>
+          </section>
         </div>
-      </div>
-    </section>
-
-    <section class="container section">
-      <div class="final-card">
-        <div>
-          <h3>Ready when you are</h3>
-          <p>Preview the print mask, export a production-ready PNG, or jump straight to checkout.</p>
-        </div>
-        <div class="actions">
-          <button class="btn-ghost" id="previewBtn" type="button">Preview Mask</button>
-          <button class="btn-accent" id="downloadBtn" type="button">Download Design (PNG)</button>
-          <a id="orderBtn" class="btn-ghost" href="https://example.com/order" target="_blank" rel="noopener">Order Now</a>
-        </div>
-        <div id="exportStatus" class="status" role="status" aria-live="polite"></div>
-      </div>
-    </section>
+      </aside>
+    </div>
   </main>
   <footer>
     Add your own Gemini API key to unlock instant AI designs, or work offline with manual uploads.
