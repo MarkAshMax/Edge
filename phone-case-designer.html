@@ -1773,7 +1773,8 @@
         initialPos: { x: 0, y: 0 },
         needsRender: true,
         showMask: false,
-        vibePreviewActive: true,
+        vibePreviewActive: false,
+        showEdgeDefault: true,
         selections: {
           vibeIndex: 0,
           layout: 'center',
@@ -1791,6 +1792,7 @@
           dataUrl: '',
           signature: '',
         },
+        edgeLogoImage: null,
         three: {
           enabled: false,
           scene: null,
@@ -1921,6 +1923,9 @@
         return overlay;
       })();
 
+      const EDGE_LOGO_SVG = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 70"><path d="M7 58L36 22l14 20 10-12 23 24 15-12 17 30H7Z" fill="#ff6b36"/><path d="M36 22l14 20 10-12 23 24 15-12 17 30" fill="none" stroke="#ffffff" stroke-opacity="0.82" stroke-width="4" stroke-linejoin="round"/></svg>';
+      const EDGE_LOGO_DATA_URL = `data:image/svg+xml;utf8,${encodeURIComponent(EDGE_LOGO_SVG)}`;
+
       const debounce = (fn, delay = 300) => {
         let timer;
         return (...args) => {
@@ -1931,6 +1936,22 @@
 
       const clipToPhoneMask = (context) => {
         context.clip(phoneMask.path, phoneMask.clipRule);
+      };
+
+      const ensureEdgeLogoImage = () => {
+        if (state.edgeLogoImage) {
+          return state.edgeLogoImage;
+        }
+        const img = new Image();
+        img.onload = () => {
+          state.edgeLogoImage = img;
+          state.needsRender = true;
+        };
+        img.onerror = (err) => {
+          console.warn('Edge logo failed to load', err);
+        };
+        img.src = EDGE_LOGO_DATA_URL;
+        return null;
       };
 
       const setLoading = (isLoading) => {
@@ -1982,6 +2003,56 @@
         if (state.customOverlay?.bitmap) {
           drawCustomOverlay(ctx);
         }
+        ctx.restore();
+      };
+
+      const drawEdgeFallback = () => {
+        ctx.save();
+        clipToPhoneMask(ctx);
+
+        const baseGradient = ctx.createLinearGradient(0, 0, 0, caseHeight);
+        baseGradient.addColorStop(0, '#050608');
+        baseGradient.addColorStop(1, '#0b0d15');
+        ctx.fillStyle = baseGradient;
+        ctx.fillRect(0, 0, caseWidth, caseHeight);
+
+        const radialGlow = ctx.createRadialGradient(
+          caseWidth / 2,
+          caseHeight * 0.4,
+          caseWidth * 0.08,
+          caseWidth / 2,
+          caseHeight * 0.42,
+          caseWidth * 0.7
+        );
+        radialGlow.addColorStop(0, 'rgba(255, 77, 31, 0.32)');
+        radialGlow.addColorStop(1, 'rgba(255, 77, 31, 0)');
+        ctx.fillStyle = radialGlow;
+        ctx.fillRect(0, 0, caseWidth, caseHeight);
+
+        const sweep = ctx.createLinearGradient(0, caseHeight * 0.18, 0, caseHeight * 0.82);
+        sweep.addColorStop(0, 'rgba(255, 255, 255, 0.08)');
+        sweep.addColorStop(0.5, 'rgba(255, 255, 255, 0)');
+        sweep.addColorStop(1, 'rgba(255, 255, 255, 0.08)');
+        ctx.globalCompositeOperation = 'lighter';
+        ctx.fillStyle = sweep;
+        ctx.fillRect(0, caseHeight * 0.18, caseWidth, caseHeight * 0.64);
+        ctx.globalCompositeOperation = 'source-over';
+
+        const logoImg = ensureEdgeLogoImage();
+        if (logoImg) {
+          const maxWidth = caseWidth * 0.56;
+          const maxHeight = caseHeight * 0.32;
+          const scale = Math.min(maxWidth / logoImg.width, maxHeight / logoImg.height);
+          const logoWidth = logoImg.width * scale;
+          const logoHeight = logoImg.height * scale;
+          const logoX = (caseWidth - logoWidth) / 2;
+          const logoY = caseHeight * 0.46 - logoHeight / 2;
+          ctx.shadowColor = 'rgba(255, 77, 31, 0.32)';
+          ctx.shadowBlur = 36;
+          ctx.drawImage(logoImg, logoX, logoY, logoWidth, logoHeight);
+          ctx.shadowBlur = 0;
+        }
+
         ctx.restore();
       };
 
@@ -2043,13 +2114,17 @@
         });
       };
 
-      const setVibeIndex = (index) => {
+      const setVibeIndex = (index, options = {}) => {
+        const { activatePreview = true } = options;
         if (!Array.isArray(VIBE_CATEGORIES) || VIBE_CATEGORIES.length === 0) return;
         const total = VIBE_CATEGORIES.length;
         const normalized = ((index % total) + total) % total;
         state.selections.vibeIndex = normalized;
+        if (activatePreview) {
+          state.showEdgeDefault = false;
+        }
         if (!state.imageBitmap) {
-          state.vibePreviewActive = true;
+          state.vibePreviewActive = activatePreview;
         }
         updateVibeDisplay();
         state.needsRender = true;
@@ -2156,8 +2231,11 @@
         if (!state.needsRender) return;
         state.needsRender = false;
         clearCanvas();
-        if (state.imageBitmap || state.customOverlay?.bitmap) {
+        const hasDesign = Boolean(state.imageBitmap || state.customOverlay?.bitmap);
+        if (hasDesign) {
           drawDesign();
+        } else if (state.showEdgeDefault) {
+          drawEdgeFallback();
         } else if (state.vibePreviewActive) {
           drawVibePreview();
         }
@@ -2204,6 +2282,7 @@
         state.image = img;
         state.imageBitmap = await createImageBitmapSafe(img);
         state.vibePreviewActive = false;
+        state.showEdgeDefault = false;
         const coverScale = Math.max(caseWidth / img.width, caseHeight / img.height);
         state.baseScale = coverScale;
         resetTransform();
@@ -2302,6 +2381,7 @@
           overlayIconUpload.value = '';
         }
         state.vibePreviewActive = !state.imageBitmap;
+        state.showEdgeDefault = !state.imageBitmap;
         state.needsRender = true;
       };
 
@@ -2342,6 +2422,7 @@
             overlayIconUpload.value = '';
           }
           state.vibePreviewActive = !state.imageBitmap;
+          state.showEdgeDefault = false;
           state.needsRender = true;
           nextObjectUrl = '';
         } catch (err) {
@@ -2821,19 +2902,24 @@
           setStatus(aiStatus, 'Prompt loaded. Pick a vibe next.');
           if (!state.imageBitmap) {
             state.vibePreviewActive = true;
+            state.showEdgeDefault = false;
             state.needsRender = true;
           }
           promptInput.focus();
         });
       });
 
-      const applyLayoutSelection = (layoutId) => {
+      const applyLayoutSelection = (layoutId, options = {}) => {
+        const { activatePreview = true } = options;
         state.selections.layout = layoutId;
         layoutRadios.forEach((radio) => {
           radio.checked = radio.value === layoutId;
         });
         if (!state.imageBitmap) {
-          state.vibePreviewActive = true;
+          if (activatePreview) {
+            state.vibePreviewActive = true;
+            state.showEdgeDefault = false;
+          }
           state.needsRender = true;
         }
       };
@@ -2846,13 +2932,14 @@
         });
       });
 
-      applyLayoutSelection(state.selections.layout);
+      applyLayoutSelection(state.selections.layout, { activatePreview: false });
 
       if (overlayTextInput) {
         overlayTextInput.addEventListener('input', () => {
           state.selections.overlayText = overlayTextInput.value;
           if (!state.imageBitmap) {
             state.vibePreviewActive = true;
+            state.showEdgeDefault = false;
             state.needsRender = true;
           }
         });
@@ -2931,6 +3018,7 @@
         }
         state.selections.overlayText = preset.overlayText || '';
         state.vibePreviewActive = true;
+        state.showEdgeDefault = false;
         state.needsRender = true;
         handleGeminiGeneration();
       };
@@ -2939,7 +3027,7 @@
         surpriseBtn.addEventListener('click', handleSurprise);
       }
 
-      setVibeIndex(state.selections.vibeIndex);
+      setVibeIndex(state.selections.vibeIndex, { activatePreview: false });
 
       dropZone.addEventListener('click', () => fileInput.click());
       dropZone.addEventListener('keydown', (event) => {
@@ -3016,6 +3104,7 @@
       canvas.addEventListener('pointerleave', onPointerUp);
       canvas.addEventListener('pointercancel', onPointerUp);
 
+      ensureEdgeLogoImage();
       renderLoop();
       updateTransformInfo();
     })();
