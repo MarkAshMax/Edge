@@ -1,0 +1,186 @@
+@layer components {
+  .mobile-nav-root {
+    position: fixed;
+    inset: 0;
+    z-index: 60;
+  }
+
+  .mobile-nav-overlay {
+    position: fixed;
+    inset: 0;
+    display: grid;
+    pointer-events: none;
+  }
+
+  .mobile-nav-overlay[data-open="true"] {
+    pointer-events: auto;
+  }
+
+  .mobile-nav-backdrop {
+    position: absolute;
+    inset: 0;
+    border: none;
+    background: rgba(4, 5, 11, 0.65);
+    backdrop-filter: blur(14px);
+    opacity: 0;
+    transition: opacity 220ms ease-out;
+    cursor: pointer;
+  }
+
+  .mobile-nav-overlay[data-open="true"] .mobile-nav-backdrop {
+    opacity: 1;
+  }
+
+  .mobile-nav-panel {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: min(92vw, 360px);
+    padding: calc(var(--safe-area-top) + 1.35rem) clamp(1.25rem, 4vw, 1.75rem) calc(var(--safe-area-bottom) + 2rem);
+    background: rgba(12, 16, 28, 0.96);
+    border-left: 1px solid var(--stroke);
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    transform: translateX(100%);
+    opacity: 0;
+    transition: transform 260ms ease-out, opacity 180ms ease-out;
+    box-shadow: -24px 0 60px -28px rgba(7, 10, 28, 0.65);
+    pointer-events: auto;
+  }
+
+  .mobile-nav-overlay[data-open="true"] .mobile-nav-panel {
+    transform: translateX(0%);
+    opacity: 1;
+  }
+
+  .mobile-nav-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .mobile-nav-brand {
+    font-size: var(--step-0);
+    font-weight: 700;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+  }
+
+  .mobile-nav-close {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 44px;
+    width: 44px;
+    border-radius: 999px;
+    border: 1px solid var(--stroke);
+    background: rgba(255, 255, 255, 0.08);
+    color: inherit;
+    transition: background 160ms ease, border-color 160ms ease;
+  }
+
+  .mobile-nav-close:hover {
+    border-color: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.14);
+  }
+
+  .mobile-nav-close:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 4px rgba(110, 231, 249, 0.32);
+  }
+
+  .mobile-nav-body {
+    flex: 1;
+    overflow-y: auto;
+    padding-right: 0.25rem;
+  }
+
+  .mobile-nav-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .mobile-nav-link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 56px;
+    border-radius: 18px;
+    padding: 0.85rem 1.1rem;
+    text-decoration: none;
+    font-size: var(--step-0);
+    font-weight: 600;
+    color: var(--foreground);
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid var(--stroke-soft);
+    transition: border-color 160ms ease, background 160ms ease, transform 200ms ease;
+  }
+
+  .mobile-nav-link::after {
+    content: "↗";
+    font-size: 0.75em;
+    opacity: 0.6;
+  }
+
+  .mobile-nav-link:hover,
+  .mobile-nav-link:focus-visible {
+    border-color: rgba(255, 255, 255, 0.28);
+    background: rgba(255, 255, 255, 0.14);
+    transform: translateX(4px);
+    outline: none;
+  }
+
+  .mobile-nav-footer {
+    display: grid;
+    gap: 0.85rem;
+  }
+
+  .mobile-nav-cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 52px;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #6ee7f9, #a855f7, #f472b6);
+    color: #04050b;
+    font-weight: 700;
+    text-decoration: none;
+    font-size: var(--step--1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 16px 32px rgba(132, 101, 255, 0.32);
+    transition: transform 200ms ease, box-shadow 200ms ease;
+  }
+
+  .mobile-nav-cta:hover,
+  .mobile-nav-cta:focus-visible {
+    transform: translateY(-2px);
+    box-shadow: 0 22px 44px rgba(132, 101, 255, 0.38);
+    outline: none;
+  }
+
+  .mobile-nav-meta {
+    display: grid;
+    gap: 0.35rem;
+    font-size: var(--step--2);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.6);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mobile-nav-backdrop,
+  .mobile-nav-panel {
+    transition: none !important;
+  }
+}
+
+body[data-nav-open="true"] {
+  overscroll-behavior: contain;
+}

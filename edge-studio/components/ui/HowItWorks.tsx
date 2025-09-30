@@ -77,20 +77,20 @@ const steps = [
 
 export default function HowItWorks() {
   return (
-    <section aria-labelledby="how-heading" className="relative isolate py-24 sm:py-28">
+    <section aria-labelledby="how-heading" className="relative isolate section-shell">
       <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(circle_at_center,rgba(152,115,255,0.18),transparent_65%)]" />
       <div className="pointer-events-none absolute inset-x-0 bottom-0 -z-10 h-72 bg-gradient-to-t from-[#04050b] via-[#070818] to-transparent" />
-      <div className="mx-auto max-w-[1200px] px-6 sm:px-8">
-        <div className="relative overflow-hidden rounded-[36px] border border-white/10 bg-white/5 px-8 py-14 shadow-[0_40px_120px_-60px_rgba(10,15,40,0.75)] backdrop-blur-[32px]">
+      <div className="content-shell">
+        <div className="relative overflow-hidden rounded-[36px] border border-white/10 bg-white/5 px-6 py-12 shadow-[0_40px_120px_-60px_rgba(10,15,40,0.75)] backdrop-blur-[32px] sm:px-8 sm:py-14">
           <div className="pointer-events-none absolute -top-20 right-8 h-48 w-48 rounded-full bg-gradient-to-br from-fuchsia-400/45 via-indigo-500/30 to-transparent blur-3xl" />
           <div className="pointer-events-none absolute -bottom-16 left-0 h-60 w-60 rounded-full bg-gradient-to-tr from-cyan-300/35 via-indigo-400/25 to-transparent blur-3xl" />
 
           <div className="relative flex flex-col gap-10 lg:flex-row lg:items-end lg:justify-between">
             <div className="max-w-xl">
-              <h2 id="how-heading" className="text-3xl font-semibold tracking-tight text-white sm:text-[44px] sm:leading-tight">
+              <h2 id="how-heading" className="font-semibold tracking-tight text-white text-[length:var(--step-3)] md:text-[length:var(--step-4)]">
                 How it works
               </h2>
-              <p className="mt-3 text-base text-white/70 sm:text-lg">
+              <p className="mt-3 text-[length:var(--step--1)] text-white/70 sm:text-[length:var(--step-0)]">
                 Three easy steps to your perfect case. Every interaction is designed to keep your creativity flowing.
               </p>
             </div>
@@ -107,15 +107,15 @@ export default function HowItWorks() {
             {steps.map((step) => (
               <article
                 key={step.title}
-                className="group relative flex min-h-[320px] flex-col rounded-[26px] border border-white/12 bg-white/6 p-7 shadow-[0_24px_50px_-28px_rgba(10,15,40,0.65)] transition duration-300 hover:-translate-y-1.5 hover:border-white/20 hover:shadow-[0_28px_70px_-28px_rgba(44,86,255,0.55)]"
+                className="group relative flex min-h-[18rem] flex-col rounded-[26px] border border-white/12 bg-white/6 p-6 shadow-[0_24px_50px_-28px_rgba(10,15,40,0.65)] transition duration-300 hover:-translate-y-1.5 hover:border-white/20 hover:shadow-[0_28px_70px_-28px_rgba(44,86,255,0.55)] sm:p-7"
               >
                 <div className="absolute inset-0 rounded-[26px] bg-[radial-gradient(circle_at_top,#6ee7f933,transparent_70%)] opacity-0 transition duration-300 group-hover:opacity-100 group-focus-visible:opacity-100" aria-hidden="true" />
                 <div className="relative flex h-14 w-14 items-center justify-center rounded-2xl bg-white/10 shadow-inner">
                   {step.icon}
                 </div>
-                <h3 className="relative mt-6 text-xl font-semibold text-white">{step.title}</h3>
-                <p className="relative mt-3 text-sm leading-6 text-white/70">{step.desc}</p>
-                <div className="relative mt-auto pt-6 text-xs uppercase tracking-[0.28em] text-white/50">
+                <h3 className="relative mt-6 text-[length:var(--step-1)] font-semibold text-white">{step.title}</h3>
+                <p className="relative mt-3 text-[length:var(--step--1)] leading-6 text-white/70">{step.desc}</p>
+                <div className="relative mt-auto pt-6 text-[length:var(--step--2)] uppercase tracking-[0.28em] text-white/50">
                   <span className="inline-flex items-center gap-2">
                     <span className="block h-px w-8 bg-gradient-to-r from-white/40 to-transparent" />
                     Guided in-app prompts

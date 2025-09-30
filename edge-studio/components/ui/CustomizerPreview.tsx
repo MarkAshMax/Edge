@@ -13,16 +13,16 @@ export default function CustomizerPreview() {
   const [activeChip, setActiveChip] = useState(previewChips[0].id);
 
   return (
-    <section aria-labelledby="customizer-heading" className="relative isolate py-24 sm:py-28">
+    <section aria-labelledby="customizer-heading" className="relative isolate section-shell">
       <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(circle_at_center,rgba(110,231,249,0.12),transparent_70%)]" />
       <div className="pointer-events-none absolute inset-y-0 left-[-18rem] -z-10 h-[28rem] w-[28rem] rounded-full bg-gradient-to-br from-cyan-300/35 via-indigo-500/30 to-transparent blur-3xl" />
-      <div className="mx-auto grid max-w-[1200px] items-center gap-12 px-6 sm:px-8 lg:grid-cols-2">
+      <div className="content-shell grid items-center gap-12 lg:grid-cols-2">
         <div className="order-2 flex flex-col gap-6 lg:order-1">
           <div>
-            <h2 id="customizer-heading" className="text-3xl font-semibold tracking-tight text-white sm:text-[44px] sm:leading-tight">
+            <h2 id="customizer-heading" className="font-semibold tracking-tight text-white text-[length:var(--step-3)] md:text-[length:var(--step-4)]">
               See your design come alive in real time
             </h2>
-            <p className="mt-4 text-base text-white/70 sm:text-lg">
+            <p className="mt-4 text-[length:var(--step--1)] text-white/70 sm:text-[length:var(--step-0)]">
               Personalise colours, stickers and fonts while our live preview mirrors every tweak instantly across 360° views. Hotspots guide you through cases, wallets and straps.
             </p>
           </div>
@@ -30,19 +30,19 @@ export default function CustomizerPreview() {
           <div className="flex flex-wrap gap-3">
             <Link
               href="/design"
-              className="inline-flex h-12 items-center justify-center rounded-full bg-gradient-to-r from-cyan-300 via-indigo-400 to-pink-400 px-6 text-sm font-semibold text-slate-900 shadow-[0_10px_24px_rgba(132,101,255,0.35)] transition hover:-translate-y-0.5 hover:shadow-[0_14px_32px_rgba(132,101,255,0.42)] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-cyan-300/45 focus-visible:ring-offset-2 focus-visible:ring-offset-[#04050b]"
+              className="inline-flex min-h-[3rem] items-center justify-center rounded-full bg-gradient-to-r from-cyan-300 via-indigo-400 to-pink-400 px-6 text-[length:var(--step--1)] font-semibold text-slate-900 shadow-[0_10px_24px_rgba(132,101,255,0.35)] transition hover:-translate-y-0.5 hover:shadow-[0_14px_32px_rgba(132,101,255,0.42)] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-cyan-300/45 focus-visible:ring-offset-2 focus-visible:ring-offset-[#04050b]"
             >
               Start Designing
             </Link>
             <Link
               href="/design?template=upload"
-              className="inline-flex h-12 items-center justify-center rounded-full border border-white/15 bg-white/10 px-6 text-sm font-semibold text-white transition hover:border-white/25 hover:bg-white/16 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-cyan-300/45 focus-visible:ring-offset-2 focus-visible:ring-offset-[#04050b]"
+              className="inline-flex min-h-[3rem] items-center justify-center rounded-full border border-white/15 bg-white/10 px-6 text-[length:var(--step--1)] font-semibold text-white transition hover:border-white/25 hover:bg-white/16 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-cyan-300/45 focus-visible:ring-offset-2 focus-visible:ring-offset-[#04050b]"
             >
               Upload Photo
             </Link>
             <Link
               href="/design?template=browse"
-              className="inline-flex h-12 items-center justify-center rounded-full border border-white/20 bg-transparent px-6 text-sm font-semibold text-white transition hover:border-white/35 hover:bg-white/8 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-cyan-300/45 focus-visible:ring-offset-2 focus-visible:ring-offset-[#04050b]"
+              className="inline-flex min-h-[3rem] items-center justify-center rounded-full border border-white/20 bg-transparent px-6 text-[length:var(--step--1)] font-semibold text-white transition hover:border-white/35 hover:bg-white/8 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-cyan-300/45 focus-visible:ring-offset-2 focus-visible:ring-offset-[#04050b]"
             >
               Try a Template
             </Link>
@@ -54,7 +54,7 @@ export default function CustomizerPreview() {
                 type="button"
                 key={chip.id}
                 onClick={() => setActiveChip(chip.id)}
-                className={`rounded-full border px-4 py-2 text-xs font-semibold uppercase tracking-[0.28em] transition ${
+                className={`rounded-full border px-4 py-2 text-[length:var(--step--2)] font-semibold uppercase tracking-[0.28em] transition ${
                   chip.id === activeChip
                     ? "border-transparent bg-gradient-to-r from-cyan-300 via-indigo-400 to-pink-400 text-slate-900"
                     : "border-white/15 bg-white/6 text-white/70 hover:border-white/30 hover:text-white"
@@ -68,7 +68,7 @@ export default function CustomizerPreview() {
         </div>
 
         <div className="order-1 lg:order-2">
-          <div className="relative overflow-hidden rounded-[40px] border border-white/12 bg-white/6 p-6 shadow-[0_32px_90px_-40px_rgba(15,18,40,0.7)] backdrop-blur-[30px]">
+          <div className="relative overflow-hidden rounded-[40px] border border-white/12 bg-white/6 p-5 shadow-[0_32px_90px_-40px_rgba(15,18,40,0.7)] backdrop-blur-[30px] sm:p-6">
             <div className="pointer-events-none absolute -left-16 top-6 h-40 w-40 rounded-full bg-gradient-to-br from-cyan-300/35 via-indigo-400/30 to-transparent blur-3xl" />
             <div className="pointer-events-none absolute -right-12 bottom-8 h-48 w-48 rounded-full bg-gradient-to-tr from-fuchsia-400/35 via-amber-200/25 to-transparent blur-3xl" />
             <div className="relative grid gap-6 lg:grid-cols-[180px_minmax(0,1fr)_200px]">
