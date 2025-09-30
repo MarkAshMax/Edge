@@ -1,7 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import MobileNav from "@/src/components/MobileNav";
+import { useMobileUXFlag } from "@/lib/featureFlags";
 
 const navLinks = [
   { href: "/shop", label: "Shop" },
@@ -12,6 +14,8 @@ const navLinks = [
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const mobileUXEnabled = useMobileUXFlag();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);
@@ -19,6 +23,19 @@ export default function Header() {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  useEffect(() => {
+    if (!mobileUXEnabled && menuOpen) {
+      setMenuOpen(false);
+    }
+  }, [mobileUXEnabled, menuOpen]);
+
+  const handleOpenMenu = useCallback(() => {
+    if (!mobileUXEnabled) return;
+    setMenuOpen(true);
+  }, [mobileUXEnabled]);
+
+  const handleCloseMenu = useCallback(() => setMenuOpen(false), []);
 
   return (
     <header
@@ -28,7 +45,7 @@ export default function Header() {
           : "bg-gradient-to-b from-[#04050b]/96 to-transparent border-b border-transparent"
       }`}
     >
-      <div className="mx-auto flex h-20 max-w-[1200px] items-center justify-between px-6 sm:px-8">
+      <div className="content-shell flex min-h-[4.5rem] items-center justify-between gap-4">
         <Link href="/" className="flex items-center gap-3 text-sm font-semibold uppercase tracking-[0.32em] text-white">
           <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-cyan-300 via-indigo-400 to-pink-400 text-[#04050b]">
             E
@@ -83,21 +100,29 @@ export default function Header() {
         <div className="flex items-center gap-3 lg:hidden">
           <Link
             href="/design"
-            className="inline-flex h-10 items-center justify-center rounded-full bg-gradient-to-r from-cyan-300 via-indigo-400 to-pink-400 px-4 text-xs font-semibold text-[#04050b]"
+            className="inline-flex min-h-[2.75rem] items-center justify-center rounded-full bg-gradient-to-r from-cyan-300 via-indigo-400 to-pink-400 px-4 text-[length:var(--step--1)] font-semibold text-[#04050b]"
           >
             Start
           </Link>
-          <button
-            type="button"
-            className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/15 bg-white/6 text-white transition hover:border-white/25 hover:bg-white/12 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-cyan-300/45"
-            aria-label="Open navigation"
-          >
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" className="h-5 w-5">
-              <path d="M5 7h14M5 12h14M5 17h14" />
-            </svg>
-          </button>
+          {mobileUXEnabled && (
+            <button
+              type="button"
+              onClick={handleOpenMenu}
+              aria-label="Open navigation"
+              aria-controls="mobile-nav"
+              aria-expanded={menuOpen}
+              className="min-tap inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/15 bg-white/6 text-white transition hover:border-white/25 hover:bg-white/12 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-cyan-300/45"
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" className="h-5 w-5">
+                <path d="M5 7h14M5 12h14M5 17h14" />
+              </svg>
+            </button>
+          )}
         </div>
       </div>
+      {mobileUXEnabled && (
+        <MobileNav isOpen={menuOpen} onClose={handleCloseMenu} links={navLinks} />
+      )}
     </header>
   );
 }

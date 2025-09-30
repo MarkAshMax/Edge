@@ -36,16 +36,16 @@ const tiles: Tile[] = [
 
 export default function Inspiration() {
   return (
-    <section aria-labelledby="inspo-heading" className="relative isolate py-24 sm:py-28">
+    <section aria-labelledby="inspo-heading" className="relative isolate section-shell">
       <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(circle_at_center,rgba(248,79,181,0.16),transparent_75%)]" />
       <div className="pointer-events-none absolute inset-x-0 bottom-0 -z-10 h-72 bg-gradient-to-t from-[#04050b] via-[#070818] to-transparent" />
-      <div className="mx-auto max-w-[1200px] px-6 sm:px-8">
+      <div className="content-shell">
         <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
           <div>
-            <h2 id="inspo-heading" className="text-3xl font-semibold tracking-tight text-white sm:text-[44px] sm:leading-tight">
+            <h2 id="inspo-heading" className="font-semibold tracking-tight text-white text-[length:var(--step-3)] md:text-[length:var(--step-4)]">
               Think outside the case
             </h2>
-            <p className="mt-3 text-base text-white/70 sm:text-lg">
+            <p className="mt-3 text-[length:var(--step--1)] text-white/70 sm:text-[length:var(--step-0)]">
               From festival-ready finishes to grounded eco builds, find your spark across our moodboard of community favourites.
             </p>
           </div>
@@ -74,9 +74,9 @@ export default function Inspiration() {
                     <span className="block h-px w-6 bg-gradient-to-r from-white to-transparent" />
                     Inspiration
                   </span>
-                  <h3 className="text-2xl font-semibold text-white">{tile.title}</h3>
+                  <h3 className="text-[length:var(--step-1)] font-semibold text-white md:text-[length:var(--step-2)]">{tile.title}</h3>
                 </div>
-                <p className="text-sm leading-6 text-white/75">{tile.caption}</p>
+                <p className="text-[length:var(--step--1)] leading-6 text-white/75">{tile.caption}</p>
               </div>
 
               <div className="absolute left-6 top-6 inline-flex items-center gap-3 rounded-full border border-white/15 bg-white/10 px-4 py-2 text-xs font-medium uppercase tracking-[0.32em] text-white/70">

@@ -111,20 +111,20 @@ export default function Testimonials() {
   };
 
   return (
-    <section aria-labelledby="testimonials-heading" className="relative isolate py-24 sm:py-28">
+    <section aria-labelledby="testimonials-heading" className="relative isolate section-shell">
       <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top,rgba(99,102,241,0.24),transparent_65%)]" />
       <div className="pointer-events-none absolute inset-x-0 bottom-0 -z-10 h-72 bg-gradient-to-t from-[#04050b] via-[#070818] to-transparent" />
-      <div className="mx-auto max-w-[1200px] px-6 sm:px-8">
-        <div className="relative overflow-hidden rounded-[40px] border border-white/10 bg-white/6 px-8 py-14 shadow-[0_40px_120px_-60px_rgba(14,18,44,0.7)] backdrop-blur-[28px]">
+      <div className="content-shell">
+        <div className="relative overflow-hidden rounded-[40px] border border-white/10 bg-white/6 px-6 py-12 shadow-[0_40px_120px_-60px_rgba(14,18,44,0.7)] backdrop-blur-[28px] sm:px-8 sm:py-14">
           <div className="pointer-events-none absolute -top-28 left-16 h-60 w-60 rounded-full bg-gradient-to-br from-indigo-500/35 via-cyan-300/25 to-transparent blur-3xl" />
           <div className="pointer-events-none absolute -bottom-28 right-10 h-72 w-72 rounded-full bg-gradient-to-br from-pink-400/35 via-amber-200/20 to-transparent blur-3xl" />
 
           <div className="relative flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
             <div className="max-w-xl">
-              <h2 id="testimonials-heading" className="text-3xl font-semibold tracking-tight text-white sm:text-[44px] sm:leading-tight">
+              <h2 id="testimonials-heading" className="font-semibold tracking-tight text-white text-[length:var(--step-3)] md:text-[length:var(--step-4)]">
                 Loved by creators across the UK
               </h2>
-              <p className="mt-3 text-base text-white/70 sm:text-lg">
+              <p className="mt-3 text-[length:var(--step--1)] text-white/70 sm:text-[length:var(--step-0)]">
                 Designers, photographers and founders ship their ideas with Edge! Studio. Here&apos;s what keeps them coming back.
               </p>
             </div>

@@ -98,16 +98,16 @@ export default function Gallery() {
   }, [activeFilter]);
 
   return (
-    <section aria-labelledby="gallery-heading" className="relative isolate py-24 sm:py-28">
+    <section aria-labelledby="gallery-heading" className="relative isolate section-shell">
       <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(circle_at_center,rgba(110,231,249,0.08),transparent_70%)]" />
       <div className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-64 bg-gradient-to-b from-transparent via-white/5 to-transparent opacity-20" />
-      <div className="mx-auto max-w-[1200px] px-6 sm:px-8">
+      <div className="content-shell">
         <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
           <div className="max-w-xl">
-            <h2 id="gallery-heading" className="text-3xl font-semibold tracking-tight text-white sm:text-[44px] sm:leading-tight">
+            <h2 id="gallery-heading" className="font-semibold tracking-tight text-white text-[length:var(--step-3)] md:text-[length:var(--step-4)]">
               Best-selling custom looks
             </h2>
-            <p className="mt-3 text-base text-white/70 sm:text-lg">
+            <p className="mt-3 text-[length:var(--step--1)] text-white/70 sm:text-[length:var(--step-0)]">
               A curated mix of bold gradients, clean linework and real-life collages — refreshed weekly by our community team.
             </p>
           </div>
@@ -162,8 +162,8 @@ export default function Gallery() {
                     <span>{item.category}</span>
                     <span>{item.rating}</span>
                   </div>
-                  <h3 className="text-lg font-semibold text-white">{item.title}</h3>
-                  <div className="flex items-center justify-between text-sm text-white/70">
+                  <h3 className="text-[length:var(--step-1)] font-semibold text-white">{item.title}</h3>
+                  <div className="flex items-center justify-between text-[length:var(--step--1)] text-white/70">
                     <span>{item.models}</span>
                     <span className="font-semibold text-white">{item.price}</span>
                   </div>
@@ -173,7 +173,7 @@ export default function Gallery() {
           ))}
         </div>
 
-        <div className="mt-12 flex items-center gap-6 text-sm text-white/60">
+        <div className="mt-12 flex items-center gap-6 text-[length:var(--step--1)] text-white/60">
           <span className="h-px w-16 bg-gradient-to-r from-white/20 to-transparent" />
           Scroll for more looks inside the builder — each style is customisable in seconds.
         </div>

@@ -1,26 +1,147 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    color-scheme: dark;
+    --background: #04050b;
+    --foreground: #f7f7fb;
+    --surface: rgba(10, 12, 24, 0.84);
+    --surface-muted: rgba(14, 16, 28, 0.72);
+    --stroke: rgba(255, 255, 255, 0.12);
+    --stroke-soft: rgba(255, 255, 255, 0.06);
+    --accent-1: #6ee7f9;
+    --accent-2: #a855f7;
+    --accent-3: #f472b6;
+    --safe-area-top: env(safe-area-inset-top, 0px);
+    --safe-area-bottom: env(safe-area-inset-bottom, 0px);
+    --safe-area-left: env(safe-area-inset-left, 0px);
+    --safe-area-right: env(safe-area-inset-right, 0px);
+    --space-inline: clamp(1rem, 2.5vw, 3.5rem);
+    --section-pad: clamp(2.5rem, 5vw, 6rem);
+    --content-max: 1200px;
+    --step--2: clamp(0.78rem, 0.72rem + 0.26vw, 0.86rem);
+    --step--1: clamp(0.88rem, 0.82rem + 0.33vw, 0.98rem);
+    --step-0: clamp(1rem, 0.9rem + 0.5vw, 1.1rem);
+    --step-1: clamp(1.22rem, 1.05rem + 0.86vw, 1.55rem);
+    --step-2: clamp(1.52rem, 1.25rem + 1.38vw, 2.05rem);
+    --step-3: clamp(1.9rem, 1.48rem + 2.12vw, 2.8rem);
+    --step-4: clamp(2.36rem, 1.74rem + 3.14vw, 3.6rem);
+    --step-5: clamp(2.92rem, 2.04rem + 4.54vw, 4.8rem);
+  }
+
+  html {
+    font-size: var(--step-0);
+    background: var(--background);
+    color: var(--foreground);
+    min-height: 100%;
+    text-size-adjust: 100%;
+  }
+
+  body {
+    margin: 0;
+    min-height: 100dvh;
+    padding: var(--safe-area-top) var(--safe-area-right) var(--safe-area-bottom) var(--safe-area-left);
+    background: radial-gradient(circle at 22% 10%, rgba(132, 101, 255, 0.12), transparent 60%),
+      radial-gradient(circle at 78% 0%, rgba(111, 231, 249, 0.1), transparent 70%),
+      var(--background);
+    color: var(--foreground);
+    font-family: var(--font-geist-sans, "Plus Jakarta Sans", "Inter", "Segoe UI", sans-serif);
+    line-height: 1.6;
+    letter-spacing: -0.01em;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow-x: clip;
+  }
+
+  main {
+    display: block;
+  }
+
+  a {
+    color: inherit;
+  }
+
+  button {
+    font: inherit;
+  }
+
+  ::selection {
+    background: rgba(132, 101, 255, 0.45);
+    color: #04050b;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer components {
+  .content-shell {
+    margin-inline: auto;
+    width: min(var(--content-max), calc(100% - (var(--space-inline) * 2)));
+    padding-inline: var(--space-inline);
+    container-type: inline-size;
+  }
+
+  .section-shell {
+    padding-block: var(--section-pad);
+  }
+
+  .rounded-panel {
+    border-radius: clamp(1.5rem, 4vw, 2.5rem);
+    border: 1px solid var(--stroke);
+    background: var(--surface);
+    backdrop-filter: blur(28px);
+  }
+
+  .safe-bottom {
+    padding-bottom: calc(var(--safe-area-bottom) + 1.25rem);
+  }
+}
+
+@layer utilities {
+  .min-tap {
+    min-height: 2.75rem;
+    min-width: 2.75rem;
+  }
+
+  .supports-no-motion:where(:not(.motion-ok)) {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  .content-visibility-auto {
+    content-visibility: auto;
+    contain-intrinsic-size: 600px;
+  }
+
+  .dynamic-screen {
+    min-height: min(100vh, 100dvh);
+    min-height: 100dvh;
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --background: #f7f8fc;
+    --foreground: #0c1020;
+    --surface: rgba(255, 255, 255, 0.9);
+    --surface-muted: rgba(250, 250, 255, 0.65);
+    --stroke: rgba(12, 17, 34, 0.08);
+    --stroke-soft: rgba(12, 17, 34, 0.05);
+  }
+
+  body {
+    background: radial-gradient(circle at 18% 12%, rgba(51, 119, 255, 0.14), transparent 62%),
+      radial-gradient(circle at 82% 4%, rgba(255, 162, 132, 0.1), transparent 68%),
+      var(--background);
+    color: var(--foreground);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

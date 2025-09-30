@@ -77,16 +77,16 @@ const badges = [
 
 export default function PressAndUGC() {
   return (
-    <section aria-labelledby="trust-heading" className="relative isolate py-24 sm:py-28">
+    <section aria-labelledby="trust-heading" className="relative isolate section-shell">
       <div className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-b from-transparent via-[rgba(8,10,22,0.85)] to-[#04050b]" />
       <div className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-64 bg-[radial-gradient(circle_at_top,rgba(110,231,249,0.18),transparent_65%)]" />
-      <div className="mx-auto max-w-[1200px] px-6 sm:px-8">
+      <div className="content-shell">
         <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
           <div>
-            <h2 id="trust-heading" className="text-3xl font-semibold tracking-tight text-white sm:text-[44px] sm:leading-tight">
+            <h2 id="trust-heading" className="font-semibold tracking-tight text-white text-[length:var(--step-3)] md:text-[length:var(--step-4)]">
               Trusted by thousands
             </h2>
-            <p className="mt-3 text-base text-white/70 sm:text-lg">
+            <p className="mt-3 text-[length:var(--step--1)] text-white/70 sm:text-[length:var(--step-0)]">
               Featured by the world&apos;s leading design voices and documented daily by our #MyCustomCase crew.
             </p>
           </div>
@@ -97,7 +97,7 @@ export default function PressAndUGC() {
           </div>
         </div>
 
-        <div className="mt-10 flex flex-wrap gap-4 text-sm text-white/70">
+        <div className="mt-10 flex flex-wrap gap-4 text-[length:var(--step--1)] text-white/70">
           {press.map((logo) => (
             <div
               key={logo.name}
@@ -126,7 +126,7 @@ export default function PressAndUGC() {
                     <span className="text-white/50">•</span>
                     <span className="text-white/60">{item.likes} likes</span>
                   </div>
-                  <p className="text-lg font-semibold text-white">{item.caption}</p>
+                  <p className="text-[length:var(--step-1)] font-semibold text-white">{item.caption}</p>
                 </div>
                 <button
                   type="button"
@@ -148,8 +148,8 @@ export default function PressAndUGC() {
             >
               <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(110,231,249,0.18),transparent_75%)]" aria-hidden="true" />
               <div className="relative">
-                <h3 className="text-base font-semibold text-white">{badge.title}</h3>
-                <p className="mt-2 text-sm text-white/70">{badge.desc}</p>
+                <h3 className="text-[length:var(--step-0)] font-semibold text-white">{badge.title}</h3>
+                <p className="mt-2 text-[length:var(--step--1)] text-white/70">{badge.desc}</p>
               </div>
               <div className="relative mt-6 inline-flex items-center gap-2 text-xs uppercase tracking-[0.32em] text-white/40">
                 <span className="h-px w-8 bg-gradient-to-r from-white/40 to-transparent" />
