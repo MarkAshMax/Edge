@@ -790,125 +790,80 @@
       flex-direction: column;
       gap: 1.35rem;
     }
-    .phone-selector-grid {
+    .phone-selector-dropdowns {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-      gap: 0.85rem;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
     }
-    .phone-option {
-      position: relative;
+    .phone-dropdown-group {
       display: flex;
       flex-direction: column;
-      align-items: center;
-      gap: 0.6rem;
-      padding: 1.1rem 0.85rem;
-      border-radius: var(--radius-md);
+      gap: 0.5rem;
+    }
+    .phone-dropdown-label {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .phone-dropdown {
+      position: relative;
+      width: 100%;
+    }
+    .phone-dropdown select {
+      width: 100%;
+      padding: 0.95rem 2.5rem 0.95rem 1.1rem;
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--text-primary);
+      background: rgba(255, 255, 255, 0.04);
       border: 1px solid var(--stroke-soft);
-      background: rgba(255, 255, 255, 0.02);
+      border-radius: var(--radius-md);
       cursor: pointer;
       transition: all 200ms ease;
+      appearance: none;
+      font-family: inherit;
     }
-    .phone-option:hover {
+    .phone-dropdown select:hover {
       border-color: rgba(255, 118, 63, 0.35);
-      background: rgba(255, 255, 255, 0.05);
-      transform: translateY(-2px);
+      background: rgba(255, 255, 255, 0.06);
     }
-    .phone-option input[type="radio"] {
-      position: absolute;
-      opacity: 0;
-      pointer-events: none;
-    }
-    .phone-option input[type="radio"]:checked + .phone-option-content {
+    .phone-dropdown select:focus {
+      outline: none;
       border-color: rgba(255, 118, 63, 0.65);
-      background: rgba(255, 118, 63, 0.12);
+      background: rgba(255, 255, 255, 0.08);
+      box-shadow: 0 0 0 3px rgba(255, 118, 63, 0.15);
     }
-    .phone-option input[type="radio"]:checked ~ .phone-checkmark {
-      opacity: 1;
-      transform: scale(1);
+    .phone-dropdown select:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
     }
-    .phone-option-content {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0.6rem;
-      width: 100%;
-      border-radius: var(--radius-sm);
-      padding: 0.8rem;
-      border: 2px solid transparent;
-      transition: all 200ms ease;
-    }
-    .phone-icon {
-      width: 48px;
-      height: 68px;
-      border-radius: 10px;
-      background: linear-gradient(160deg, rgba(255, 255, 255, 0.12), rgba(12, 16, 28, 0.12));
-      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.18);
-      position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .phone-icon::before {
-      content: '';
+    .phone-dropdown::after {
+      content: '▼';
       position: absolute;
-      top: 8px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 24px;
-      height: 4px;
-      border-radius: 999px;
-      background: rgba(0, 0, 0, 0.3);
-    }
-    .phone-icon::after {
-      content: '';
-      position: absolute;
-      top: 6px;
-      right: 8px;
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(50, 55, 65, 0.9), rgba(20, 24, 32, 0.9));
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
-    }
-    .phone-label {
-      font-size: 0.88rem;
-      font-weight: 600;
-      color: var(--text-primary);
-      text-align: center;
-      line-height: 1.3;
-    }
-    .phone-checkmark {
-      position: absolute;
-      top: 8px;
-      right: 8px;
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #ff5a22, #ff7a38);
-      display: grid;
-      place-items: center;
-      opacity: 0;
-      transform: scale(0.5);
-      transition: all 200ms ease;
-      box-shadow: 0 4px 12px rgba(255, 77, 31, 0.4);
-    }
-    .phone-checkmark::after {
-      content: '✓';
-      color: white;
-      font-size: 12px;
-      font-weight: bold;
+      right: 1.1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--accent-strong);
+      pointer-events: none;
+      font-size: 0.75rem;
     }
     .selected-phone-display {
       display: inline-flex;
       align-items: center;
       gap: 0.6rem;
-      padding: 0.65rem 1.2rem;
+      padding: 0.75rem 1.3rem;
       border-radius: var(--radius-sm);
       background: rgba(255, 77, 31, 0.14);
       border: 1px solid rgba(255, 77, 31, 0.32);
       color: var(--accent-strong);
-      font-size: 0.92rem;
+      font-size: 0.95rem;
       font-weight: 600;
+      margin-top: 0.5rem;
+    }
+    .selected-phone-icon {
+      font-size: 1.2rem;
     }
     .finish-grid {
       display: grid;
@@ -1426,151 +1381,37 @@
 
         <section class="workspace-section" aria-labelledby="phone-selector-title">
           <div class="section-heading">
-            <h2 id="phone-selector-title">Choose your iPhone</h2>
-            <p>Select your model so we can create the perfect fit and design.</p>
+            <h2 id="phone-selector-title">Select Your Device</h2>
+            <p>Choose your phone brand and model for the perfect fit.</p>
           </div>
           
           <div class="phone-selector-card">
-            <div class="selected-phone-display" id="selectedPhoneDisplay">
-              <span>📱</span>
-              <span id="selectedPhoneText">iPhone 15 Pro</span>
+            <div class="phone-selector-dropdowns">
+              <div class="phone-dropdown-group">
+                <label for="phoneBrand" class="phone-dropdown-label">Brand</label>
+                <div class="phone-dropdown">
+                  <select id="phoneBrand" name="phoneBrand" aria-label="Select phone brand">
+                    <option value="">Choose brand...</option>
+                    <option value="apple" selected>Apple</option>
+                    <option value="samsung">Samsung</option>
+                    <option value="google">Google</option>
+                  </select>
+                </div>
+              </div>
+              
+              <div class="phone-dropdown-group">
+                <label for="phoneModel" class="phone-dropdown-label">Model</label>
+                <div class="phone-dropdown">
+                  <select id="phoneModel" name="phoneModel" aria-label="Select phone model" disabled>
+                    <option value="">Select brand first...</option>
+                  </select>
+                </div>
+              </div>
             </div>
             
-            <div class="phone-selector-grid" role="radiogroup" aria-labelledby="phone-selector-title">
-              <label class="phone-option">
-                <input type="radio" name="phoneModel" value="iphone-10" data-display="iPhone X" />
-                <div class="phone-option-content">
-                  <div class="phone-icon"></div>
-                  <span class="phone-label">iPhone X</span>
-                </div>
-                <span class="phone-checkmark" aria-hidden="true"></span>
-              </label>
-              
-              <label class="phone-option">
-                <input type="radio" name="phoneModel" value="iphone-11" data-display="iPhone 11" />
-                <div class="phone-option-content">
-                  <div class="phone-icon"></div>
-                  <span class="phone-label">iPhone 11</span>
-                </div>
-                <span class="phone-checkmark" aria-hidden="true"></span>
-              </label>
-              
-              <label class="phone-option">
-                <input type="radio" name="phoneModel" value="iphone-11-pro" data-display="iPhone 11 Pro" />
-                <div class="phone-option-content">
-                  <div class="phone-icon"></div>
-                  <span class="phone-label">iPhone 11 Pro</span>
-                </div>
-                <span class="phone-checkmark" aria-hidden="true"></span>
-              </label>
-              
-              <label class="phone-option">
-                <input type="radio" name="phoneModel" value="iphone-12" data-display="iPhone 12" />
-                <div class="phone-option-content">
-                  <div class="phone-icon"></div>
-                  <span class="phone-label">iPhone 12</span>
-                </div>
-                <span class="phone-checkmark" aria-hidden="true"></span>
-              </label>
-              
-              <label class="phone-option">
-                <input type="radio" name="phoneModel" value="iphone-12-pro" data-display="iPhone 12 Pro" />
-                <div class="phone-option-content">
-                  <div class="phone-icon"></div>
-                  <span class="phone-label">iPhone 12 Pro</span>
-                </div>
-                <span class="phone-checkmark" aria-hidden="true"></span>
-              </label>
-              
-              <label class="phone-option">
-                <input type="radio" name="phoneModel" value="iphone-13" data-display="iPhone 13" />
-                <div class="phone-option-content">
-                  <div class="phone-icon"></div>
-                  <span class="phone-label">iPhone 13</span>
-                </div>
-                <span class="phone-checkmark" aria-hidden="true"></span>
-              </label>
-              
-              <label class="phone-option">
-                <input type="radio" name="phoneModel" value="iphone-13-pro" data-display="iPhone 13 Pro" />
-                <div class="phone-option-content">
-                  <div class="phone-icon"></div>
-                  <span class="phone-label">iPhone 13 Pro</span>
-                </div>
-                <span class="phone-checkmark" aria-hidden="true"></span>
-              </label>
-              
-              <label class="phone-option">
-                <input type="radio" name="phoneModel" value="iphone-14" data-display="iPhone 14" />
-                <div class="phone-option-content">
-                  <div class="phone-icon"></div>
-                  <span class="phone-label">iPhone 14</span>
-                </div>
-                <span class="phone-checkmark" aria-hidden="true"></span>
-              </label>
-              
-              <label class="phone-option">
-                <input type="radio" name="phoneModel" value="iphone-14-pro" data-display="iPhone 14 Pro" />
-                <div class="phone-option-content">
-                  <div class="phone-icon"></div>
-                  <span class="phone-label">iPhone 14 Pro</span>
-                </div>
-                <span class="phone-checkmark" aria-hidden="true"></span>
-              </label>
-              
-              <label class="phone-option">
-                <input type="radio" name="phoneModel" value="iphone-15" data-display="iPhone 15" />
-                <div class="phone-option-content">
-                  <div class="phone-icon"></div>
-                  <span class="phone-label">iPhone 15</span>
-                </div>
-                <span class="phone-checkmark" aria-hidden="true"></span>
-              </label>
-              
-              <label class="phone-option">
-                <input type="radio" name="phoneModel" value="iphone-15-pro" data-display="iPhone 15 Pro" checked />
-                <div class="phone-option-content">
-                  <div class="phone-icon"></div>
-                  <span class="phone-label">iPhone 15 Pro</span>
-                </div>
-                <span class="phone-checkmark" aria-hidden="true"></span>
-              </label>
-              
-              <label class="phone-option">
-                <input type="radio" name="phoneModel" value="iphone-16" data-display="iPhone 16" />
-                <div class="phone-option-content">
-                  <div class="phone-icon"></div>
-                  <span class="phone-label">iPhone 16</span>
-                </div>
-                <span class="phone-checkmark" aria-hidden="true"></span>
-              </label>
-              
-              <label class="phone-option">
-                <input type="radio" name="phoneModel" value="iphone-16-pro" data-display="iPhone 16 Pro" />
-                <div class="phone-option-content">
-                  <div class="phone-icon"></div>
-                  <span class="phone-label">iPhone 16 Pro</span>
-                </div>
-                <span class="phone-checkmark" aria-hidden="true"></span>
-              </label>
-              
-              <label class="phone-option">
-                <input type="radio" name="phoneModel" value="iphone-17" data-display="iPhone 17" />
-                <div class="phone-option-content">
-                  <div class="phone-icon"></div>
-                  <span class="phone-label">iPhone 17</span>
-                </div>
-                <span class="phone-checkmark" aria-hidden="true"></span>
-              </label>
-              
-              <label class="phone-option">
-                <input type="radio" name="phoneModel" value="iphone-17-pro" data-display="iPhone 17 Pro" />
-                <div class="phone-option-content">
-                  <div class="phone-icon"></div>
-                  <span class="phone-label">iPhone 17 Pro</span>
-                </div>
-                <span class="phone-checkmark" aria-hidden="true"></span>
-              </label>
+            <div class="selected-phone-display" id="selectedPhoneDisplay">
+              <span class="selected-phone-icon">📱</span>
+              <span id="selectedPhoneText">iPhone 15 Pro</span>
             </div>
           </div>
         </section>
@@ -2010,6 +1851,35 @@
       const promptReferencePreview = document.getElementById('promptReferencePreview');
       const layoutRadios = document.querySelectorAll('input[name="layoutOption"]');
       const surpriseBtn = document.getElementById('surpriseBtn');
+      
+      // Phone data configuration
+      const phoneData = {
+        apple: [
+          { value: 'iphone-15-pro-max', display: 'iPhone 15 Pro Max' },
+          { value: 'iphone-15-pro', display: 'iPhone 15 Pro' },
+          { value: 'iphone-15-plus', display: 'iPhone 15 Plus' },
+          { value: 'iphone-15', display: 'iPhone 15' },
+          { value: 'iphone-14-pro-max', display: 'iPhone 14 Pro Max' },
+          { value: 'iphone-14-pro', display: 'iPhone 14 Pro' }
+        ],
+        samsung: [
+          { value: 'galaxy-s24-ultra', display: 'Galaxy S24 Ultra' },
+          { value: 'galaxy-s24-plus', display: 'Galaxy S24+' },
+          { value: 'galaxy-s24', display: 'Galaxy S24' },
+          { value: 'galaxy-s23-ultra', display: 'Galaxy S23 Ultra' },
+          { value: 'galaxy-s23-plus', display: 'Galaxy S23+' },
+          { value: 'galaxy-s23', display: 'Galaxy S23' }
+        ],
+        google: [
+          { value: 'pixel-9-pro-xl', display: 'Pixel 9 Pro XL' },
+          { value: 'pixel-9-pro', display: 'Pixel 9 Pro' },
+          { value: 'pixel-9', display: 'Pixel 9' },
+          { value: 'pixel-8-pro', display: 'Pixel 8 Pro' },
+          { value: 'pixel-8', display: 'Pixel 8' },
+          { value: 'pixel-7-pro', display: 'Pixel 7 Pro' }
+        ]
+      };
+      
       const GEMINI_ENDPOINT = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image-preview:generateContent';
       const GEMINI_API_KEY = 'AIzaSyBsfKWcYbpEGd7tol6qOAyzc8WIrWPeZ4w';
       const RATE_LIMIT_FALLBACK_MS = 45_000;
@@ -2038,6 +1908,7 @@
           vibeIndex: 0,
           layout: 'center',
           overlayText: '',
+          phoneBrand: 'apple',
           phoneModel: 'iphone-15-pro',
           phoneDisplay: 'iPhone 15 Pro',
         },
@@ -3379,24 +3250,71 @@
 
       applyLayoutSelection(state.selections.layout, { activatePreview: false });
 
-      const phoneModelRadios = document.querySelectorAll('input[name="phoneModel"]');
+      const phoneBrandSelect = document.getElementById('phoneBrand');
+      const phoneModelSelect = document.getElementById('phoneModel');
       const selectedPhoneText = document.getElementById('selectedPhoneText');
 
-      phoneModelRadios.forEach((radio) => {
-        radio.addEventListener('change', () => {
-          if (radio.checked) {
-            state.selections.phoneModel = radio.value;
-            state.selections.phoneDisplay = radio.dataset.display || radio.value;
-            if (selectedPhoneText) {
-              selectedPhoneText.textContent = state.selections.phoneDisplay;
-            }
-          }
+      function updatePhoneModels(brand) {
+        phoneModelSelect.innerHTML = '';
+        
+        if (!brand || !phoneData[brand]) {
+          phoneModelSelect.innerHTML = '<option value="">Select brand first...</option>';
+          phoneModelSelect.disabled = true;
+          return;
+        }
+        
+        phoneModelSelect.disabled = false;
+        
+        const placeholder = document.createElement('option');
+        placeholder.value = '';
+        placeholder.textContent = 'Choose model...';
+        phoneModelSelect.appendChild(placeholder);
+        
+        phoneData[brand].forEach(phone => {
+          const option = document.createElement('option');
+          option.value = phone.value;
+          option.textContent = phone.display;
+          phoneModelSelect.appendChild(option);
         });
+        
+        // Auto-select first model
+        if (phoneData[brand].length > 0) {
+          phoneModelSelect.value = phoneData[brand][0].value;
+          updateSelectedPhone(brand, phoneData[brand][0].value, phoneData[brand][0].display);
+        }
+      }
+
+      function updateSelectedPhone(brand, model, display) {
+        state.selections.phoneBrand = brand;
+        state.selections.phoneModel = model;
+        state.selections.phoneDisplay = display;
+        
+        if (selectedPhoneText) {
+          selectedPhoneText.textContent = display;
+        }
+      }
+
+      phoneBrandSelect.addEventListener('change', (e) => {
+        const brand = e.target.value;
+        updatePhoneModels(brand);
       });
 
-      if (selectedPhoneText) {
-        selectedPhoneText.textContent = state.selections.phoneDisplay;
-      }
+      phoneModelSelect.addEventListener('change', (e) => {
+        const model = e.target.value;
+        const brand = phoneBrandSelect.value;
+        
+        if (model && brand && phoneData[brand]) {
+          const phoneInfo = phoneData[brand].find(p => p.value === model);
+          if (phoneInfo) {
+            updateSelectedPhone(brand, model, phoneInfo.display);
+          }
+        }
+      });
+
+      // Initialize with Apple iPhone 15 Pro
+      updatePhoneModels('apple');
+      phoneModelSelect.value = 'iphone-15-pro';
+      updateSelectedPhone('apple', 'iphone-15-pro', 'iPhone 15 Pro');
 
       if (overlayTextInput) {
         overlayTextInput.addEventListener('input', () => {
