@@ -780,6 +780,136 @@
       border-color: rgba(255, 118, 63, 0.8);
       background: rgba(255, 118, 63, 0.6);
     }
+    .phone-selector-card {
+      background: linear-gradient(180deg, rgba(14, 16, 24, 0.92), rgba(9, 10, 16, 0.9));
+      border-radius: var(--radius-lg);
+      padding: clamp(1.9rem, 3vw, 2.5rem);
+      border: 1px solid var(--stroke);
+      box-shadow: 0 34px 70px rgba(6, 8, 14, 0.55);
+      display: flex;
+      flex-direction: column;
+      gap: 1.35rem;
+    }
+    .phone-selector-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 0.85rem;
+    }
+    .phone-option {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 1.1rem 0.85rem;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--stroke-soft);
+      background: rgba(255, 255, 255, 0.02);
+      cursor: pointer;
+      transition: all 200ms ease;
+    }
+    .phone-option:hover {
+      border-color: rgba(255, 118, 63, 0.35);
+      background: rgba(255, 255, 255, 0.05);
+      transform: translateY(-2px);
+    }
+    .phone-option input[type="radio"] {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+    .phone-option input[type="radio"]:checked + .phone-option-content {
+      border-color: rgba(255, 118, 63, 0.65);
+      background: rgba(255, 118, 63, 0.12);
+    }
+    .phone-option input[type="radio"]:checked ~ .phone-checkmark {
+      opacity: 1;
+      transform: scale(1);
+    }
+    .phone-option-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.6rem;
+      width: 100%;
+      border-radius: var(--radius-sm);
+      padding: 0.8rem;
+      border: 2px solid transparent;
+      transition: all 200ms ease;
+    }
+    .phone-icon {
+      width: 48px;
+      height: 68px;
+      border-radius: 10px;
+      background: linear-gradient(160deg, rgba(255, 255, 255, 0.12), rgba(12, 16, 28, 0.12));
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.18);
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .phone-icon::before {
+      content: '';
+      position: absolute;
+      top: 8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 24px;
+      height: 4px;
+      border-radius: 999px;
+      background: rgba(0, 0, 0, 0.3);
+    }
+    .phone-icon::after {
+      content: '';
+      position: absolute;
+      top: 6px;
+      right: 8px;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(50, 55, 65, 0.9), rgba(20, 24, 32, 0.9));
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+    }
+    .phone-label {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      text-align: center;
+      line-height: 1.3;
+    }
+    .phone-checkmark {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #ff5a22, #ff7a38);
+      display: grid;
+      place-items: center;
+      opacity: 0;
+      transform: scale(0.5);
+      transition: all 200ms ease;
+      box-shadow: 0 4px 12px rgba(255, 77, 31, 0.4);
+    }
+    .phone-checkmark::after {
+      content: '✓';
+      color: white;
+      font-size: 12px;
+      font-weight: bold;
+    }
+    .selected-phone-display {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.65rem 1.2rem;
+      border-radius: var(--radius-sm);
+      background: rgba(255, 77, 31, 0.14);
+      border: 1px solid rgba(255, 77, 31, 0.32);
+      color: var(--accent-strong);
+      font-size: 0.92rem;
+      font-weight: 600;
+    }
     .finish-grid {
       display: grid;
       gap: 1.1rem;
@@ -1294,6 +1424,157 @@
           </div>
         </section>
 
+        <section class="workspace-section" aria-labelledby="phone-selector-title">
+          <div class="section-heading">
+            <h2 id="phone-selector-title">Choose your iPhone</h2>
+            <p>Select your model so we can create the perfect fit and design.</p>
+          </div>
+          
+          <div class="phone-selector-card">
+            <div class="selected-phone-display" id="selectedPhoneDisplay">
+              <span>📱</span>
+              <span id="selectedPhoneText">iPhone 15 Pro</span>
+            </div>
+            
+            <div class="phone-selector-grid" role="radiogroup" aria-labelledby="phone-selector-title">
+              <label class="phone-option">
+                <input type="radio" name="phoneModel" value="iphone-10" data-display="iPhone X" />
+                <div class="phone-option-content">
+                  <div class="phone-icon"></div>
+                  <span class="phone-label">iPhone X</span>
+                </div>
+                <span class="phone-checkmark" aria-hidden="true"></span>
+              </label>
+              
+              <label class="phone-option">
+                <input type="radio" name="phoneModel" value="iphone-11" data-display="iPhone 11" />
+                <div class="phone-option-content">
+                  <div class="phone-icon"></div>
+                  <span class="phone-label">iPhone 11</span>
+                </div>
+                <span class="phone-checkmark" aria-hidden="true"></span>
+              </label>
+              
+              <label class="phone-option">
+                <input type="radio" name="phoneModel" value="iphone-11-pro" data-display="iPhone 11 Pro" />
+                <div class="phone-option-content">
+                  <div class="phone-icon"></div>
+                  <span class="phone-label">iPhone 11 Pro</span>
+                </div>
+                <span class="phone-checkmark" aria-hidden="true"></span>
+              </label>
+              
+              <label class="phone-option">
+                <input type="radio" name="phoneModel" value="iphone-12" data-display="iPhone 12" />
+                <div class="phone-option-content">
+                  <div class="phone-icon"></div>
+                  <span class="phone-label">iPhone 12</span>
+                </div>
+                <span class="phone-checkmark" aria-hidden="true"></span>
+              </label>
+              
+              <label class="phone-option">
+                <input type="radio" name="phoneModel" value="iphone-12-pro" data-display="iPhone 12 Pro" />
+                <div class="phone-option-content">
+                  <div class="phone-icon"></div>
+                  <span class="phone-label">iPhone 12 Pro</span>
+                </div>
+                <span class="phone-checkmark" aria-hidden="true"></span>
+              </label>
+              
+              <label class="phone-option">
+                <input type="radio" name="phoneModel" value="iphone-13" data-display="iPhone 13" />
+                <div class="phone-option-content">
+                  <div class="phone-icon"></div>
+                  <span class="phone-label">iPhone 13</span>
+                </div>
+                <span class="phone-checkmark" aria-hidden="true"></span>
+              </label>
+              
+              <label class="phone-option">
+                <input type="radio" name="phoneModel" value="iphone-13-pro" data-display="iPhone 13 Pro" />
+                <div class="phone-option-content">
+                  <div class="phone-icon"></div>
+                  <span class="phone-label">iPhone 13 Pro</span>
+                </div>
+                <span class="phone-checkmark" aria-hidden="true"></span>
+              </label>
+              
+              <label class="phone-option">
+                <input type="radio" name="phoneModel" value="iphone-14" data-display="iPhone 14" />
+                <div class="phone-option-content">
+                  <div class="phone-icon"></div>
+                  <span class="phone-label">iPhone 14</span>
+                </div>
+                <span class="phone-checkmark" aria-hidden="true"></span>
+              </label>
+              
+              <label class="phone-option">
+                <input type="radio" name="phoneModel" value="iphone-14-pro" data-display="iPhone 14 Pro" />
+                <div class="phone-option-content">
+                  <div class="phone-icon"></div>
+                  <span class="phone-label">iPhone 14 Pro</span>
+                </div>
+                <span class="phone-checkmark" aria-hidden="true"></span>
+              </label>
+              
+              <label class="phone-option">
+                <input type="radio" name="phoneModel" value="iphone-15" data-display="iPhone 15" />
+                <div class="phone-option-content">
+                  <div class="phone-icon"></div>
+                  <span class="phone-label">iPhone 15</span>
+                </div>
+                <span class="phone-checkmark" aria-hidden="true"></span>
+              </label>
+              
+              <label class="phone-option">
+                <input type="radio" name="phoneModel" value="iphone-15-pro" data-display="iPhone 15 Pro" checked />
+                <div class="phone-option-content">
+                  <div class="phone-icon"></div>
+                  <span class="phone-label">iPhone 15 Pro</span>
+                </div>
+                <span class="phone-checkmark" aria-hidden="true"></span>
+              </label>
+              
+              <label class="phone-option">
+                <input type="radio" name="phoneModel" value="iphone-16" data-display="iPhone 16" />
+                <div class="phone-option-content">
+                  <div class="phone-icon"></div>
+                  <span class="phone-label">iPhone 16</span>
+                </div>
+                <span class="phone-checkmark" aria-hidden="true"></span>
+              </label>
+              
+              <label class="phone-option">
+                <input type="radio" name="phoneModel" value="iphone-16-pro" data-display="iPhone 16 Pro" />
+                <div class="phone-option-content">
+                  <div class="phone-icon"></div>
+                  <span class="phone-label">iPhone 16 Pro</span>
+                </div>
+                <span class="phone-checkmark" aria-hidden="true"></span>
+              </label>
+              
+              <label class="phone-option">
+                <input type="radio" name="phoneModel" value="iphone-17" data-display="iPhone 17" />
+                <div class="phone-option-content">
+                  <div class="phone-icon"></div>
+                  <span class="phone-label">iPhone 17</span>
+                </div>
+                <span class="phone-checkmark" aria-hidden="true"></span>
+              </label>
+              
+              <label class="phone-option">
+                <input type="radio" name="phoneModel" value="iphone-17-pro" data-display="iPhone 17 Pro" />
+                <div class="phone-option-content">
+                  <div class="phone-icon"></div>
+                  <span class="phone-label">iPhone 17 Pro</span>
+                </div>
+                <span class="phone-checkmark" aria-hidden="true"></span>
+              </label>
+            </div>
+          </div>
+        </section>
+
         <section class="workspace-section" aria-labelledby="ai-section-title">
           <div class="section-heading">
             <h2 id="ai-section-title">Craft with AI or upload instantly</h2>
@@ -1757,6 +2038,8 @@
           vibeIndex: 0,
           layout: 'center',
           overlayText: '',
+          phoneModel: 'iphone-15-pro',
+          phoneDisplay: 'iPhone 15 Pro',
         },
         customOverlay: {
           bitmap: null,
@@ -1799,21 +2082,66 @@
         outer.quadraticCurveTo(0, 0, cornerRadius, 0);
         outer.closePath();
 
-        const cameraRadius = Math.min(caseWidth, caseHeight) * 0.058;
-        const cameraX = caseWidth * 0.18;
-        const cameraY = caseHeight * 0.13;
-        const cameraPath = new Path2D();
-        cameraPath.moveTo(cameraX + cameraRadius, cameraY);
-        cameraPath.arc(cameraX, cameraY, cameraRadius, 0, Math.PI * 2);
+        // iPhone 17 Pro camera module - triple camera system
+        const moduleWidth = Math.min(caseWidth, caseHeight) * 0.17;
+        const moduleHeight = Math.min(caseWidth, caseHeight) * 0.17;
+        const moduleX = caseWidth * 0.12;
+        const moduleY = caseHeight * 0.09;
+        const moduleRadius = moduleWidth * 0.28;
+        
+        // Camera module rounded square background
+        const modulePath = new Path2D();
+        modulePath.moveTo(moduleX + moduleRadius, moduleY);
+        modulePath.lineTo(moduleX + moduleWidth - moduleRadius, moduleY);
+        modulePath.quadraticCurveTo(moduleX + moduleWidth, moduleY, moduleX + moduleWidth, moduleY + moduleRadius);
+        modulePath.lineTo(moduleX + moduleWidth, moduleY + moduleHeight - moduleRadius);
+        modulePath.quadraticCurveTo(moduleX + moduleWidth, moduleY + moduleHeight, moduleX + moduleWidth - moduleRadius, moduleY + moduleHeight);
+        modulePath.lineTo(moduleX + moduleRadius, moduleY + moduleHeight);
+        modulePath.quadraticCurveTo(moduleX, moduleY + moduleHeight, moduleX, moduleY + moduleHeight - moduleRadius);
+        modulePath.lineTo(moduleX, moduleY + moduleRadius);
+        modulePath.quadraticCurveTo(moduleX, moduleY, moduleX + moduleRadius, moduleY);
+        modulePath.closePath();
+
+        // Three camera lenses in triangular arrangement
+        const lensRadius = moduleWidth * 0.18;
+        const lens1X = moduleX + moduleWidth * 0.28;
+        const lens1Y = moduleY + moduleHeight * 0.28;
+        const lens2X = moduleX + moduleWidth * 0.72;
+        const lens2Y = moduleY + moduleHeight * 0.28;
+        const lens3X = moduleX + moduleWidth * 0.5;
+        const lens3Y = moduleY + moduleHeight * 0.75;
+        
+        const camera1Path = new Path2D();
+        camera1Path.arc(lens1X, lens1Y, lensRadius, 0, Math.PI * 2);
+        
+        const camera2Path = new Path2D();
+        camera2Path.arc(lens2X, lens2Y, lensRadius, 0, Math.PI * 2);
+        
+        const camera3Path = new Path2D();
+        camera3Path.arc(lens3X, lens3Y, lensRadius, 0, Math.PI * 2);
 
         const path = new Path2D();
         path.addPath(outer);
-        path.addPath(cameraPath);
+        path.addPath(modulePath);
+        path.addPath(camera1Path);
+        path.addPath(camera2Path);
+        path.addPath(camera3Path);
 
         return {
           path,
           outer,
-          camera: { x: cameraX, y: cameraY, radius: cameraRadius },
+          cameraModule: { 
+            x: moduleX, 
+            y: moduleY, 
+            width: moduleWidth, 
+            height: moduleHeight,
+            radius: moduleRadius
+          },
+          cameras: [
+            { x: lens1X, y: lens1Y, radius: lensRadius },
+            { x: lens2X, y: lens2Y, radius: lensRadius },
+            { x: lens3X, y: lens3Y, radius: lensRadius }
+          ],
           clipRule: 'evenodd',
         };
       })();
@@ -1825,7 +2153,7 @@
         overlay.height = caseHeight;
         const gctx = overlay.getContext('2d');
 
-        const { path: maskPath, clipRule, outer, camera } = phoneMask;
+        const { path: maskPath, clipRule, outer, cameraModule, cameras } = phoneMask;
 
         gctx.save();
         gctx.clip(maskPath, clipRule);
@@ -1877,24 +2205,160 @@
         gctx.strokeStyle = 'rgba(0, 0, 0, 0.45)';
         gctx.stroke(outer);
 
-        // Camera module detail
-        if (camera) {
+        // iPhone 17 Pro camera module detail
+        if (cameraModule && cameras) {
           gctx.save();
-          gctx.shadowColor = 'rgba(0, 0, 0, 0.55)';
-          gctx.shadowBlur = 12;
-          gctx.fillStyle = 'rgba(12, 14, 22, 0.95)';
+          
+          // Camera module background with premium gradient
+          gctx.shadowColor = 'rgba(0, 0, 0, 0.65)';
+          gctx.shadowBlur = 18;
+          gctx.shadowOffsetY = 4;
+          
+          // Outer module with titanium-like gradient
+          const moduleGrad = gctx.createLinearGradient(
+            cameraModule.x, 
+            cameraModule.y, 
+            cameraModule.x + cameraModule.width, 
+            cameraModule.y + cameraModule.height
+          );
+          moduleGrad.addColorStop(0, 'rgba(50, 55, 65, 0.98)');
+          moduleGrad.addColorStop(0.5, 'rgba(32, 36, 45, 0.98)');
+          moduleGrad.addColorStop(1, 'rgba(20, 24, 32, 0.98)');
+          gctx.fillStyle = moduleGrad;
           gctx.beginPath();
-          gctx.arc(camera.x, camera.y, camera.radius + 6, 0, Math.PI * 2);
+          gctx.roundRect(cameraModule.x, cameraModule.y, cameraModule.width, cameraModule.height, cameraModule.radius);
           gctx.fill();
+          
+          // Subtle highlight on top edge of module
           gctx.shadowBlur = 0;
-          gctx.fillStyle = 'rgba(32, 36, 48, 0.96)';
+          gctx.shadowOffsetY = 0;
+          const highlightGrad = gctx.createLinearGradient(
+            cameraModule.x, 
+            cameraModule.y, 
+            cameraModule.x, 
+            cameraModule.y + cameraModule.height * 0.4
+          );
+          highlightGrad.addColorStop(0, 'rgba(255, 255, 255, 0.18)');
+          highlightGrad.addColorStop(1, 'rgba(255, 255, 255, 0)');
+          gctx.fillStyle = highlightGrad;
           gctx.beginPath();
-          gctx.arc(camera.x, camera.y, camera.radius, 0, Math.PI * 2);
+          gctx.roundRect(cameraModule.x, cameraModule.y, cameraModule.width, cameraModule.height * 0.4, cameraModule.radius);
           gctx.fill();
-          gctx.fillStyle = 'rgba(255, 255, 255, 0.28)';
+          
+          // Draw each camera lens with realistic detail
+          cameras.forEach((cam, index) => {
+            // Outer ring (darker)
+            gctx.shadowColor = 'rgba(0, 0, 0, 0.7)';
+            gctx.shadowBlur = 8;
+            gctx.fillStyle = 'rgba(18, 20, 26, 0.98)';
+            gctx.beginPath();
+            gctx.arc(cam.x, cam.y, cam.radius + 3, 0, Math.PI * 2);
+            gctx.fill();
+            
+            // Main lens body
+            gctx.shadowBlur = 0;
+            const lensGrad = gctx.createRadialGradient(
+              cam.x - cam.radius * 0.3,
+              cam.y - cam.radius * 0.3,
+              cam.radius * 0.1,
+              cam.x,
+              cam.y,
+              cam.radius
+            );
+            lensGrad.addColorStop(0, 'rgba(55, 60, 70, 0.98)');
+            lensGrad.addColorStop(0.6, 'rgba(25, 28, 35, 0.98)');
+            lensGrad.addColorStop(1, 'rgba(8, 10, 15, 0.98)');
+            gctx.fillStyle = lensGrad;
+            gctx.beginPath();
+            gctx.arc(cam.x, cam.y, cam.radius, 0, Math.PI * 2);
+            gctx.fill();
+            
+            // Inner lens glass reflection
+            const glassGrad = gctx.createRadialGradient(
+              cam.x - cam.radius * 0.25,
+              cam.y - cam.radius * 0.25,
+              0,
+              cam.x,
+              cam.y,
+              cam.radius * 0.6
+            );
+            glassGrad.addColorStop(0, 'rgba(100, 120, 180, 0.35)');
+            glassGrad.addColorStop(0.5, 'rgba(50, 60, 90, 0.2)');
+            glassGrad.addColorStop(1, 'rgba(20, 25, 35, 0.15)');
+            gctx.fillStyle = glassGrad;
+            gctx.beginPath();
+            gctx.arc(cam.x, cam.y, cam.radius * 0.7, 0, Math.PI * 2);
+            gctx.fill();
+            
+            // Lens highlight (catchlight)
+            gctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
+            gctx.beginPath();
+            gctx.arc(
+              cam.x - cam.radius * 0.35, 
+              cam.y - cam.radius * 0.35, 
+              cam.radius * 0.25, 
+              0, 
+              Math.PI * 2
+            );
+            gctx.fill();
+            
+            // Secondary smaller highlight
+            gctx.fillStyle = 'rgba(255, 255, 255, 0.25)';
+            gctx.beginPath();
+            gctx.arc(
+              cam.x + cam.radius * 0.25, 
+              cam.y + cam.radius * 0.2, 
+              cam.radius * 0.15, 
+              0, 
+              Math.PI * 2
+            );
+            gctx.fill();
+          });
+          
+          // Flash (bottom right of module)
+          const flashX = cameraModule.x + cameraModule.width * 0.85;
+          const flashY = cameraModule.y + cameraModule.height * 0.85;
+          const flashRadius = cameraModule.width * 0.08;
+          
+          gctx.shadowColor = 'rgba(0, 0, 0, 0.5)';
+          gctx.shadowBlur = 6;
+          gctx.fillStyle = 'rgba(18, 20, 26, 0.98)';
           gctx.beginPath();
-          gctx.arc(camera.x - camera.radius * 0.32, camera.y - camera.radius * 0.28, camera.radius * 0.32, 0, Math.PI * 2);
+          gctx.arc(flashX, flashY, flashRadius + 2, 0, Math.PI * 2);
           gctx.fill();
+          
+          gctx.shadowBlur = 0;
+          const flashGrad = gctx.createRadialGradient(
+            flashX - flashRadius * 0.3,
+            flashY - flashRadius * 0.3,
+            0,
+            flashX,
+            flashY,
+            flashRadius
+          );
+          flashGrad.addColorStop(0, 'rgba(255, 255, 245, 0.95)');
+          flashGrad.addColorStop(0.7, 'rgba(220, 225, 235, 0.9)');
+          flashGrad.addColorStop(1, 'rgba(180, 185, 195, 0.85)');
+          gctx.fillStyle = flashGrad;
+          gctx.beginPath();
+          gctx.arc(flashX, flashY, flashRadius, 0, Math.PI * 2);
+          gctx.fill();
+          
+          // LiDAR sensor (bottom left of module)
+          const lidarX = cameraModule.x + cameraModule.width * 0.15;
+          const lidarY = cameraModule.y + cameraModule.height * 0.85;
+          const lidarRadius = cameraModule.width * 0.07;
+          
+          gctx.fillStyle = 'rgba(8, 10, 14, 0.98)';
+          gctx.beginPath();
+          gctx.arc(lidarX, lidarY, lidarRadius + 2, 0, Math.PI * 2);
+          gctx.fill();
+          
+          gctx.fillStyle = 'rgba(5, 8, 12, 0.98)';
+          gctx.beginPath();
+          gctx.arc(lidarX, lidarY, lidarRadius, 0, Math.PI * 2);
+          gctx.fill();
+          
           gctx.restore();
         }
 
@@ -2488,11 +2952,14 @@
         const vibe = getActiveVibe();
         const layout = getSelectedLayout();
         const overlayText = sanitize((state.selections.overlayText || '').trim());
+        const phoneDisplay = state.selections.phoneDisplay || 'iPhone 15 Pro';
 
         const safePrompt = basePrompt || 'abstract light trails with premium polish';
         const parts = [
-          `Create a premium phone case design based on the prompt: "${safePrompt}".`
+          `Create a premium phone case design for ${phoneDisplay} based on the prompt: "${safePrompt}".`
         ];
+
+        parts.push(`The design must fit the ${phoneDisplay} dimensions and camera module layout perfectly. Ensure the camera cutout area remains clear and unobstructed.`);
 
         if (vibe) {
           const styleDetail = vibe.stylePrompt ? `, emphasizing ${vibe.stylePrompt}.` : '.';
@@ -2518,7 +2985,7 @@
           parts.push(`Use the uploaded reference image '${referenceName}'${signature} as the primary subject while applying the requested scene. Preserve the subject's defining traits so the final artwork still clearly relates to the original photo.`);
         }
 
-        parts.push('Maintain balanced composition, crisp detail, and keep the artwork printable for a phone case.');
+        parts.push(`Maintain balanced composition, crisp detail, and keep the artwork printable for a ${phoneDisplay} phone case. The design should complement the phone's form factor.`);
 
         return parts.join(' ');
       };
@@ -2911,6 +3378,25 @@
       });
 
       applyLayoutSelection(state.selections.layout, { activatePreview: false });
+
+      const phoneModelRadios = document.querySelectorAll('input[name="phoneModel"]');
+      const selectedPhoneText = document.getElementById('selectedPhoneText');
+
+      phoneModelRadios.forEach((radio) => {
+        radio.addEventListener('change', () => {
+          if (radio.checked) {
+            state.selections.phoneModel = radio.value;
+            state.selections.phoneDisplay = radio.dataset.display || radio.value;
+            if (selectedPhoneText) {
+              selectedPhoneText.textContent = state.selections.phoneDisplay;
+            }
+          }
+        });
+      });
+
+      if (selectedPhoneText) {
+        selectedPhoneText.textContent = state.selections.phoneDisplay;
+      }
 
       if (overlayTextInput) {
         overlayTextInput.addEventListener('input', () => {
