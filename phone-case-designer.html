@@ -817,7 +817,7 @@
       font-size: 1rem;
       font-weight: 500;
       color: var(--text-primary);
-      background: rgba(255, 255, 255, 0.04);
+      background: rgba(18, 21, 31, 0.95);
       border: 1px solid var(--stroke-soft);
       border-radius: var(--radius-md);
       cursor: pointer;
@@ -825,14 +825,18 @@
       appearance: none;
       font-family: inherit;
     }
+    .phone-dropdown select option {
+      background: rgba(18, 21, 31, 1);
+      color: var(--text-primary);
+    }
     .phone-dropdown select:hover {
       border-color: rgba(255, 118, 63, 0.35);
-      background: rgba(255, 255, 255, 0.06);
+      background: rgba(18, 21, 31, 1);
     }
     .phone-dropdown select:focus {
       outline: none;
       border-color: rgba(255, 118, 63, 0.65);
-      background: rgba(255, 255, 255, 0.08);
+      background: rgba(18, 21, 31, 1);
       box-shadow: 0 0 0 3px rgba(255, 118, 63, 0.15);
     }
     .phone-dropdown select:disabled {
@@ -1379,43 +1383,6 @@
           </div>
         </section>
 
-        <section class="workspace-section" aria-labelledby="phone-selector-title">
-          <div class="section-heading">
-            <h2 id="phone-selector-title">Select Your Device</h2>
-            <p>Choose your phone brand and model for the perfect fit.</p>
-          </div>
-          
-          <div class="phone-selector-card">
-            <div class="phone-selector-dropdowns">
-              <div class="phone-dropdown-group">
-                <label for="phoneBrand" class="phone-dropdown-label">Brand</label>
-                <div class="phone-dropdown">
-                  <select id="phoneBrand" name="phoneBrand" aria-label="Select phone brand">
-                    <option value="">Choose brand...</option>
-                    <option value="apple" selected>Apple</option>
-                    <option value="samsung">Samsung</option>
-                    <option value="google">Google</option>
-                  </select>
-                </div>
-              </div>
-              
-              <div class="phone-dropdown-group">
-                <label for="phoneModel" class="phone-dropdown-label">Model</label>
-                <div class="phone-dropdown">
-                  <select id="phoneModel" name="phoneModel" aria-label="Select phone model" disabled>
-                    <option value="">Select brand first...</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-            
-            <div class="selected-phone-display" id="selectedPhoneDisplay">
-              <span class="selected-phone-icon">📱</span>
-              <span id="selectedPhoneText">iPhone 15 Pro</span>
-            </div>
-          </div>
-        </section>
-
         <section class="workspace-section" aria-labelledby="ai-section-title">
           <div class="section-heading">
             <h2 id="ai-section-title">Craft with AI or upload instantly</h2>
@@ -1430,6 +1397,40 @@
                   <p class="ai-card-lede">Type anything you like, from "Y2K glitter with my name in bold" to "sunset over Tokyo skyline with sakura petals." Then customize with styles, moods, and flips until it is perfect.</p>
                 </div>
               </div>
+
+              <section class="ai-step" aria-labelledby="phone-selector-section">
+                <div class="ai-step-label" id="phone-selector-section">
+                  <span class="ai-step-icon" aria-hidden="true">📱</span>
+                  <span class="ai-step-text">SELECT YOUR DEVICE</span>
+                </div>
+                <p class="ai-helper">Choose your phone brand and model so we can create the perfect fit and design.</p>
+                <div class="phone-selector-dropdowns">
+                  <div class="phone-dropdown-group">
+                    <label for="phoneBrand" class="phone-dropdown-label">Brand</label>
+                    <div class="phone-dropdown">
+                      <select id="phoneBrand" name="phoneBrand" aria-label="Select phone brand">
+                        <option value="">Choose brand...</option>
+                        <option value="apple" selected>Apple</option>
+                        <option value="samsung">Samsung</option>
+                        <option value="google">Google</option>
+                      </select>
+                    </div>
+                  </div>
+                  
+                  <div class="phone-dropdown-group">
+                    <label for="phoneModel" class="phone-dropdown-label">Model</label>
+                    <div class="phone-dropdown">
+                      <select id="phoneModel" name="phoneModel" aria-label="Select phone model" disabled>
+                        <option value="">Select brand first...</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                <div class="selected-phone-display" id="selectedPhoneDisplay">
+                  <span class="selected-phone-icon">📱</span>
+                  <span id="selectedPhoneText">iPhone 15 Pro</span>
+                </div>
+              </section>
 
               <section class="ai-step" aria-labelledby="ai-step-1">
                 <div class="ai-step-label" id="ai-step-1">
