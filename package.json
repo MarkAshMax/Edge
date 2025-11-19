@@ -1,0 +1,13 @@
+{
+  "name": "edge-phone-case-designer",
+  "version": "1.0.0",
+  "description": "Edge Phone Case Designer with secure API proxy",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5"
+  }
+}

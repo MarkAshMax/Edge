@@ -323,10 +323,6 @@
       position: relative;
       width: min(420px, 92vw);
       margin: 0;
-      min-height: 840px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
     }
     canvas {
       width: 100%;
@@ -334,18 +330,6 @@
       border-radius: 30px;
       background: transparent;
       box-shadow: none;
-      position: relative;
-      z-index: 2;
-    }
-    .canvas-wrapper img {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: auto;
-      z-index: 1;
-      border-radius: 30px;
-      pointer-events: none;
     }
     .canvas-overlay {
       position: absolute;
@@ -373,25 +357,6 @@
       text-transform: uppercase;
       color: var(--text-tertiary);
       margin-bottom: 1rem;
-      gap: 1rem;
-      flex-wrap: wrap;
-    }
-    .live-info select {
-      background: var(--surface-soft);
-      border: 1px solid var(--stroke);
-      color: var(--text-primary);
-      border-radius: var(--radius-sm);
-      padding: 0.5rem 0.75rem;
-      font-size: 0.85rem;
-      font-family: inherit;
-      cursor: pointer;
-      transition: border-color 180ms ease, background 180ms ease;
-    }
-    .live-info select:hover,
-    .live-info select:focus {
-      border-color: rgba(255, 118, 63, 0.45);
-      background: rgba(255, 255, 255, 0.08);
-      outline: none;
     }
     .section,
     .workspace-section {
@@ -540,12 +505,8 @@
     button:disabled {
       opacity: 0.5;
       cursor: not-allowed;
-      transform: none !important;
-      box-shadow: none !important;
-      filter: grayscale(0.3);
-    }
-    button:disabled:hover {
-      transform: none !important;
+      transform: none;
+      box-shadow: none;
     }
     .drop-zone {
       border-radius: var(--radius-lg);
@@ -636,20 +597,9 @@
       min-height: 1.5rem;
       font-size: 0.9rem;
       color: var(--text-secondary);
-      padding: 0.5rem 0;
-      transition: color 200ms ease;
     }
     .status.error {
       color: #ff6159;
-      font-weight: 600;
-    }
-    .status.success {
-      color: #4ade80;
-      font-weight: 600;
-    }
-    .status.warning {
-      color: #fbbf24;
-      font-weight: 600;
     }
     .ai-card-header {
       display: flex;
@@ -1489,12 +1439,7 @@
           <section class="preview-card dark" id="preview">
             <div class="live-info">
               <span id="transformInfo">Scale 100% · Rotation 0° · Opacity 100%</span>
-              <select id="phoneModel" aria-label="Select phone model">
-                <option value="iphone15" selected>iPhone 15 Pro</option>
-                <option value="iphone16">iPhone 16 Pro</option>
-                <option value="samsung">Samsung Galaxy S24</option>
-                <option value="pixel">Google Pixel 8 Pro</option>
-              </select>
+              <span>iPhone 15 Pro</span>
             </div>
             <div class="canvas-wrapper" id="canvasWrapper">
               <canvas id="phoneCanvas" width="400" height="800" aria-label="Phone case preview"></canvas>
@@ -1589,15 +1534,6 @@
       const preview3dPlaceholder = document.getElementById('preview3dPlaceholder');
       const toggle3d = document.getElementById('toggle3d');
       const quickPromptButtons = document.querySelectorAll('[data-prompt]');
-      const phoneModelSelect = document.getElementById('phoneModel');
-
-      // Phone model data
-      const phoneModels = {
-        iphone15: { name: 'iPhone 15 Pro', width: 400, height: 800 },
-        iphone16: { name: 'iPhone 16 Pro', width: 400, height: 820 },
-        samsung: { name: 'Samsung Galaxy S24', width: 390, height: 810 },
-        pixel: { name: 'Google Pixel 8 Pro', width: 395, height: 815 }
-      };
 
       
 
@@ -2007,12 +1943,8 @@
       };
 
       const setStatus = (element, message, type = 'info') => {
-        if (!element) return;
         element.textContent = message;
-        element.classList.remove('error', 'success', 'warning');
-        if (type !== 'info') {
-          element.classList.add(type);
-        }
+        element.classList.toggle('error', type === 'error');
       };
 
       const updateTransformInfo = () => {
@@ -2383,8 +2315,7 @@
           });
           const img = await loadImageFromSource(dataUrl, file.name);
           await applyImage(img, { focusPreview: true });
-          setStatus(uploadStatus, `✓ ${file.name} loaded successfully!`, 'success');
-          setTimeout(() => setStatus(uploadStatus, 'Drag to reposition or adjust with sliders.'), 2000);
+          setStatus(uploadStatus, 'Image ready. Drag to position.');
         } catch (err) {
           console.error(err);
           setStatus(uploadStatus, err.message, 'error');
@@ -2701,8 +2632,7 @@
           await applyImage(img, { focusPreview: true });
           rateLimitUntil = 0;
           cacheDesign(finalPrompt, dataUrl);
-          setStatus(aiStatus, '✨ Design created successfully! Use sliders to customize.', 'success');
-          setTimeout(() => setStatus(aiStatus, ''), 4000);
+          setStatus(aiStatus, 'Design ready! Drag to fine-tune.');
         } catch (err) {
           console.error(err);
           setStatus(aiStatus, err.message || 'Gemini generation failed.', 'error');
@@ -3150,35 +3080,6 @@
       canvas.addEventListener('pointerup', onPointerUp);
       canvas.addEventListener('pointerleave', onPointerUp);
       canvas.addEventListener('pointercancel', onPointerUp);
-
-      // Keyboard shortcuts
-      document.addEventListener('keydown', (event) => {
-        // Cmd/Ctrl + Enter to generate
-        if ((event.metaKey || event.ctrlKey) && event.key === 'Enter') {
-          event.preventDefault();
-          if (!generateBtn.disabled && promptInput.value.trim()) {
-            handleGeminiGeneration();
-          }
-        }
-        // Escape to clear status messages
-        if (event.key === 'Escape') {
-          if (aiStatus.textContent) setStatus(aiStatus, '');
-          if (uploadStatus.textContent) setStatus(uploadStatus, '');
-          if (exportStatus.textContent) setStatus(exportStatus, '');
-        }
-      });
-
-      // Phone model switcher
-      if (phoneModelSelect) {
-        phoneModelSelect.addEventListener('change', () => {
-          const modelKey = phoneModelSelect.value;
-          const model = phoneModels[modelKey];
-          if (model) {
-            setStatus(exportStatus, `Switched to ${model.name}`, 'success');
-            setTimeout(() => setStatus(exportStatus, ''), 2000);
-          }
-        });
-      }
 
       ensureEdgeLogoImage();
       renderLoop();
