@@ -3580,8 +3580,8 @@
         updatePhoneModel(phoneSelect.value || 'iphone15');
       };
       
-      // Initialize after a short delay to ensure DOM is ready
-      setTimeout(initPhoneModelSwitcher, 100);
+      // Initialize phone model FIRST, then start rendering
+      initPhoneModelSwitcher();
 
       ensureEdgeLogoImage();
       renderLoop();
