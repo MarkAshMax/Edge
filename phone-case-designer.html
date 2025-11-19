@@ -1609,14 +1609,85 @@
       const phoneModelSelect = document.getElementById('phoneModel');
       const phoneImageElem = document.getElementById('phoneImage');
 
-      // Generate SVG phone case frame with unique color tints
-      const createPhoneCaseSVG = (width, height, name, colorTint = 'rgba(40,42,54,0.95)') => {
+      // Generate SVG phone case frame with model-specific camera layouts
+      const createPhoneCaseSVG = (width, height, config) => {
+        const { name, colorTint, cameraLayout, buttonLayout } = config;
         const cornerRadius = 60;
-        const cameraRadius = Math.min(width, height) * 0.058;
-        const cameraX = width * 0.18;
-        const cameraY = height * 0.13;
         const strokeWidth = 8;
         const id = name.replace(/\s+/g, '-');
+        
+        // Generate camera cutouts based on layout type
+        let cameraSVG = '';
+        if (cameraLayout.type === 'pill') {
+          // iPhone 15/16 Pro style - pill-shaped triple camera
+          const pillX = width * cameraLayout.x;
+          const pillY = height * cameraLayout.y;
+          const pillW = width * cameraLayout.width;
+          const pillH = height * cameraLayout.height;
+          cameraSVG = `
+            <!-- Camera pill cutout -->
+            <rect x="${pillX}" y="${pillY}" width="${pillW}" height="${pillH}" 
+                  rx="${pillH / 2}" fill="rgba(0,0,0,0.9)"/>
+            <rect x="${pillX + 3}" y="${pillY + 3}" width="${pillW - 6}" height="${pillH - 6}" 
+                  rx="${(pillH - 6) / 2}" fill="rgba(25,27,35,0.95)"/>
+            <!-- Camera lenses -->
+            <circle cx="${pillX + pillH / 2}" cy="${pillY + pillH / 2}" r="${pillH * 0.32}" 
+                    fill="rgba(15,17,22,0.98)" stroke="rgba(255,255,255,0.1)" stroke-width="1.5"/>
+            <circle cx="${pillX + pillW / 2}" cy="${pillY + pillH / 2}" r="${pillH * 0.32}" 
+                    fill="rgba(15,17,22,0.98)" stroke="rgba(255,255,255,0.1)" stroke-width="1.5"/>
+            <circle cx="${pillX + pillW - pillH / 2}" cy="${pillY + pillH / 2}" r="${pillH * 0.32}" 
+                    fill="rgba(15,17,22,0.98)" stroke="rgba(255,255,255,0.1)" stroke-width="1.5"/>`;
+        } else if (cameraLayout.type === 'square') {
+          // Samsung style - square camera module in corner
+          const sqX = width * cameraLayout.x;
+          const sqY = height * cameraLayout.y;
+          const sqSize = width * cameraLayout.size;
+          cameraSVG = `
+            <!-- Square camera module -->
+            <rect x="${sqX}" y="${sqY}" width="${sqSize}" height="${sqSize}" 
+                  rx="18" fill="rgba(0,0,0,0.9)"/>
+            <rect x="${sqX + 4}" y="${sqY + 4}" width="${sqSize - 8}" height="${sqSize - 8}" 
+                  rx="14" fill="rgba(28,30,38,0.95)"/>
+            <!-- Camera lenses in grid -->
+            <circle cx="${sqX + sqSize * 0.3}" cy="${sqY + sqSize * 0.3}" r="${sqSize * 0.12}" 
+                    fill="rgba(15,17,22,0.98)" stroke="rgba(255,255,255,0.1)" stroke-width="1.5"/>
+            <circle cx="${sqX + sqSize * 0.7}" cy="${sqY + sqSize * 0.3}" r="${sqSize * 0.12}" 
+                    fill="rgba(15,17,22,0.98)" stroke="rgba(255,255,255,0.1)" stroke-width="1.5"/>
+            <circle cx="${sqX + sqSize * 0.3}" cy="${sqY + sqSize * 0.7}" r="${sqSize * 0.12}" 
+                    fill="rgba(15,17,22,0.98)" stroke="rgba(255,255,255,0.1)" stroke-width="1.5"/>
+            <circle cx="${sqX + sqSize * 0.7}" cy="${sqY + sqSize * 0.7}" r="${sqSize * 0.12}" 
+                    fill="rgba(15,17,22,0.98)" stroke="rgba(255,255,255,0.1)" stroke-width="1.5"/>`;
+        } else if (cameraLayout.type === 'bar') {
+          // Pixel style - horizontal camera bar
+          const barX = width * cameraLayout.x;
+          const barY = height * cameraLayout.y;
+          const barW = width * cameraLayout.width;
+          const barH = height * cameraLayout.height;
+          cameraSVG = `
+            <!-- Camera bar -->
+            <rect x="${barX}" y="${barY}" width="${barW}" height="${barH}" 
+                  rx="12" fill="rgba(0,0,0,0.9)"/>
+            <rect x="${barX + 3}" y="${barY + 3}" width="${barW - 6}" height="${barH - 6}" 
+                  rx="9" fill="rgba(30,32,40,0.95)"/>
+            <!-- Camera lenses in row -->
+            <circle cx="${barX + barH * 0.6}" cy="${barY + barH / 2}" r="${barH * 0.28}" 
+                    fill="rgba(15,17,22,0.98)" stroke="rgba(255,255,255,0.1)" stroke-width="1.5"/>
+            <circle cx="${barX + barW / 2}" cy="${barY + barH / 2}" r="${barH * 0.28}" 
+                    fill="rgba(15,17,22,0.98)" stroke="rgba(255,255,255,0.1)" stroke-width="1.5"/>
+            <circle cx="${barX + barW - barH * 0.6}" cy="${barY + barH / 2}" r="${barH * 0.28}" 
+                    fill="rgba(15,17,22,0.98)" stroke="rgba(255,255,255,0.1)" stroke-width="1.5"/>`;
+        }
+        
+        // Generate button cutouts
+        let buttonsSVG = '';
+        buttonLayout.forEach(btn => {
+          const x = btn.side === 'left' ? 2 : width - 5;
+          const y = height * btn.y;
+          const h = height * btn.height;
+          buttonsSVG += `
+            <rect x="${x}" y="${y}" width="3" height="${h}" 
+                  rx="1.5" fill="${colorTint}" opacity="0.9"/>`;
+        });
         
         return `data:image/svg+xml;utf8,${encodeURIComponent(`
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" width="${width}" height="${height}">
@@ -1668,62 +1739,101 @@
                   stroke="rgba(255,255,255,0.08)" 
                   stroke-width="2"/>
             
-            <!-- Camera cutout -->
-            <circle cx="${cameraX}" cy="${cameraY}" r="${cameraRadius + 8}" 
-                    fill="rgba(0,0,0,0.9)"/>
-            <circle cx="${cameraX}" cy="${cameraY}" r="${cameraRadius}" 
-                    fill="rgba(20,22,30,0.95)"/>
-            <circle cx="${cameraX - cameraRadius * 0.3}" cy="${cameraY - cameraRadius * 0.3}" 
-                    r="${cameraRadius * 0.25}" 
-                    fill="rgba(255,255,255,0.2)"/>
-            
-            <!-- Side buttons (volume/power) -->
-            <rect x="2" y="${height * 0.2}" width="3" height="${height * 0.08}" 
-                  rx="1.5" fill="${colorTint}"/>
-            <rect x="2" y="${height * 0.32}" width="3" height="${height * 0.05}" 
-                  rx="1.5" fill="${colorTint}"/>
-            <rect x="${width - 5}" y="${height * 0.25}" width="3" height="${height * 0.12}" 
-                  rx="1.5" fill="${colorTint}"/>
+            ${cameraSVG}
+            ${buttonsSVG}
           </svg>
         `)}`;
       };
 
-      // Phone model data with SVG-generated frames and unique colors
+      // Phone model data with realistic camera layouts and button positions
       const phoneModels = {
         iphone15: { 
           name: 'iPhone 15 Pro', 
           width: 400, 
           height: 800,
-          color: 'rgba(45,50,65,0.95)', // Blue-gray tint
+          colorTint: 'rgba(50,55,70,0.95)', // Titanium blue
+          cameraLayout: {
+            type: 'pill', // Pill-shaped triple camera
+            x: 0.05,
+            y: 0.04,
+            width: 0.35,
+            height: 0.085
+          },
+          buttonLayout: [
+            { side: 'left', y: 0.15, height: 0.055 }, // Volume up
+            { side: 'left', y: 0.22, height: 0.055 }, // Volume down
+            { side: 'left', y: 0.31, height: 0.025 }, // Mute switch
+            { side: 'right', y: 0.38, height: 0.14 }  // Power/Action button
+          ],
           image: null
         },
         iphone16: { 
           name: 'iPhone 16 Pro', 
           width: 400, 
           height: 820,
-          color: 'rgba(55,40,60,0.95)', // Purple tint
+          colorTint: 'rgba(60,50,70,0.95)', // Desert titanium
+          cameraLayout: {
+            type: 'pill',
+            x: 0.05,
+            y: 0.038,
+            width: 0.36,
+            height: 0.088
+          },
+          buttonLayout: [
+            { side: 'left', y: 0.14, height: 0.05 },
+            { side: 'left', y: 0.21, height: 0.05 },
+            { side: 'left', y: 0.29, height: 0.02 },
+            { side: 'right', y: 0.36, height: 0.15 }, // Longer action button
+            { side: 'right', y: 0.18, height: 0.025 }  // Camera control
+          ],
           image: null
         },
         samsung: { 
           name: 'Samsung Galaxy S24', 
           width: 390, 
           height: 810,
-          color: 'rgba(40,50,45,0.95)', // Green tint
+          colorTint: 'rgba(45,55,50,0.95)', // Samsung black/green
+          cameraLayout: {
+            type: 'square', // Square camera module
+            x: 0.05,
+            y: 0.03,
+            size: 0.28
+          },
+          buttonLayout: [
+            { side: 'right', y: 0.22, height: 0.08 }, // Volume rocker
+            { side: 'right', y: 0.34, height: 0.08 }  // Power button
+          ],
           image: null
         },
         pixel: { 
           name: 'Google Pixel 8 Pro', 
           width: 395, 
           height: 815,
-          color: 'rgba(50,45,40,0.95)', // Orange tint
+          colorTint: 'rgba(55,50,45,0.95)', // Pixel bay/obsidian
+          cameraLayout: {
+            type: 'bar', // Horizontal camera bar
+            x: 0.08,
+            y: 0.035,
+            width: 0.84,
+            height: 0.075
+          },
+          buttonLayout: [
+            { side: 'right', y: 0.28, height: 0.085 }, // Volume
+            { side: 'right', y: 0.42, height: 0.065 }  // Power
+          ],
           image: null
         }
       };
 
-      // Generate SVG images for all models with unique colors
+      // Generate SVG images for all models with realistic layouts
       Object.keys(phoneModels).forEach(key => {
         const model = phoneModels[key];
-        model.image = createPhoneCaseSVG(model.width, model.height, model.name, model.color);
+        model.image = createPhoneCaseSVG(model.width, model.height, {
+          name: model.name,
+          colorTint: model.colorTint,
+          cameraLayout: model.cameraLayout,
+          buttonLayout: model.buttonLayout
+        });
       });
 
       
@@ -1977,7 +2087,7 @@
       const vibeDotsButtons = [];
 
       // Path2D mask keeps artwork perfectly contained within the case outline
-      const createPhoneMask = (width, height, corner) => {
+      const createPhoneMask = (width, height, corner, cameraLayout) => {
         const outer = new Path2D();
         outer.moveTo(corner, 0);
         outer.lineTo(width - corner, 0);
@@ -1990,12 +2100,26 @@
         outer.quadraticCurveTo(0, 0, corner, 0);
         outer.closePath();
 
-        const cameraRadius = Math.min(width, height) * 0.058;
-        const cameraX = width * 0.18;
-        const cameraY = height * 0.13;
+        // Create camera cutout path based on layout type
         const cameraPath = new Path2D();
-        cameraPath.moveTo(cameraX + cameraRadius, cameraY);
-        cameraPath.arc(cameraX, cameraY, cameraRadius, 0, Math.PI * 2);
+        if (cameraLayout.type === 'pill') {
+          const pillX = width * cameraLayout.x;
+          const pillY = height * cameraLayout.y;
+          const pillW = width * cameraLayout.width;
+          const pillH = height * cameraLayout.height;
+          cameraPath.roundRect(pillX, pillY, pillW, pillH, pillH / 2);
+        } else if (cameraLayout.type === 'square') {
+          const sqX = width * cameraLayout.x;
+          const sqY = height * cameraLayout.y;
+          const sqSize = width * cameraLayout.size;
+          cameraPath.roundRect(sqX, sqY, sqSize, sqSize, 18);
+        } else if (cameraLayout.type === 'bar') {
+          const barX = width * cameraLayout.x;
+          const barY = height * cameraLayout.y;
+          const barW = width * cameraLayout.width;
+          const barH = height * cameraLayout.height;
+          cameraPath.roundRect(barX, barY, barW, barH, 12);
+        }
 
         const path = new Path2D();
         path.addPath(outer);
@@ -2004,12 +2128,12 @@
         return {
           path,
           outer,
-          camera: { x: cameraX, y: cameraY, radius: cameraRadius },
+          camera: cameraLayout,
           clipRule: 'evenodd',
         };
       };
       
-      let phoneMask = createPhoneMask(caseWidth, caseHeight, cornerRadius);
+      let phoneMask = createPhoneMask(caseWidth, caseHeight, cornerRadius, phoneModels.iphone15.cameraLayout);
 
       // Pre-rendered lighting overlay keeps the case feeling three-dimensional while allowing transparent background
       const createCaseLightingOverlay = (width, height, mask) => {
@@ -2070,24 +2194,38 @@
         gctx.strokeStyle = 'rgba(0, 0, 0, 0.45)';
         gctx.stroke(outer);
 
-        // Camera module detail
-        if (camera) {
+        // Camera module detail (simplified for new layouts)
+        if (camera && camera.type) {
           gctx.save();
-          gctx.shadowColor = 'rgba(0, 0, 0, 0.55)';
-          gctx.shadowBlur = 12;
-          gctx.fillStyle = 'rgba(12, 14, 22, 0.95)';
-          gctx.beginPath();
-          gctx.arc(camera.x, camera.y, camera.radius + 6, 0, Math.PI * 2);
-          gctx.fill();
-          gctx.shadowBlur = 0;
-          gctx.fillStyle = 'rgba(32, 36, 48, 0.96)';
-          gctx.beginPath();
-          gctx.arc(camera.x, camera.y, camera.radius, 0, Math.PI * 2);
-          gctx.fill();
-          gctx.fillStyle = 'rgba(255, 255, 255, 0.28)';
-          gctx.beginPath();
-          gctx.arc(camera.x - camera.radius * 0.32, camera.y - camera.radius * 0.28, camera.radius * 0.32, 0, Math.PI * 2);
-          gctx.fill();
+          gctx.shadowColor = 'rgba(0, 0, 0, 0.35)';
+          gctx.shadowBlur = 8;
+          gctx.fillStyle = 'rgba(12, 14, 22, 0.6)';
+          
+          // Draw shadow based on camera type
+          if (camera.type === 'pill') {
+            const pillX = width * camera.x;
+            const pillY = height * camera.y;
+            const pillW = width * camera.width;
+            const pillH = height * camera.height;
+            gctx.beginPath();
+            gctx.roundRect(pillX, pillY, pillW, pillH, pillH / 2);
+            gctx.fill();
+          } else if (camera.type === 'square') {
+            const sqX = width * camera.x;
+            const sqY = height * camera.y;
+            const sqSize = width * camera.size;
+            gctx.beginPath();
+            gctx.roundRect(sqX, sqY, sqSize, sqSize, 18);
+            gctx.fill();
+          } else if (camera.type === 'bar') {
+            const barX = width * camera.x;
+            const barY = height * camera.y;
+            const barW = width * camera.width;
+            const barH = height * camera.height;
+            gctx.beginPath();
+            gctx.roundRect(barX, barY, barW, barH, 12);
+            gctx.fill();
+          }
           gctx.restore();
         }
 
@@ -3342,8 +3480,8 @@
               wrapper.style.minHeight = `${newHeight}px`;
             }
             
-            // Regenerate phone mask for new dimensions
-            phoneMask = createPhoneMask(model.width, model.height, cornerRadius);
+            // Regenerate phone mask for new dimensions and camera layout
+            phoneMask = createPhoneMask(model.width, model.height, cornerRadius, model.cameraLayout);
             
             // Regenerate lighting overlay for new dimensions
             caseLightingOverlay = createCaseLightingOverlay(model.width, model.height, phoneMask);
