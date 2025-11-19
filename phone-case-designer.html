@@ -3492,10 +3492,14 @@
           phoneImg.style.opacity = '0';
 
           setTimeout(() => {
-            // Remove old phoneImage and insert a new one with the correct SVG and size
+            // Remove ALL existing phoneImage elements to prevent duplicates
             const wrapper = document.getElementById('canvasWrapper');
-            if (phoneImg && wrapper) {
-              phoneImg.remove();
+            if (wrapper) {
+              // Remove all img elements with id phoneImage
+              const existingImages = wrapper.querySelectorAll('img#phoneImage');
+              existingImages.forEach(img => img.remove());
+              
+              // Create ONE new phoneImage element
               const newImg = document.createElement('img');
               newImg.id = 'phoneImage';
               newImg.src = model.image;
@@ -3508,7 +3512,7 @@
               newImg.style.top = '50%';
               newImg.style.left = '50%';
               newImg.style.transform = 'translate(-50%, -50%)';
-              newImg.style.zIndex = '3';
+              newImg.style.zIndex = '1';
               newImg.style.pointerEvents = 'none';
               newImg.style.filter = 'drop-shadow(0 20px 40px rgba(0, 0, 0, 0.4))';
               newImg.style.opacity = '1';
