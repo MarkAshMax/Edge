@@ -3095,40 +3095,140 @@
 
         const THREE = window.THREE;
         const scene = new THREE.Scene();
-        scene.background = new THREE.Color(0x0a0a13);
-        const camera = new THREE.PerspectiveCamera(60, 1, 0.1, 1000);
-        camera.position.set(0, 0, 3.5);
+        
+        // Enhanced environment with gradient background
+        const bgGradient = new THREE.Color(0x0a0a13);
+        scene.background = bgGradient;
+        scene.fog = new THREE.Fog(0x0a0a13, 5, 12);
+        
+        const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 1000);
+        camera.position.set(0, 0.5, 4.5);
 
-        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        const renderer = new THREE.WebGLRenderer({ 
+          antialias: true, 
+          alpha: true,
+          powerPreference: 'high-performance'
+        });
         const size = preview3dContainer.clientWidth;
         renderer.setSize(size, size, false);
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        renderer.toneMapping = THREE.ACESFilmicToneMapping;
+        renderer.toneMappingExposure = 1.2;
+        renderer.shadowMap.enabled = true;
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
         preview3dContainer.innerHTML = '';
         preview3dContainer.appendChild(renderer.domElement);
 
-        const light = new THREE.HemisphereLight(0xffffff, 0x080820, 1.2);
-        scene.add(light);
-        const directional = new THREE.DirectionalLight(0xffffff, 0.6);
-        directional.position.set(2, 2, 3);
-        scene.add(directional);
+        // Enhanced realistic lighting setup
+        const ambientLight = new THREE.AmbientLight(0x8899bb, 0.4);
+        scene.add(ambientLight);
+        
+        const keyLight = new THREE.DirectionalLight(0xffffff, 1.2);
+        keyLight.position.set(2, 3, 4);
+        keyLight.castShadow = true;
+        keyLight.shadow.mapSize.width = 1024;
+        keyLight.shadow.mapSize.height = 1024;
+        keyLight.shadow.camera.near = 0.1;
+        keyLight.shadow.camera.far = 20;
+        scene.add(keyLight);
+        
+        const fillLight = new THREE.DirectionalLight(0xff7733, 0.3);
+        fillLight.position.set(-2, 1, -2);
+        scene.add(fillLight);
+        
+        const rimLight = new THREE.DirectionalLight(0x6688ff, 0.5);
+        rimLight.position.set(-1, 0, -3);
+        scene.add(rimLight);
 
-        const phoneGeometry = new THREE.BoxGeometry(1.9, 4, 0.18, 20, 20, 4);
+        // Enhanced phone case geometry with rounded edges
+        const phoneWidth = 1.9;
+        const phoneHeight = 4;
+        const phoneDepth = 0.24;
+        const phoneGeometry = new THREE.BoxGeometry(phoneWidth, phoneHeight, phoneDepth, 32, 64, 8);
+        
+        // Apply smooth rounded edges to geometry
+        const positions = phoneGeometry.attributes.position;
+        for (let i = 0; i < positions.count; i++) {
+          const x = positions.getX(i);
+          const y = positions.getY(i);
+          const z = positions.getZ(i);
+          
+          // Smooth corners with radius
+          const cornerRadius = 0.15;
+          const absX = Math.abs(x);
+          const absY = Math.abs(y);
+          
+          if (absX > phoneWidth/2 - cornerRadius && absY > phoneHeight/2 - cornerRadius) {
+            const dx = absX - (phoneWidth/2 - cornerRadius);
+            const dy = absY - (phoneHeight/2 - cornerRadius);
+            const dist = Math.sqrt(dx*dx + dy*dy);
+            if (dist > cornerRadius) {
+              const scale = cornerRadius / dist;
+              positions.setX(i, Math.sign(x) * (phoneWidth/2 - cornerRadius + dx * scale));
+              positions.setY(i, Math.sign(y) * (phoneHeight/2 - cornerRadius + dy * scale));
+            }
+          }
+        }
+        phoneGeometry.computeVertexNormals();
+        
         const texture = new THREE.CanvasTexture(canvas);
         texture.flipY = false;
-        texture.anisotropy = 8;
-        const materialFront = new THREE.MeshStandardMaterial({ map: texture, roughness: 0.6, metalness: 0.1 });
-        const materialBody = new THREE.MeshStandardMaterial({ color: 0x11131f, roughness: 0.8, metalness: 0.2 });
+        texture.anisotropy = renderer.capabilities.getMaxAnisotropy();
+        texture.minFilter = THREE.LinearMipmapLinearFilter;
+        texture.magFilter = THREE.LinearFilter;
+        
+        // Premium materials with realistic properties
+        const materialFront = new THREE.MeshStandardMaterial({ 
+          map: texture, 
+          roughness: 0.4, 
+          metalness: 0.05,
+          envMapIntensity: 0.8,
+          transparent: false
+        });
+        
+        const materialBody = new THREE.MeshStandardMaterial({ 
+          color: new THREE.Color(0x11131f), 
+          roughness: 0.7, 
+          metalness: 0.3,
+          envMapIntensity: 0.6
+        });
+        
+        // Camera bump detail
+        const cameraBumpGeometry = new THREE.BoxGeometry(0.6, 0.8, 0.08, 4, 4, 2);
+        const cameraBumpMaterial = new THREE.MeshStandardMaterial({
+          color: 0x0a0c15,
+          roughness: 0.6,
+          metalness: 0.4
+        });
+        const cameraBump = new THREE.Mesh(cameraBumpGeometry, cameraBumpMaterial);
+        cameraBump.position.set(-0.6, phoneHeight/2 - 0.6, phoneDepth/2 + 0.02);
+        
         const materials = [materialBody, materialBody, materialBody, materialBody, materialFront, materialBody];
         const mesh = new THREE.Mesh(phoneGeometry, materials);
+        mesh.castShadow = true;
+        mesh.receiveShadow = true;
+        mesh.add(cameraBump);
         scene.add(mesh);
+
+        // Subtle platform/ground for better spatial reference
+        const platformGeometry = new THREE.CircleGeometry(4, 32);
+        const platformMaterial = new THREE.ShadowMaterial({ opacity: 0.15 });
+        const platform = new THREE.Mesh(platformGeometry, platformMaterial);
+        platform.rotation.x = -Math.PI / 2;
+        platform.position.y = -phoneHeight/2 - 0.3;
+        platform.receiveShadow = true;
+        scene.add(platform);
 
         const controls = new THREE.OrbitControls(camera, renderer.domElement);
         controls.enableDamping = true;
-        controls.minDistance = 2.5;
-        controls.maxDistance = 6;
+        controls.dampingFactor = 0.08;
+        controls.minDistance = 3;
+        controls.maxDistance = 8;
         controls.enablePan = false;
         controls.autoRotate = true;
-        controls.autoRotateSpeed = 1.2;
+        controls.autoRotateSpeed = 1.5;
+        controls.maxPolarAngle = Math.PI * 0.6;
+        controls.minPolarAngle = Math.PI * 0.3;
 
         const handleResize = () => {
           const newSize = preview3dContainer.clientWidth;
@@ -3195,23 +3295,39 @@
           return;
         }
         const script = document.createElement('script');
-        script.src = 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js';
-        script.onload = () => resolve();
-        script.onerror = () => reject(new Error('Failed to load three.min.js'));
+        script.type = 'importmap';
+        script.textContent = JSON.stringify({
+          imports: {
+            'three': 'https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js',
+            'three/addons/': 'https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/'
+          }
+        });
         document.head.appendChild(script);
+        
+        const moduleScript = document.createElement('script');
+        moduleScript.type = 'module';
+        moduleScript.textContent = `
+          import * as THREE from 'three';
+          import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+          import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
+          window.THREE = THREE;
+          window.THREE.OrbitControls = OrbitControls;
+          window.THREE.RGBELoader = RGBELoader;
+        `;
+        moduleScript.onload = () => {
+          setTimeout(() => {
+            if (window.THREE && window.THREE.OrbitControls) {
+              resolve();
+            } else {
+              reject(new Error('THREE not available after load'));
+            }
+          }, 100);
+        };
+        moduleScript.onerror = () => reject(new Error('Failed to load Three.js module'));
+        document.head.appendChild(moduleScript);
       });
 
-      const loadOrbitControls = () => new Promise((resolve, reject) => {
-        if (window.THREE?.OrbitControls) {
-          resolve();
-          return;
-        }
-        const script = document.createElement('script');
-        script.src = 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/examples/js/controls/OrbitControls.js';
-        script.onload = () => resolve();
-        script.onerror = () => reject(new Error('Failed to load OrbitControls'));
-        document.head.appendChild(script);
-      });
+      const loadOrbitControls = () => Promise.resolve(); // Now loaded with Three.js core
 
       // Upscale render (~300 DPI) and export the masked design as a PNG
       const performExport = async () => {
@@ -3586,6 +3702,349 @@
       ensureEdgeLogoImage();
       renderLoop();
       updateTransformInfo();
+      
+      // ============================================
+      // FABRIC.JS ADVANCED CANVAS ENHANCEMENT
+      // ============================================
+      
+      // Lazy-load Fabric.js for advanced canvas manipulation
+      const loadFabricJS = () => new Promise((resolve, reject) => {
+        if (window.fabric) {
+          resolve();
+          return;
+        }
+        const script = document.createElement('script');
+        script.src = 'https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.0/fabric.min.js';
+        script.onload = () => {
+          if (window.fabric) {
+            resolve();
+          } else {
+            reject(new Error('Fabric.js not available after load'));
+          }
+        };
+        script.onerror = () => reject(new Error('Failed to load Fabric.js'));
+        document.head.appendChild(script);
+      });
+
+      // Create "Advanced Mode" button in controls section
+      const controlsSection = document.querySelector('#controls .card');
+      if (controlsSection) {
+        const advancedModeBtn = document.createElement('button');
+        advancedModeBtn.id = 'advancedModeBtn';
+        advancedModeBtn.className = 'btn-accent';
+        advancedModeBtn.style.marginTop = '1.5rem';
+        advancedModeBtn.textContent = '🎨 Enable Advanced Canvas Mode';
+        advancedModeBtn.title = 'Enable Fabric.js for layers, undo/redo, and advanced object manipulation';
+        controlsSection.appendChild(advancedModeBtn);
+
+        let fabricCanvas = null;
+        let fabricEnabled = false;
+        let undoStack = [];
+        let redoStack = [];
+        const MAX_HISTORY = 50;
+
+        const saveCanvasState = () => {
+          if (!fabricCanvas) return;
+          const json = JSON.stringify(fabricCanvas.toJSON());
+          undoStack.push(json);
+          if (undoStack.length > MAX_HISTORY) {
+            undoStack.shift();
+          }
+          redoStack = []; // Clear redo stack on new action
+        };
+
+        const undo = () => {
+          if (!fabricCanvas || undoStack.length === 0) return;
+          const currentState = JSON.stringify(fabricCanvas.toJSON());
+          redoStack.push(currentState);
+          const previousState = undoStack.pop();
+          fabricCanvas.loadFromJSON(previousState, () => {
+            fabricCanvas.renderAll();
+          });
+        };
+
+        const redo = () => {
+          if (!fabricCanvas || redoStack.length === 0) return;
+          const currentState = JSON.stringify(fabricCanvas.toJSON());
+          undoStack.push(currentState);
+          const nextState = redoStack.pop();
+          fabricCanvas.loadFromJSON(nextState, () => {
+            fabricCanvas.renderAll();
+          });
+        };
+
+        const enableFabricMode = async () => {
+          if (fabricEnabled) return;
+          
+          try {
+            advancedModeBtn.disabled = true;
+            advancedModeBtn.innerHTML = '<span class="loading"><span class="spinner"></span>Loading Fabric.js...</span>';
+            
+            await loadFabricJS();
+            
+            // Create Fabric canvas overlay
+            const fabricCanvasEl = document.createElement('canvas');
+            fabricCanvasEl.id = 'fabricCanvas';
+            fabricCanvasEl.width = canvas.width;
+            fabricCanvasEl.height = canvas.height;
+            fabricCanvasEl.style.position = 'absolute';
+            fabricCanvasEl.style.top = '50%';
+            fabricCanvasEl.style.left = '50%';
+            fabricCanvasEl.style.transform = 'translate(-50%, -50%)';
+            fabricCanvasEl.style.zIndex = '10';
+            canvasWrapper.appendChild(fabricCanvasEl);
+
+            fabricCanvas = new fabric.Canvas('fabricCanvas', {
+              width: canvas.width,
+              height: canvas.height,
+              selection: true,
+              preserveObjectStacking: true,
+              renderOnAddRemove: true,
+              enableRetinaScaling: true,
+              backgroundColor: 'transparent'
+            });
+
+            // Transfer current canvas content to Fabric
+            if (state.imageBitmap || state.image) {
+              const imgElement = state.image || canvas;
+              fabric.Image.fromURL(imgElement.src || canvas.toDataURL(), (img) => {
+                const scale = Math.max(canvas.width / img.width, canvas.height / img.height);
+                img.set({
+                  left: canvas.width / 2,
+                  top: canvas.height / 2,
+                  originX: 'center',
+                  originY: 'center',
+                  scaleX: scale * state.transform.scale,
+                  scaleY: scale * state.transform.scale,
+                  angle: state.transform.rotation,
+                  opacity: state.transform.opacity
+                });
+                fabricCanvas.add(img);
+                fabricCanvas.centerObject(img);
+                fabricCanvas.renderAll();
+                saveCanvasState();
+              });
+            }
+
+            // Add Fabric controls panel
+            const fabricControls = document.createElement('div');
+            fabricControls.className = 'card';
+            fabricControls.style.marginTop = '1.5rem';
+            fabricControls.innerHTML = `
+              <h3>🎨 Advanced Canvas Controls</h3>
+              <p class="card-subtitle">Fabric.js enabled - Use layers, add shapes, and precise editing</p>
+              <div class="controls-grid">
+                <button id="fabricUndo" class="btn-ghost control">↶ Undo</button>
+                <button id="fabricRedo" class="btn-ghost control">↷ Redo</button>
+                <button id="fabricAddText" class="btn-ghost control">+ Text</button>
+                <button id="fabricAddRect" class="btn-ghost control">+ Rectangle</button>
+                <button id="fabricAddCircle" class="btn-ghost control">+ Circle</button>
+                <button id="fabricDelete" class="btn-ghost control" style="color: #ff6159;">🗑 Delete</button>
+              </div>
+              <div class="controls-grid" style="margin-top: 1rem;">
+                <button id="fabricBringForward" class="btn-ghost control">▲ Forward</button>
+                <button id="fabricSendBackward" class="btn-ghost control">▼ Backward</button>
+                <button id="fabricDuplicate" class="btn-ghost control">⎘ Duplicate</button>
+                <button id="fabricClear" class="btn-ghost control">✕ Clear All</button>
+              </div>
+              <p style="margin-top: 1rem; font-size: 0.85rem; color: var(--text-tertiary);">
+                💡 Tip: Click objects to edit, drag to move, use corner handles to resize
+              </p>
+            `;
+            controlsSection.appendChild(fabricControls);
+
+            // Fabric event listeners
+            document.getElementById('fabricUndo')?.addEventListener('click', undo);
+            document.getElementById('fabricRedo')?.addEventListener('click', redo);
+            
+            document.getElementById('fabricAddText')?.addEventListener('click', () => {
+              const text = new fabric.IText('Double-click to edit', {
+                left: canvas.width / 2,
+                top: canvas.height / 2,
+                fontSize: 48,
+                fill: '#ffffff',
+                fontFamily: 'Plus Jakarta Sans, Inter, sans-serif',
+                fontWeight: 700,
+                stroke: '#000000',
+                strokeWidth: 2,
+                shadow: 'rgba(0,0,0,0.5) 2px 2px 8px'
+              });
+              fabricCanvas.add(text);
+              fabricCanvas.setActiveObject(text);
+              saveCanvasState();
+            });
+
+            document.getElementById('fabricAddRect')?.addEventListener('click', () => {
+              const rect = new fabric.Rect({
+                left: canvas.width / 2 - 50,
+                top: canvas.height / 2 - 50,
+                width: 100,
+                height: 100,
+                fill: '#ff6b36',
+                stroke: '#ffffff',
+                strokeWidth: 2,
+                rx: 10,
+                ry: 10
+              });
+              fabricCanvas.add(rect);
+              fabricCanvas.setActiveObject(rect);
+              saveCanvasState();
+            });
+
+            document.getElementById('fabricAddCircle')?.addEventListener('click', () => {
+              const circle = new fabric.Circle({
+                left: canvas.width / 2 - 50,
+                top: canvas.height / 2 - 50,
+                radius: 50,
+                fill: '#6688ff',
+                stroke: '#ffffff',
+                strokeWidth: 2
+              });
+              fabricCanvas.add(circle);
+              fabricCanvas.setActiveObject(circle);
+              saveCanvasState();
+            });
+
+            document.getElementById('fabricDelete')?.addEventListener('click', () => {
+              const activeObject = fabricCanvas.getActiveObject();
+              if (activeObject) {
+                fabricCanvas.remove(activeObject);
+                saveCanvasState();
+              }
+            });
+
+            document.getElementById('fabricBringForward')?.addEventListener('click', () => {
+              const activeObject = fabricCanvas.getActiveObject();
+              if (activeObject) {
+                fabricCanvas.bringForward(activeObject);
+                saveCanvasState();
+              }
+            });
+
+            document.getElementById('fabricSendBackward')?.addEventListener('click', () => {
+              const activeObject = fabricCanvas.getActiveObject();
+              if (activeObject) {
+                fabricCanvas.sendBackwards(activeObject);
+                saveCanvasState();
+              }
+            });
+
+            document.getElementById('fabricDuplicate')?.addEventListener('click', () => {
+              const activeObject = fabricCanvas.getActiveObject();
+              if (activeObject) {
+                activeObject.clone((cloned) => {
+                  cloned.set({
+                    left: cloned.left + 20,
+                    top: cloned.top + 20
+                  });
+                  fabricCanvas.add(cloned);
+                  fabricCanvas.setActiveObject(cloned);
+                  saveCanvasState();
+                });
+              }
+            });
+
+            document.getElementById('fabricClear')?.addEventListener('click', () => {
+              if (confirm('Clear all objects from Fabric canvas?')) {
+                fabricCanvas.clear();
+                fabricCanvas.backgroundColor = 'transparent';
+                saveCanvasState();
+              }
+            });
+
+            // Track changes for undo/redo
+            fabricCanvas.on('object:modified', saveCanvasState);
+            fabricCanvas.on('object:added', (e) => {
+              if (!e.target._skipHistory) {
+                saveCanvasState();
+              }
+            });
+
+            // Keyboard shortcuts for Fabric
+            document.addEventListener('keydown', (e) => {
+              if (!fabricEnabled) return;
+              
+              // Cmd/Ctrl + Z for undo
+              if ((e.metaKey || e.ctrlKey) && e.key === 'z' && !e.shiftKey) {
+                e.preventDefault();
+                undo();
+              }
+              // Cmd/Ctrl + Shift + Z or Cmd/Ctrl + Y for redo
+              if (((e.metaKey || e.ctrlKey) && e.shiftKey && e.key === 'z') || 
+                  ((e.metaKey || e.ctrlKey) && e.key === 'y')) {
+                e.preventDefault();
+                redo();
+              }
+              // Delete key
+              if (e.key === 'Delete' || e.key === 'Backspace') {
+                const activeObject = fabricCanvas.getActiveObject();
+                if (activeObject && document.activeElement.tagName !== 'INPUT' && 
+                    document.activeElement.tagName !== 'TEXTAREA') {
+                  e.preventDefault();
+                  fabricCanvas.remove(activeObject);
+                  saveCanvasState();
+                }
+              }
+              // Cmd/Ctrl + D for duplicate
+              if ((e.metaKey || e.ctrlKey) && e.key === 'd') {
+                const activeObject = fabricCanvas.getActiveObject();
+                if (activeObject) {
+                  e.preventDefault();
+                  activeObject.clone((cloned) => {
+                    cloned.set({ left: cloned.left + 20, top: cloned.top + 20 });
+                    fabricCanvas.add(cloned);
+                    fabricCanvas.setActiveObject(cloned);
+                    saveCanvasState();
+                  });
+                }
+              }
+            });
+
+            fabricEnabled = true;
+            advancedModeBtn.textContent = '✓ Advanced Mode Active';
+            advancedModeBtn.style.background = 'linear-gradient(135deg, #4ade80, #22c55e)';
+            
+            // Update download button to export merged canvas
+            const originalPerformExport = performExport;
+            window.performExport = async () => {
+              if (fabricEnabled && fabricCanvas) {
+                // Merge base canvas and Fabric canvas
+                const exportCanvas = document.createElement('canvas');
+                const EXPORT_SCALE = 300 / 96;
+                exportCanvas.width = Math.round(canvas.width * EXPORT_SCALE);
+                exportCanvas.height = Math.round(canvas.height * EXPORT_SCALE);
+                const eCtx = exportCanvas.getContext('2d');
+                
+                // Draw base canvas
+                eCtx.scale(EXPORT_SCALE, EXPORT_SCALE);
+                eCtx.drawImage(canvas, 0, 0);
+                
+                // Draw Fabric canvas on top
+                const fabricDataUrl = fabricCanvas.toDataURL({ format: 'png', multiplier: EXPORT_SCALE });
+                const fabricImg = await loadImageFromSource(fabricDataUrl, 'fabric layer');
+                eCtx.drawImage(fabricImg, 0, 0, canvas.width, canvas.height);
+                
+                const link = document.createElement('a');
+                link.download = 'neon-case-design-advanced.png';
+                link.href = exportCanvas.toDataURL('image/png');
+                link.click();
+                setStatus(exportStatus, 'PNG downloaded at ~300 DPI with Fabric layers.');
+              } else {
+                originalPerformExport();
+              }
+            };
+            downloadBtn.removeEventListener('click', originalPerformExport);
+            downloadBtn.addEventListener('click', window.performExport);
+
+          } catch (err) {
+            console.error('Fabric.js load failed:', err);
+            advancedModeBtn.textContent = '⚠ Fabric.js load failed';
+            advancedModeBtn.disabled = false;
+          }
+        };
+
+        advancedModeBtn.addEventListener('click', enableFabricMode);
+      }
     })();
   </script>
 </body>
