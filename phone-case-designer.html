@@ -1619,63 +1619,70 @@
         // Generate camera cutouts based on layout type
         let cameraSVG = '';
         if (cameraLayout.type === 'pill') {
-          // iPhone 15/16 Pro style - pill-shaped triple camera
+          // iPhone style - Triangular/pill triple camera system
           const pillX = width * cameraLayout.x;
-          const pillY = height * cameraLayout.y;
+          const pillY = width * cameraLayout.y;
           const pillW = width * cameraLayout.width;
-          const pillH = height * cameraLayout.height;
+          const pillH = width * cameraLayout.height;
+          
+          // Create rounded square camera bump
           cameraSVG = `
-            <!-- Camera pill cutout -->
+            <!-- Camera bump housing -->
             <rect x="${pillX}" y="${pillY}" width="${pillW}" height="${pillH}" 
-                  rx="${pillH / 2}" fill="rgba(0,0,0,0.9)"/>
+                  rx="22" fill="rgba(0,0,0,0.85)"/>
             <rect x="${pillX + 3}" y="${pillY + 3}" width="${pillW - 6}" height="${pillH - 6}" 
-                  rx="${(pillH - 6) / 2}" fill="rgba(25,27,35,0.95)"/>
-            <!-- Camera lenses -->
-            <circle cx="${pillX + pillH / 2}" cy="${pillY + pillH / 2}" r="${pillH * 0.32}" 
-                    fill="rgba(15,17,22,0.98)" stroke="rgba(255,255,255,0.1)" stroke-width="1.5"/>
-            <circle cx="${pillX + pillW / 2}" cy="${pillY + pillH / 2}" r="${pillH * 0.32}" 
-                    fill="rgba(15,17,22,0.98)" stroke="rgba(255,255,255,0.1)" stroke-width="1.5"/>
-            <circle cx="${pillX + pillW - pillH / 2}" cy="${pillY + pillH / 2}" r="${pillH * 0.32}" 
-                    fill="rgba(15,17,22,0.98)" stroke="rgba(255,255,255,0.1)" stroke-width="1.5"/>`;
-        } else if (cameraLayout.type === 'square') {
-          // Samsung style - square camera module in corner
-          const sqX = width * cameraLayout.x;
-          const sqY = height * cameraLayout.y;
-          const sqSize = width * cameraLayout.size;
+                  rx="19" fill="rgba(28,30,38,0.92)"/>
+            
+            <!-- Three camera lenses in triangle formation -->
+            <circle cx="${pillX + pillW * 0.28}" cy="${pillY + pillH * 0.35}" r="${pillW * 0.14}" 
+                    fill="rgba(10,12,18,0.98)" stroke="rgba(255,255,255,0.12)" stroke-width="1.8"/>
+            <circle cx="${pillX + pillW * 0.72}" cy="${pillY + pillH * 0.35}" r="${pillW * 0.14}" 
+                    fill="rgba(10,12,18,0.98)" stroke="rgba(255,255,255,0.12)" stroke-width="1.8"/>
+            <circle cx="${pillX + pillW * 0.5}" cy="${pillY + pillH * 0.72}" r="${pillW * 0.14}" 
+                    fill="rgba(10,12,18,0.98)" stroke="rgba(255,255,255,0.12)" stroke-width="1.8"/>
+            
+            <!-- LiDAR/Flash in corner -->
+            <circle cx="${pillX + pillW * 0.82}" cy="${pillY + pillH * 0.78}" r="${pillW * 0.09}" 
+                    fill="rgba(20,22,28,0.95)" stroke="rgba(255,255,255,0.08)" stroke-width="1.2"/>`;
+                    
+        } else if (cameraLayout.type === 'vertical') {
+          // Samsung style - Individual lenses stacked vertically (no visible housing)
+          const lensX = width * cameraLayout.x;
+          const startY = height * cameraLayout.y;
+          const lensRadius = width * cameraLayout.lensSize;
+          const spacing = height * cameraLayout.spacing;
+          
           cameraSVG = `
-            <!-- Square camera module -->
-            <rect x="${sqX}" y="${sqY}" width="${sqSize}" height="${sqSize}" 
-                  rx="18" fill="rgba(0,0,0,0.9)"/>
-            <rect x="${sqX + 4}" y="${sqY + 4}" width="${sqSize - 8}" height="${sqSize - 8}" 
-                  rx="14" fill="rgba(28,30,38,0.95)"/>
-            <!-- Camera lenses in grid -->
-            <circle cx="${sqX + sqSize * 0.3}" cy="${sqY + sqSize * 0.3}" r="${sqSize * 0.12}" 
-                    fill="rgba(15,17,22,0.98)" stroke="rgba(255,255,255,0.1)" stroke-width="1.5"/>
-            <circle cx="${sqX + sqSize * 0.7}" cy="${sqY + sqSize * 0.3}" r="${sqSize * 0.12}" 
-                    fill="rgba(15,17,22,0.98)" stroke="rgba(255,255,255,0.1)" stroke-width="1.5"/>
-            <circle cx="${sqX + sqSize * 0.3}" cy="${sqY + sqSize * 0.7}" r="${sqSize * 0.12}" 
-                    fill="rgba(15,17,22,0.98)" stroke="rgba(255,255,255,0.1)" stroke-width="1.5"/>
-            <circle cx="${sqX + sqSize * 0.7}" cy="${sqY + sqSize * 0.7}" r="${sqSize * 0.12}" 
+            <!-- Individual camera lenses (Samsung style) -->`;
+          for (let i = 0; i < cameraLayout.count; i++) {
+            const lensY = startY + (lensRadius * 2 + spacing) * i + lensRadius;
+            cameraSVG += `
+            <circle cx="${lensX + lensRadius}" cy="${lensY}" r="${lensRadius + 3}" 
+                    fill="rgba(0,0,0,0.85)"/>
+            <circle cx="${lensX + lensRadius}" cy="${lensY}" r="${lensRadius}" 
                     fill="rgba(15,17,22,0.98)" stroke="rgba(255,255,255,0.1)" stroke-width="1.5"/>`;
+          }
+          
         } else if (cameraLayout.type === 'bar') {
-          // Pixel style - horizontal camera bar
+          // Pixel style - Horizontal camera bar
           const barX = width * cameraLayout.x;
           const barY = height * cameraLayout.y;
           const barW = width * cameraLayout.width;
           const barH = height * cameraLayout.height;
           cameraSVG = `
-            <!-- Camera bar -->
+            <!-- Camera bar (Pixel signature design) -->
             <rect x="${barX}" y="${barY}" width="${barW}" height="${barH}" 
-                  rx="12" fill="rgba(0,0,0,0.9)"/>
-            <rect x="${barX + 3}" y="${barY + 3}" width="${barW - 6}" height="${barH - 6}" 
-                  rx="9" fill="rgba(30,32,40,0.95)"/>
-            <!-- Camera lenses in row -->
-            <circle cx="${barX + barH * 0.6}" cy="${barY + barH / 2}" r="${barH * 0.28}" 
-                    fill="rgba(15,17,22,0.98)" stroke="rgba(255,255,255,0.1)" stroke-width="1.5"/>
-            <circle cx="${barX + barW / 2}" cy="${barY + barH / 2}" r="${barH * 0.28}" 
-                    fill="rgba(15,17,22,0.98)" stroke="rgba(255,255,255,0.1)" stroke-width="1.5"/>
-            <circle cx="${barX + barW - barH * 0.6}" cy="${barY + barH / 2}" r="${barH * 0.28}" 
-                    fill="rgba(15,17,22,0.98)" stroke="rgba(255,255,255,0.1)" stroke-width="1.5"/>`;
+                  rx="16" fill="rgba(0,0,0,0.88)"/>
+            <rect x="${barX + 4}" y="${barY + 4}" width="${barW - 8}" height="${barH - 8}" 
+                  rx="12" fill="rgba(32,34,42,0.95)"/>
+            
+            <!-- Camera lenses in horizontal row -->
+            <circle cx="${barX + barW * 0.22}" cy="${barY + barH / 2}" r="${barH * 0.28}" 
+                    fill="rgba(12,14,20,0.98)" stroke="rgba(255,255,255,0.12)" stroke-width="1.8"/>
+            <circle cx="${barX + barW * 0.50}" cy="${barY + barH / 2}" r="${barH * 0.28}" 
+                    fill="rgba(12,14,20,0.98)" stroke="rgba(255,255,255,0.12)" stroke-width="1.8"/>
+            <circle cx="${barX + barW * 0.78}" cy="${barY + barH / 2}" r="${barH * 0.28}" 
+                    fill="rgba(12,14,20,0.98)" stroke="rgba(255,255,255,0.12)" stroke-width="1.8"/>`;
         }
         
         // Generate button cutouts
@@ -1745,7 +1752,7 @@
         `)}`;
       };
 
-      // Phone model data with realistic camera layouts and button positions
+      // Phone model data with ACCURATE camera layouts based on real phone cases
       const phoneModels = {
         iphone15: { 
           name: 'iPhone 15 Pro', 
@@ -1753,17 +1760,17 @@
           height: 800,
           colorTint: 'rgba(50,55,70,0.95)', // Titanium blue
           cameraLayout: {
-            type: 'pill', // Pill-shaped triple camera
-            x: 0.05,
-            y: 0.04,
-            width: 0.35,
-            height: 0.085
+            type: 'pill', // Triangle pill camera bump (top-left corner)
+            x: 0.04,      // 4% from left edge
+            y: 0.025,     // 2.5% from top
+            width: 0.32,  // 32% of width
+            height: 0.12  // 12% of height (taller for vertical triangle)
           },
           buttonLayout: [
-            { side: 'left', y: 0.15, height: 0.055 }, // Volume up
-            { side: 'left', y: 0.22, height: 0.055 }, // Volume down
-            { side: 'left', y: 0.31, height: 0.025 }, // Mute switch
-            { side: 'right', y: 0.38, height: 0.14 }  // Power/Action button
+            { side: 'left', y: 0.13, height: 0.04 },  // Volume up
+            { side: 'left', y: 0.19, height: 0.04 },  // Volume down
+            { side: 'left', y: 0.26, height: 0.018 }, // Mute/Action switch
+            { side: 'right', y: 0.35, height: 0.11 }  // Power button
           ],
           image: null
         },
@@ -1773,18 +1780,18 @@
           height: 820,
           colorTint: 'rgba(60,50,70,0.95)', // Desert titanium
           cameraLayout: {
-            type: 'pill',
-            x: 0.05,
-            y: 0.038,
-            width: 0.36,
-            height: 0.088
+            type: 'pill',  // Larger triangle pill camera bump
+            x: 0.04,
+            y: 0.024,
+            width: 0.34,   // Slightly larger than 15 Pro
+            height: 0.13
           },
           buttonLayout: [
-            { side: 'left', y: 0.14, height: 0.05 },
-            { side: 'left', y: 0.21, height: 0.05 },
-            { side: 'left', y: 0.29, height: 0.02 },
-            { side: 'right', y: 0.36, height: 0.15 }, // Longer action button
-            { side: 'right', y: 0.18, height: 0.025 }  // Camera control
+            { side: 'left', y: 0.125, height: 0.038 }, // Volume up
+            { side: 'left', y: 0.182, height: 0.038 }, // Volume down
+            { side: 'left', y: 0.25, height: 0.015 },  // Mute switch
+            { side: 'right', y: 0.16, height: 0.022 }, // Camera control button
+            { side: 'right', y: 0.33, height: 0.13 }   // Power/Action button
           ],
           image: null
         },
@@ -1792,16 +1799,18 @@
           name: 'Samsung Galaxy S24', 
           width: 390, 
           height: 810,
-          colorTint: 'rgba(45,55,50,0.95)', // Samsung black/green
+          colorTint: 'rgba(45,55,50,0.95)', // Samsung black
           cameraLayout: {
-            type: 'square', // Square camera module
-            x: 0.05,
-            y: 0.03,
-            size: 0.28
+            type: 'vertical', // Individual lenses stacked vertically (no housing)
+            x: 0.06,
+            y: 0.035,
+            lensSize: 0.055,  // Size of each individual lens
+            spacing: 0.018,    // Space between lenses
+            count: 3           // Three lenses
           },
           buttonLayout: [
-            { side: 'right', y: 0.22, height: 0.08 }, // Volume rocker
-            { side: 'right', y: 0.34, height: 0.08 }  // Power button
+            { side: 'right', y: 0.20, height: 0.075 }, // Volume rocker
+            { side: 'right', y: 0.31, height: 0.065 }  // Power button
           ],
           image: null
         },
@@ -1809,17 +1818,17 @@
           name: 'Google Pixel 8 Pro', 
           width: 395, 
           height: 815,
-          colorTint: 'rgba(55,50,45,0.95)', // Pixel bay/obsidian
+          colorTint: 'rgba(55,50,45,0.95)', // Pixel obsidian
           cameraLayout: {
-            type: 'bar', // Horizontal camera bar
-            x: 0.08,
-            y: 0.035,
-            width: 0.84,
-            height: 0.075
+            type: 'bar', // Horizontal camera bar (signature Pixel design)
+            x: 0.05,
+            y: 0.028,
+            width: 0.90,   // Extends almost full width
+            height: 0.08   // Prominent bar height
           },
           buttonLayout: [
-            { side: 'right', y: 0.28, height: 0.085 }, // Volume
-            { side: 'right', y: 0.42, height: 0.065 }  // Power
+            { side: 'right', y: 0.26, height: 0.08 },  // Volume
+            { side: 'right', y: 0.39, height: 0.058 }  // Power
           ],
           image: null
         }
@@ -2104,21 +2113,27 @@
         const cameraPath = new Path2D();
         if (cameraLayout.type === 'pill') {
           const pillX = width * cameraLayout.x;
-          const pillY = height * cameraLayout.y;
+          const pillY = width * cameraLayout.y;
           const pillW = width * cameraLayout.width;
-          const pillH = height * cameraLayout.height;
-          cameraPath.roundRect(pillX, pillY, pillW, pillH, pillH / 2);
-        } else if (cameraLayout.type === 'square') {
-          const sqX = width * cameraLayout.x;
-          const sqY = height * cameraLayout.y;
-          const sqSize = width * cameraLayout.size;
-          cameraPath.roundRect(sqX, sqY, sqSize, sqSize, 18);
+          const pillH = width * cameraLayout.height;
+          cameraPath.roundRect(pillX, pillY, pillW, pillH, 22);
+        } else if (cameraLayout.type === 'vertical') {
+          // Samsung style - individual circular lenses
+          const lensX = width * cameraLayout.x;
+          const startY = height * cameraLayout.y;
+          const lensRadius = width * cameraLayout.lensSize;
+          const spacing = height * cameraLayout.spacing;
+          
+          for (let i = 0; i < cameraLayout.count; i++) {
+            const lensY = startY + (lensRadius * 2 + spacing) * i + lensRadius;
+            cameraPath.arc(lensX + lensRadius, lensY, lensRadius + 3, 0, Math.PI * 2);
+          }
         } else if (cameraLayout.type === 'bar') {
           const barX = width * cameraLayout.x;
           const barY = height * cameraLayout.y;
           const barW = width * cameraLayout.width;
           const barH = height * cameraLayout.height;
-          cameraPath.roundRect(barX, barY, barW, barH, 12);
+          cameraPath.roundRect(barX, barY, barW, barH, 16);
         }
 
         const path = new Path2D();
@@ -2204,26 +2219,32 @@
           // Draw shadow based on camera type
           if (camera.type === 'pill') {
             const pillX = width * camera.x;
-            const pillY = height * camera.y;
+            const pillY = width * camera.y;
             const pillW = width * camera.width;
-            const pillH = height * camera.height;
+            const pillH = width * camera.height;
             gctx.beginPath();
-            gctx.roundRect(pillX, pillY, pillW, pillH, pillH / 2);
+            gctx.roundRect(pillX, pillY, pillW, pillH, 22);
             gctx.fill();
-          } else if (camera.type === 'square') {
-            const sqX = width * camera.x;
-            const sqY = height * camera.y;
-            const sqSize = width * camera.size;
-            gctx.beginPath();
-            gctx.roundRect(sqX, sqY, sqSize, sqSize, 18);
-            gctx.fill();
+          } else if (camera.type === 'vertical') {
+            // Samsung - individual lenses
+            const lensX = width * camera.x;
+            const startY = height * camera.y;
+            const lensRadius = width * camera.lensSize;
+            const spacing = height * camera.spacing;
+            
+            for (let i = 0; i < camera.count; i++) {
+              const lensY = startY + (lensRadius * 2 + spacing) * i + lensRadius;
+              gctx.beginPath();
+              gctx.arc(lensX + lensRadius, lensY, lensRadius + 3, 0, Math.PI * 2);
+              gctx.fill();
+            }
           } else if (camera.type === 'bar') {
             const barX = width * camera.x;
             const barY = height * camera.y;
             const barW = width * camera.width;
             const barH = height * camera.height;
             gctx.beginPath();
-            gctx.roundRect(barX, barY, barW, barH, 12);
+            gctx.roundRect(barX, barY, barW, barH, 16);
             gctx.fill();
           }
           gctx.restore();
