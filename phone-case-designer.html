@@ -327,9 +327,11 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      transition: min-height 300ms ease;
     }
     canvas {
       width: 100%;
+      height: auto;
       display: block;
       border-radius: 30px;
       background: transparent;
@@ -343,13 +345,15 @@
       left: 50%;
       transform: translate(-50%, -50%);
       width: 100%;
-      height: 100%;
+      height: auto;
+      max-height: 100%;
       z-index: 3;
       pointer-events: none;
       filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.4));
       opacity: 1;
       mix-blend-mode: normal;
       object-fit: contain;
+      transition: opacity 200ms ease;
     }
     #phoneImage {
       display: block !important;
@@ -1605,18 +1609,19 @@
       const phoneModelSelect = document.getElementById('phoneModel');
       const phoneImageElem = document.getElementById('phoneImage');
 
-      // Generate SVG phone case frame
-      const createPhoneCaseSVG = (width, height, name) => {
+      // Generate SVG phone case frame with unique color tints
+      const createPhoneCaseSVG = (width, height, name, colorTint = 'rgba(40,42,54,0.95)') => {
         const cornerRadius = 60;
         const cameraRadius = Math.min(width, height) * 0.058;
         const cameraX = width * 0.18;
         const cameraY = height * 0.13;
         const strokeWidth = 8;
+        const id = name.replace(/\s+/g, '-');
         
         return `data:image/svg+xml;utf8,${encodeURIComponent(`
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" width="${width}" height="${height}">
             <defs>
-              <filter id="phoneShadow">
+              <filter id="phoneShadow-${id}">
                 <feGaussianBlur in="SourceAlpha" stdDeviation="12"/>
                 <feOffset dx="0" dy="8" result="offsetblur"/>
                 <feComponentTransfer>
@@ -1627,12 +1632,12 @@
                   <feMergeNode in="SourceGraphic"/>
                 </feMerge>
               </filter>
-              <linearGradient id="caseGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" style="stop-color:rgba(40,42,54,0.95);stop-opacity:1" />
+              <linearGradient id="caseGradient-${id}" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:${colorTint};stop-opacity:1" />
                 <stop offset="50%" style="stop-color:rgba(28,30,40,0.98);stop-opacity:1" />
                 <stop offset="100%" style="stop-color:rgba(18,20,28,0.95);stop-opacity:1" />
               </linearGradient>
-              <radialGradient id="highlight" cx="30%" cy="20%">
+              <radialGradient id="highlight-${id}" cx="30%" cy="20%">
                 <stop offset="0%" style="stop-color:rgba(255,255,255,0.15);stop-opacity:1" />
                 <stop offset="100%" style="stop-color:rgba(255,255,255,0);stop-opacity:1" />
               </radialGradient>
@@ -1641,19 +1646,19 @@
             <!-- Outer shadow -->
             <rect x="${strokeWidth}" y="${strokeWidth}" width="${width - strokeWidth * 2}" height="${height - strokeWidth * 2}" 
                   rx="${cornerRadius}" ry="${cornerRadius}" 
-                  fill="rgba(0,0,0,0.6)" filter="url(#phoneShadow)"/>
+                  fill="rgba(0,0,0,0.6)" filter="url(#phoneShadow-${id})"/>
             
             <!-- Main case body -->
             <rect x="${strokeWidth}" y="${strokeWidth}" width="${width - strokeWidth * 2}" height="${height - strokeWidth * 2}" 
                   rx="${cornerRadius}" ry="${cornerRadius}" 
-                  fill="url(#caseGradient)" 
+                  fill="url(#caseGradient-${id})" 
                   stroke="rgba(255,255,255,0.12)" 
                   stroke-width="${strokeWidth * 0.8}"/>
             
             <!-- Highlight overlay -->
             <rect x="${strokeWidth}" y="${strokeWidth}" width="${width - strokeWidth * 2}" height="${height - strokeWidth * 2}" 
                   rx="${cornerRadius}" ry="${cornerRadius}" 
-                  fill="url(#highlight)" opacity="0.6"/>
+                  fill="url(#highlight-${id})" opacity="0.6"/>
             
             <!-- Inner edge highlight -->
             <rect x="${strokeWidth * 1.5}" y="${strokeWidth * 1.5}" 
@@ -1674,47 +1679,51 @@
             
             <!-- Side buttons (volume/power) -->
             <rect x="2" y="${height * 0.2}" width="3" height="${height * 0.08}" 
-                  rx="1.5" fill="rgba(40,42,54,0.95)"/>
+                  rx="1.5" fill="${colorTint}"/>
             <rect x="2" y="${height * 0.32}" width="3" height="${height * 0.05}" 
-                  rx="1.5" fill="rgba(40,42,54,0.95)"/>
+                  rx="1.5" fill="${colorTint}"/>
             <rect x="${width - 5}" y="${height * 0.25}" width="3" height="${height * 0.12}" 
-                  rx="1.5" fill="rgba(40,42,54,0.95)"/>
+                  rx="1.5" fill="${colorTint}"/>
           </svg>
         `)}`;
       };
 
-      // Phone model data with SVG-generated frames
+      // Phone model data with SVG-generated frames and unique colors
       const phoneModels = {
         iphone15: { 
           name: 'iPhone 15 Pro', 
           width: 400, 
           height: 800,
-          image: null // Will be generated
+          color: 'rgba(45,50,65,0.95)', // Blue-gray tint
+          image: null
         },
         iphone16: { 
           name: 'iPhone 16 Pro', 
           width: 400, 
           height: 820,
+          color: 'rgba(55,40,60,0.95)', // Purple tint
           image: null
         },
         samsung: { 
           name: 'Samsung Galaxy S24', 
           width: 390, 
           height: 810,
+          color: 'rgba(40,50,45,0.95)', // Green tint
           image: null
         },
         pixel: { 
           name: 'Google Pixel 8 Pro', 
           width: 395, 
           height: 815,
+          color: 'rgba(50,45,40,0.95)', // Orange tint
           image: null
         }
       };
 
-      // Generate SVG images for all models
+      // Generate SVG images for all models with unique colors
       Object.keys(phoneModels).forEach(key => {
         const model = phoneModels[key];
-        model.image = createPhoneCaseSVG(model.width, model.height, model.name);
+        model.image = createPhoneCaseSVG(model.width, model.height, model.name, model.color);
       });
 
       
@@ -3311,33 +3320,47 @@
             return;
           }
           
-          console.log('Updating to:', model.name, 'Image length:', model.image.length);
+          console.log('Updating to:', model.name, 'Width:', model.width, 'Height:', model.height);
           
-          // Update phone case background image
-          phoneImg.src = model.image;
-          phoneImg.alt = `${model.name} case`;
+          // Brief fade for smooth transition
+          phoneImg.style.opacity = '0';
           
-          // Update canvas dimensions
-          canvas.width = model.width;
-          canvas.height = model.height;
-          
-          // Regenerate phone mask for new dimensions
-          phoneMask = createPhoneMask(model.width, model.height, cornerRadius);
-          
-          // Regenerate lighting overlay for new dimensions
-          caseLightingOverlay = createCaseLightingOverlay(model.width, model.height, phoneMask);
-          
-          // Recalculate base scale for new dimensions
-          if (state.image) {
-            const coverScale = Math.max(model.width / state.image.width, model.height / state.image.height);
-            state.baseScale = coverScale;
-            state.transform.x = model.width / 2;
-            state.transform.y = model.height / 2;
-          }
-          
-          state.needsRender = true;
-          setStatus(exportStatus, `✓ Switched to ${model.name}`, 'success');
-          setTimeout(() => setStatus(exportStatus, ''), 2000);
+          setTimeout(() => {
+            // Update phone case background image
+            phoneImg.src = model.image;
+            phoneImg.alt = `${model.name} case`;
+            
+            // Update canvas dimensions
+            canvas.width = model.width;
+            canvas.height = model.height;
+            
+            // Update wrapper height to match aspect ratio
+            const wrapper = document.getElementById('canvasWrapper');
+            if (wrapper) {
+              const aspectRatio = model.height / model.width;
+              const newHeight = Math.min(420, window.innerWidth * 0.92) * aspectRatio;
+              wrapper.style.minHeight = `${newHeight}px`;
+            }
+            
+            // Regenerate phone mask for new dimensions
+            phoneMask = createPhoneMask(model.width, model.height, cornerRadius);
+            
+            // Regenerate lighting overlay for new dimensions
+            caseLightingOverlay = createCaseLightingOverlay(model.width, model.height, phoneMask);
+            
+            // Recalculate base scale for new dimensions
+            if (state.image) {
+              const coverScale = Math.max(model.width / state.image.width, model.height / state.image.height);
+              state.baseScale = coverScale;
+              state.transform.x = model.width / 2;
+              state.transform.y = model.height / 2;
+            }
+            
+            state.needsRender = true;
+            phoneImg.style.opacity = '1';
+            setStatus(exportStatus, `✓ Switched to ${model.name}`, 'success');
+            setTimeout(() => setStatus(exportStatus, ''), 2000);
+          }, 150);
         };
         
         // Add change listener
