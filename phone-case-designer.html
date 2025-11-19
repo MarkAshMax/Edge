@@ -3483,16 +3483,22 @@
           
           // Brief fade for smooth transition
           phoneImg.style.opacity = '0';
-          
+
           setTimeout(() => {
             // Update phone case background image
             phoneImg.src = model.image;
             phoneImg.alt = `${model.name} case`;
-            
+
+            // Ensure SVG phone frame is always the same size as the canvas
+            phoneImg.width = model.width;
+            phoneImg.height = model.height;
+            phoneImg.style.width = model.width + 'px';
+            phoneImg.style.height = model.height + 'px';
+
             // Update canvas dimensions
             canvas.width = model.width;
             canvas.height = model.height;
-            
+
             // Update wrapper height to match aspect ratio
             const wrapper = document.getElementById('canvasWrapper');
             if (wrapper) {
@@ -3500,13 +3506,13 @@
               const newHeight = Math.min(420, window.innerWidth * 0.92) * aspectRatio;
               wrapper.style.minHeight = `${newHeight}px`;
             }
-            
+
             // Regenerate phone mask for new dimensions and camera layout
             phoneMask = createPhoneMask(model.width, model.height, cornerRadius, model.cameraLayout);
-            
+
             // Regenerate lighting overlay for new dimensions
             caseLightingOverlay = createCaseLightingOverlay(model.width, model.height, phoneMask);
-            
+
             // Recalculate base scale for new dimensions
             if (state.image) {
               const coverScale = Math.max(model.width / state.image.width, model.height / state.image.height);
@@ -3514,7 +3520,7 @@
               state.transform.x = model.width / 2;
               state.transform.y = model.height / 2;
             }
-            
+
             state.needsRender = true;
             phoneImg.style.opacity = '1';
             setStatus(exportStatus, `✓ Switched to ${model.name}`, 'success');
