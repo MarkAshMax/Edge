@@ -2889,8 +2889,8 @@
         return parts.join(' ');
       };
 
-      // Direct Gemini image generation call using the official REST payload
-      const generateWithGemini = async (prompt) => {
+      // Direct Gemini image generation call using the official REST payload with automatic retry
+      const generateWithGemini = async (prompt, retryCount = 0, maxRetries = 3) => {
         const parts = [];
 
         if (state.referenceImage?.base64) {
@@ -2928,9 +2928,36 @@
             const retryMs = Number.isFinite(retryAfterSeconds) && retryAfterSeconds > 0
               ? retryAfterSeconds * 1000
               : RATE_LIMIT_FALLBACK_MS;
+            
+            // Auto-retry with exponential backoff
+            if (retryCount < maxRetries) {
+              const waitTime = Math.min(retryMs * Math.pow(1.5, retryCount), 60000); // Max 60s
+              const seconds = Math.ceil(waitTime / 1000);
+              rateLimitUntil = Date.now() + waitTime;
+              
+              setStatus(aiStatus, `Rate limited. Auto-retrying in ${seconds}s... (${retryCount + 1}/${maxRetries})`, 'error');
+              
+              // Countdown timer
+              const countdownInterval = setInterval(() => {
+                const remaining = Math.ceil((rateLimitUntil - Date.now()) / 1000);
+                if (remaining > 0) {
+                  setStatus(aiStatus, `Rate limited. Auto-retrying in ${remaining}s... (${retryCount + 1}/${maxRetries})`, 'error');
+                } else {
+                  clearInterval(countdownInterval);
+                }
+              }, 1000);
+              
+              await new Promise(resolve => setTimeout(resolve, waitTime));
+              clearInterval(countdownInterval);
+              
+              setStatus(aiStatus, `Retrying... (attempt ${retryCount + 2}/${maxRetries + 1})`);
+              return generateWithGemini(prompt, retryCount + 1, maxRetries);
+            }
+            
+            // Max retries reached
             rateLimitUntil = Date.now() + retryMs;
             const seconds = Math.ceil(retryMs / 1000);
-            throw new Error(`Gemini is rate limiting right now. Please wait about ${seconds}s before trying again.`);
+            throw new Error(`Rate limit reached after ${maxRetries} retries. Please wait ${seconds}s before trying again.`);
           }
 
           let detail = '';
