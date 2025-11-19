@@ -1585,8 +1585,6 @@
     (() => {
       const canvas = document.getElementById('phoneCanvas');
       const ctx = canvas.getContext('2d');
-      const caseWidth = canvas.width;
-      const caseHeight = canvas.height;
       const cornerRadius = 60;
       const generateBtn = document.getElementById('generateBtn');
       const promptInput = document.getElementById('promptInput');
@@ -2053,8 +2051,8 @@
           scale: 1,
           rotation: 0,
           opacity: 1,
-          x: caseWidth / 2,
-          y: caseHeight / 2,
+          x: canvas.width / 2,
+          y: canvas.height / 2,
         },
         dragging: false,
         dragStart: { x: 0, y: 0 },
@@ -2148,7 +2146,7 @@
         };
       };
       
-      let phoneMask = createPhoneMask(caseWidth, caseHeight, cornerRadius, phoneModels.iphone15.cameraLayout);
+      let phoneMask = createPhoneMask(canvas.width, canvas.height, cornerRadius, phoneModels.iphone15.cameraLayout);
 
       // Pre-rendered lighting overlay keeps the case feeling three-dimensional while allowing transparent background
       const createCaseLightingOverlay = (width, height, mask) => {
@@ -2253,7 +2251,7 @@
         return overlay;
       };
       
-      let caseLightingOverlay = createCaseLightingOverlay(caseWidth, caseHeight, phoneMask);
+      let caseLightingOverlay = createCaseLightingOverlay(canvas.width, canvas.height, phoneMask);
 
       const EDGE_LOGO_SVG = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 70"><path d="M7 58L36 22l14 20 10-12 23 24 15-12 17 30H7Z" fill="#ff6b36"/><path d="M36 22l14 20 10-12 23 24 15-12 17 30" fill="none" stroke="#ffffff" stroke-opacity="0.82" stroke-width="4" stroke-linejoin="round"/></svg>';
       const EDGE_LOGO_DATA_URL = `data:image/svg+xml;utf8,${encodeURIComponent(EDGE_LOGO_SVG)}`;
@@ -2316,10 +2314,10 @@
         ctx.save();
         ctx.setTransform(1, 0, 0, 1, 0, 0);
         ctx.globalAlpha = 1;
-        ctx.clearRect(0, 0, caseWidth, caseHeight);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
         // Always fill with opaque white to prevent SVG showing through
         ctx.fillStyle = '#fff';
-        ctx.fillRect(0, 0, caseWidth, caseHeight);
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
         ctx.restore();
       };
 
@@ -2353,43 +2351,43 @@
         ctx.save();
         clipToPhoneMask(ctx);
 
-        const baseGradient = ctx.createLinearGradient(0, 0, 0, caseHeight);
+        const baseGradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
         baseGradient.addColorStop(0, '#050608');
         baseGradient.addColorStop(1, '#0b0d15');
         ctx.fillStyle = baseGradient;
-        ctx.fillRect(0, 0, caseWidth, caseHeight);
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
 
         const radialGlow = ctx.createRadialGradient(
-          caseWidth / 2,
-          caseHeight * 0.4,
-          caseWidth * 0.08,
-          caseWidth / 2,
-          caseHeight * 0.42,
-          caseWidth * 0.7
+          canvas.width / 2,
+          canvas.height * 0.4,
+          canvas.width * 0.08,
+          canvas.width / 2,
+          canvas.height * 0.42,
+          canvas.width * 0.7
         );
         radialGlow.addColorStop(0, 'rgba(255, 77, 31, 0.32)');
         radialGlow.addColorStop(1, 'rgba(255, 77, 31, 0)');
         ctx.fillStyle = radialGlow;
-        ctx.fillRect(0, 0, caseWidth, caseHeight);
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-        const sweep = ctx.createLinearGradient(0, caseHeight * 0.18, 0, caseHeight * 0.82);
+        const sweep = ctx.createLinearGradient(0, canvas.height * 0.18, 0, canvas.height * 0.82);
         sweep.addColorStop(0, 'rgba(255, 255, 255, 0.08)');
         sweep.addColorStop(0.5, 'rgba(255, 255, 255, 0)');
         sweep.addColorStop(1, 'rgba(255, 255, 255, 0.08)');
         ctx.globalCompositeOperation = 'lighter';
         ctx.fillStyle = sweep;
-        ctx.fillRect(0, caseHeight * 0.18, caseWidth, caseHeight * 0.64);
+        ctx.fillRect(0, canvas.height * 0.18, canvas.width, canvas.height * 0.64);
         ctx.globalCompositeOperation = 'source-over';
 
         const logoImg = ensureEdgeLogoImage();
         if (logoImg) {
-          const maxWidth = caseWidth * 0.56;
-          const maxHeight = caseHeight * 0.32;
+          const maxWidth = canvas.width * 0.56;
+          const maxHeight = canvas.height * 0.32;
           const scale = Math.min(maxWidth / logoImg.width, maxHeight / logoImg.height);
           const logoWidth = logoImg.width * scale;
           const logoHeight = logoImg.height * scale;
-          const logoX = (caseWidth - logoWidth) / 2;
-          const logoY = caseHeight * 0.46 - logoHeight / 2;
+          const logoX = (canvas.width - logoWidth) / 2;
+          const logoY = canvas.height * 0.46 - logoHeight / 2;
           ctx.shadowColor = 'rgba(255, 77, 31, 0.32)';
           ctx.shadowBlur = 36;
           ctx.drawImage(logoImg, logoX, logoY, logoWidth, logoHeight);
@@ -2411,13 +2409,13 @@
         const overlay = state.customOverlay?.bitmap;
         if (!overlay) return;
         const layout = getSelectedLayout();
-        const maxWidth = caseWidth * 0.4;
-        const maxHeight = caseHeight * 0.4;
+        const maxWidth = canvas.width * 0.4;
+        const maxHeight = canvas.height * 0.4;
         const scale = Math.min(maxWidth / overlay.width, maxHeight / overlay.height, 1);
         const drawWidth = overlay.width * scale;
         const drawHeight = overlay.height * scale;
-        const iconX = (layout?.preview?.iconX ?? 0.5) * caseWidth;
-        const iconY = (layout?.preview?.iconY ?? 0.3) * caseHeight;
+        const iconX = (layout?.preview?.iconX ?? 0.5) * canvas.width;
+        const iconY = (layout?.preview?.iconY ?? 0.3) * canvas.height;
         ctx.save();
         ctx.shadowColor = 'rgba(0, 0, 0, 0.32)';
         ctx.shadowBlur = 18;
@@ -2481,13 +2479,13 @@
         const vibe = getActiveVibe();
         ctx.save();
         clipToPhoneMask(ctx);
-        const minDim = Math.min(caseWidth, caseHeight);
+        const minDim = Math.min(canvas.width, canvas.height);
         const gradientColors = vibe?.preview?.gradient || ['#1f2937', '#0b1120'];
-        const gradient = ctx.createLinearGradient(0, 0, caseWidth, caseHeight);
+        const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
         gradient.addColorStop(0, gradientColors[0]);
         gradient.addColorStop(1, gradientColors[1] || gradientColors[0]);
         ctx.fillStyle = gradient;
-        ctx.fillRect(0, 0, caseWidth, caseHeight);
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
 
         const shapes = Array.isArray(vibe?.preview?.shapes) ? vibe.preview.shapes : [];
         shapes.forEach((shape, idx) => {
@@ -2496,8 +2494,8 @@
           if (type === 'circle') {
             ctx.save();
             const radius = (shape.radius || 0.24) * minDim;
-            const x = (shape.x || 0.5) * caseWidth;
-            const y = (shape.y || 0.5) * caseHeight;
+            const x = (shape.x || 0.5) * canvas.width;
+            const y = (shape.y || 0.5) * canvas.height;
             ctx.fillStyle = shape.color || 'rgba(255, 255, 255, 0.18)';
             if (shape.blur) {
               ctx.shadowColor = shape.color || 'rgba(255, 255, 255, 0.18)';
@@ -2510,18 +2508,18 @@
           } else if (type === 'stripe') {
             ctx.save();
             const angle = ((shape.angle || 0) * Math.PI) / 180;
-            ctx.translate(caseWidth / 2, caseHeight / 2);
+            ctx.translate(canvas.width / 2, canvas.height / 2);
             ctx.rotate(angle);
             const thickness = (shape.thickness || 0.18) * minDim;
             ctx.fillStyle = shape.color || 'rgba(255, 255, 255, 0.08)';
-            ctx.fillRect(-caseWidth, -thickness / 2, caseWidth * 2, thickness);
+            ctx.fillRect(-canvas.width, -thickness / 2, canvas.width * 2, thickness);
             ctx.restore();
           } else if (type === 'ring') {
             ctx.save();
             const radius = (shape.radius || 0.2) * minDim;
             const lineWidth = (shape.lineWidth || 0.04) * minDim;
-            const x = (shape.x || 0.5) * caseWidth;
-            const y = (shape.y || 0.5) * caseHeight;
+            const x = (shape.x || 0.5) * canvas.width;
+            const y = (shape.y || 0.5) * canvas.height;
             ctx.lineWidth = lineWidth;
             ctx.strokeStyle = shape.color || 'rgba(255, 255, 255, 0.28)';
             ctx.beginPath();
@@ -2532,14 +2530,14 @@
             ctx.save();
             const count = Math.max(1, shape.count || 5);
             const spread = shape.spread || 0.2;
-            const offsetX = (shape.offsetX || 0.5) * caseWidth;
-            const offsetY = (shape.offsetY || 0.5) * caseHeight;
+            const offsetX = (shape.offsetX || 0.5) * canvas.width;
+            const offsetY = (shape.offsetY || 0.5) * canvas.height;
             const radius = (shape.radius || 0.03) * minDim;
             ctx.fillStyle = shape.color || 'rgba(255, 255, 255, 0.2)';
             for (let i = 0; i < count; i += 1) {
               const angle = (i / count) * Math.PI * 2;
-              const x = offsetX + Math.cos(angle) * spread * caseWidth;
-              const y = offsetY + Math.sin(angle) * spread * caseHeight;
+              const x = offsetX + Math.cos(angle) * spread * canvas.width;
+              const y = offsetY + Math.sin(angle) * spread * canvas.height;
               ctx.beginPath();
               ctx.arc(x, y, radius, 0, Math.PI * 2);
               ctx.fill();
@@ -2557,8 +2555,8 @@
           ctx.font = `600 ${fontSize}px "Plus Jakarta Sans", "Inter", sans-serif`;
           ctx.textBaseline = 'middle';
           ctx.textAlign = layout?.preview?.align || 'center';
-          const textX = (layout?.preview?.textX ?? 0.5) * caseWidth;
-          const textY = (layout?.preview?.textY ?? 0.55) * caseHeight;
+          const textX = (layout?.preview?.textX ?? 0.5) * canvas.width;
+          const textY = (layout?.preview?.textY ?? 0.55) * canvas.height;
           ctx.shadowColor = 'rgba(0, 0, 0, 0.35)';
           ctx.shadowBlur = 20;
           ctx.fillText(displayText, textX, textY);
@@ -2596,8 +2594,8 @@
         state.transform.scale = 1;
         state.transform.rotation = 0;
         state.transform.opacity = 1;
-        state.transform.x = caseWidth / 2;
-        state.transform.y = caseHeight / 2;
+        state.transform.x = canvas.width / 2;
+        state.transform.y = canvas.height / 2;
         scaleSlider.value = '1';
         rotationSlider.value = '0';
         opacitySlider.value = '1';
@@ -2626,7 +2624,7 @@
         state.imageBitmap = await createImageBitmapSafe(img);
         state.vibePreviewActive = false;
         state.showEdgeDefault = false;
-        const coverScale = Math.max(caseWidth / img.width, caseHeight / img.height);
+        const coverScale = Math.max(canvas.width / img.width, canvas.height / img.height);
         state.baseScale = coverScale;
         resetTransform();
         state.needsRender = true;
@@ -3040,8 +3038,8 @@
       const pointerPos = (event) => {
         const rect = canvas.getBoundingClientRect();
         return {
-          x: ((event.clientX - rect.left) / rect.width) * caseWidth,
-          y: ((event.clientY - rect.top) / rect.height) * caseHeight,
+          x: ((event.clientX - rect.left) / rect.width) * canvas.width,
+          y: ((event.clientY - rect.top) / rect.height) * canvas.height,
         };
       };
 
