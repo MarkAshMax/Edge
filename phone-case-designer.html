@@ -329,6 +329,22 @@
       justify-content: center;
       transition: min-height 300ms ease;
     }
+    .canvas-wrapper img#phoneImage {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 100%;
+      height: auto;
+      max-height: 100%;
+      z-index: 1;
+      pointer-events: none;
+      filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.4));
+      opacity: 1;
+      mix-blend-mode: normal;
+      object-fit: contain;
+      transition: opacity 200ms ease;
+    }
     canvas {
       width: 100%;
       height: auto;
@@ -338,22 +354,6 @@
       box-shadow: none;
       position: relative;
       z-index: 2;
-    }
-    .canvas-wrapper img#phoneImage {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 100%;
-      height: auto;
-      max-height: 100%;
-      z-index: 3;
-      pointer-events: none;
-      filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.4));
-      opacity: 1;
-      mix-blend-mode: normal;
-      object-fit: contain;
-      transition: opacity 200ms ease;
     }
     #phoneImage {
       display: block !important;
@@ -2313,7 +2313,14 @@
       };
 
       const clearCanvas = () => {
+        ctx.save();
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
+        ctx.globalAlpha = 1;
         ctx.clearRect(0, 0, caseWidth, caseHeight);
+        // Always fill with opaque white to prevent SVG showing through
+        ctx.fillStyle = '#fff';
+        ctx.fillRect(0, 0, caseWidth, caseHeight);
+        ctx.restore();
       };
 
       const drawCaseOverlay = () => {
@@ -3485,22 +3492,38 @@
           phoneImg.style.opacity = '0';
 
           setTimeout(() => {
-            // Update phone case background image
-            phoneImg.src = model.image;
-            phoneImg.alt = `${model.name} case`;
-
-            // Ensure SVG phone frame is always the same size as the canvas
-            phoneImg.width = model.width;
-            phoneImg.height = model.height;
-            phoneImg.style.width = model.width + 'px';
-            phoneImg.style.height = model.height + 'px';
+            // Remove old phoneImage and insert a new one with the correct SVG and size
+            const wrapper = document.getElementById('canvasWrapper');
+            if (phoneImg && wrapper) {
+              phoneImg.remove();
+              const newImg = document.createElement('img');
+              newImg.id = 'phoneImage';
+              newImg.src = model.image;
+              newImg.alt = `${model.name} case`;
+              newImg.width = model.width;
+              newImg.height = model.height;
+              newImg.style.width = model.width + 'px';
+              newImg.style.height = model.height + 'px';
+              newImg.style.position = 'absolute';
+              newImg.style.top = '50%';
+              newImg.style.left = '50%';
+              newImg.style.transform = 'translate(-50%, -50%)';
+              newImg.style.zIndex = '3';
+              newImg.style.pointerEvents = 'none';
+              newImg.style.filter = 'drop-shadow(0 20px 40px rgba(0, 0, 0, 0.4))';
+              newImg.style.opacity = '1';
+              newImg.style.mixBlendMode = 'normal';
+              newImg.style.objectFit = 'contain';
+              newImg.style.transition = 'opacity 200ms ease';
+              // Insert before the canvas so canvas is always above
+              wrapper.insertBefore(newImg, wrapper.querySelector('canvas'));
+            }
 
             // Update canvas dimensions
             canvas.width = model.width;
             canvas.height = model.height;
 
             // Update wrapper height to match aspect ratio
-            const wrapper = document.getElementById('canvasWrapper');
             if (wrapper) {
               const aspectRatio = model.height / model.width;
               const newHeight = Math.min(420, window.innerWidth * 0.92) * aspectRatio;
@@ -3522,7 +3545,6 @@
             }
 
             state.needsRender = true;
-            phoneImg.style.opacity = '1';
             setStatus(exportStatus, `✓ Switched to ${model.name}`, 'success');
             setTimeout(() => setStatus(exportStatus, ''), 2000);
           }, 150);
