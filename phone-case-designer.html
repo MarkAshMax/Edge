@@ -1968,22 +1968,22 @@
       const vibeDotsButtons = [];
 
       // Path2D mask keeps artwork perfectly contained within the case outline
-      const phoneMask = (() => {
+      const createPhoneMask = (width, height, corner) => {
         const outer = new Path2D();
-        outer.moveTo(cornerRadius, 0);
-        outer.lineTo(caseWidth - cornerRadius, 0);
-        outer.quadraticCurveTo(caseWidth, 0, caseWidth, cornerRadius);
-        outer.lineTo(caseWidth, caseHeight - cornerRadius);
-        outer.quadraticCurveTo(caseWidth, caseHeight, caseWidth - cornerRadius, caseHeight);
-        outer.lineTo(cornerRadius, caseHeight);
-        outer.quadraticCurveTo(0, caseHeight, 0, caseHeight - cornerRadius);
-        outer.lineTo(0, cornerRadius);
-        outer.quadraticCurveTo(0, 0, cornerRadius, 0);
+        outer.moveTo(corner, 0);
+        outer.lineTo(width - corner, 0);
+        outer.quadraticCurveTo(width, 0, width, corner);
+        outer.lineTo(width, height - corner);
+        outer.quadraticCurveTo(width, height, width - corner, height);
+        outer.lineTo(corner, height);
+        outer.quadraticCurveTo(0, height, 0, height - corner);
+        outer.lineTo(0, corner);
+        outer.quadraticCurveTo(0, 0, corner, 0);
         outer.closePath();
 
-        const cameraRadius = Math.min(caseWidth, caseHeight) * 0.058;
-        const cameraX = caseWidth * 0.18;
-        const cameraY = caseHeight * 0.13;
+        const cameraRadius = Math.min(width, height) * 0.058;
+        const cameraX = width * 0.18;
+        const cameraY = height * 0.13;
         const cameraPath = new Path2D();
         cameraPath.moveTo(cameraX + cameraRadius, cameraY);
         cameraPath.arc(cameraX, cameraY, cameraRadius, 0, Math.PI * 2);
@@ -1998,36 +1998,38 @@
           camera: { x: cameraX, y: cameraY, radius: cameraRadius },
           clipRule: 'evenodd',
         };
-      })();
+      };
+      
+      let phoneMask = createPhoneMask(caseWidth, caseHeight, cornerRadius);
 
       // Pre-rendered lighting overlay keeps the case feeling three-dimensional while allowing transparent background
-      const caseLightingOverlay = (() => {
+      const createCaseLightingOverlay = (width, height, mask) => {
         const overlay = document.createElement('canvas');
-        overlay.width = caseWidth;
-        overlay.height = caseHeight;
+        overlay.width = width;
+        overlay.height = height;
         const gctx = overlay.getContext('2d');
 
-        const { path: maskPath, clipRule, outer, camera } = phoneMask;
+        const { path: maskPath, clipRule, outer, camera } = mask;
 
         gctx.save();
         gctx.clip(maskPath, clipRule);
 
         // Subtle vignette darkens the wrapped edges so artwork feels like it hugs the case
         const edgeDarken = gctx.createRadialGradient(
-          caseWidth / 2,
-          caseHeight / 2,
-          Math.min(caseWidth, caseHeight) * 0.35,
-          caseWidth / 2,
-          caseHeight / 2,
-          Math.max(caseWidth, caseHeight) * 0.65
+          width / 2,
+          height / 2,
+          Math.min(width, height) * 0.35,
+          width / 2,
+          height / 2,
+          Math.max(width, height) * 0.65
         );
         edgeDarken.addColorStop(0, 'rgba(0, 0, 0, 0)');
         edgeDarken.addColorStop(1, 'rgba(0, 0, 0, 0.38)');
         gctx.fillStyle = edgeDarken;
-        gctx.fillRect(0, 0, caseWidth, caseHeight);
+        gctx.fillRect(0, 0, width, height);
 
         // Soft vertical highlight simulates a light source sweeping across the curvature
-        const verticalSheen = gctx.createLinearGradient(0, 0, 0, caseHeight);
+        const verticalSheen = gctx.createLinearGradient(0, 0, 0, height);
         verticalSheen.addColorStop(0, 'rgba(255, 255, 255, 0.2)');
         verticalSheen.addColorStop(0.25, 'rgba(255, 255, 255, 0.05)');
         verticalSheen.addColorStop(0.5, 'rgba(0, 0, 0, 0)');
@@ -2035,17 +2037,17 @@
         verticalSheen.addColorStop(1, 'rgba(0, 0, 0, 0.35)');
         gctx.fillStyle = verticalSheen;
         gctx.globalCompositeOperation = 'lighter';
-        gctx.fillRect(0, 0, caseWidth, caseHeight);
+        gctx.fillRect(0, 0, width, height);
 
         // Edge glows add a sense of polish along left/right rails
         gctx.globalCompositeOperation = 'source-over';
-        const horizontalSheen = gctx.createLinearGradient(0, 0, caseWidth, 0);
+        const horizontalSheen = gctx.createLinearGradient(0, 0, width, 0);
         horizontalSheen.addColorStop(0, 'rgba(255, 255, 255, 0.26)');
         horizontalSheen.addColorStop(0.12, 'rgba(255, 255, 255, 0.02)');
         horizontalSheen.addColorStop(0.88, 'rgba(0, 0, 0, 0.18)');
         horizontalSheen.addColorStop(1, 'rgba(0, 0, 0, 0.32)');
         gctx.fillStyle = horizontalSheen;
-        gctx.fillRect(0, 0, caseWidth, caseHeight);
+        gctx.fillRect(0, 0, width, height);
 
         gctx.restore();
 
@@ -2081,7 +2083,9 @@
         }
 
         return overlay;
-      })();
+      };
+      
+      let caseLightingOverlay = createCaseLightingOverlay(caseWidth, caseHeight, phoneMask);
 
       const EDGE_LOGO_SVG = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 70"><path d="M7 58L36 22l14 20 10-12 23 24 15-12 17 30H7Z" fill="#ff6b36"/><path d="M36 22l14 20 10-12 23 24 15-12 17 30" fill="none" stroke="#ffffff" stroke-opacity="0.82" stroke-width="4" stroke-linejoin="round"/></svg>';
       const EDGE_LOGO_DATA_URL = `data:image/svg+xml;utf8,${encodeURIComponent(EDGE_LOGO_SVG)}`;
@@ -3316,6 +3320,12 @@
           // Update canvas dimensions
           canvas.width = model.width;
           canvas.height = model.height;
+          
+          // Regenerate phone mask for new dimensions
+          phoneMask = createPhoneMask(model.width, model.height, cornerRadius);
+          
+          // Regenerate lighting overlay for new dimensions
+          caseLightingOverlay = createCaseLightingOverlay(model.width, model.height, phoneMask);
           
           // Recalculate base scale for new dimensions
           if (state.image) {
